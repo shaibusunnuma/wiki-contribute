@@ -20,6 +20,7 @@ const sparqlQuery = `SELECT ?a ?aLabel ?lat ?long WHERE {
     bd:serviceParam wikibase:language "en" .
   }
 } ORDER BY DESC(?lat)`;
+
 export default function App() {
   const getData = () => {
     const queryDispatcher = new SPARQLQueryDispatcher( endpointUrl );
