@@ -1,21 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import {MyTabs} from './AppComponents/Navigation/navigation';
+import Search from './AppComponents/Search';
+import {SPARQLQueryDispatcher} from './AppComponents/QueryDispatcher'
 
+
+const endpointUrl = 'https://query.wikidata.org/sparql';
+const sparqlQuery = `SELECT ?a ?aLabel ?lat ?long WHERE {
+  ?a wdt:P131+ wd:Q90 .  # administrative territorial entity = Paris
+  ?a p:P625 ?statement . # coordinate-location statement
+  ?statement psv:P625 ?coordinate_node .
+  ?coordinate_node wikibase:geoLatitude ?lat .
+  ?coordinate_node wikibase:geoLongitude ?long .
+
+  FILTER (ABS(?lat - 48.8738) < 0.01)
+  FILTER (ABS(?long - 2.2950) < 0.01)
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en" .
+  }
+} ORDER BY DESC(?lat)`;
 export default function App() {
+  const getData = () => {
+    const queryDispatcher = new SPARQLQueryDispatcher( endpointUrl );
+    queryDispatcher.query( sparqlQuery ).then( console.log );
+  }
+  
+  React.useEffect(() => {
+    getData();
+  },[])
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+  <>
+      <Search />
+      <NavigationContainer>
+        <MyTabs />
+      </NavigationContainer>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
