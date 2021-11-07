@@ -45,9 +45,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         getData();
     },[])
 
-    React.useEffect(() => {
-        console.log(entities);
-    },[])
+    // React.useEffect(() => {
+    //     console.log(entities);
+    // },[])
 
     return (
         <WikiContext.Provider value={{entities}}>{children}</WikiContext.Provider>

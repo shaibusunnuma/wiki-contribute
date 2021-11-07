@@ -65,9 +65,9 @@ export default function Map() {
       createMarkers();
     },[entities]);
 
-    React.useEffect(() => {
-      console.log(markers);
-    })
+    // React.useEffect(() => {
+    //   console.log(markers);
+    // })
 
     return (
             <MapView
