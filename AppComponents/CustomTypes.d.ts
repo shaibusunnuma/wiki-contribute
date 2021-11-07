@@ -1,8 +1,8 @@
 export type Entity = {
   a : Object;
-  aLabel: Object;
-  lat: Object;
-  long: Object;
+  aLabel: {value: string};
+  lat: {value: number};
+  long: {value: number};
 }
 
 type WikiContextState = {

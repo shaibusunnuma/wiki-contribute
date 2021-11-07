@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import Map from './Map';
+import { Feed } from './Feed';
 
-export function Feed() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Feed!</Text>
-    </View>
-  );
-}
+
 
 export function Profile() {
   return (
@@ -26,11 +21,4 @@ export function Notifications() {
   );
 }
 
-export {Map};
-// export function Map() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Text>Map!</Text>
-//     </View>
-//   );
-// }
+export {Map, Feed};
