@@ -1,14 +1,10 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, LatLng, Region } from 'react-native-maps';
+import {WikiContext } from '../../Context/Context';
 
+import {Mark} from '../CustomTypes'
 
-
-type Mark = {
-    coordinates: LatLng;
-    title: string;
-    description: string;
-}
 
 var markers: Mark[] = [
   {
@@ -22,7 +18,7 @@ var markers: Mark[] = [
     description: '1234 Foo Drive',
   },
   {
-    coordinates: {latitude: 37.78825,longitude: -122.4324,},
+    coordinates: {latitude: 37.78825,longitude: -122.4322,},
     title: 'Foo Place',
     description: '1234 Foo Drive',
   },
@@ -35,13 +31,26 @@ const defaultRegion: Region = {
     longitudeDelta: 0.0421
 }
 
+
+
 export default function Map() {
     const [region, setRegion] = React.useState(defaultRegion)
+    const {entities} = React.useContext(WikiContext);
+
+    const onRegionChanged = (region: Region) => {
+      setRegion(region);
+    }
+
+    React.useEffect(() => {
+      console.log(entities);
+    },[entities]);
+
     return (
             <MapView
             style={{ flex: 1 }}
-            provider={PROVIDER_GOOGLE}
+            //provider={PROVIDER_GOOGLE}
             //showsUserLocation
+            onRegionChange={onRegionChanged}
             region={region}
         >
             {markers.map((marker, index) => {

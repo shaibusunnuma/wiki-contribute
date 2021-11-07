@@ -12,6 +12,7 @@ export class SPARQLQueryDispatcher {
 	}
 }
 
+
 // const endpointUrl = 'https://query.wikidata.org/sparql';
 // const sparqlQuery = `SELECT ?place ?placeLabel ?location WHERE {
 //   SERVICE wikibase:box {

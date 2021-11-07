@@ -24,16 +24,18 @@ export function MyTabs() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Map"
-        component={Map}
-        options={{
-          tabBarLabel: 'Map',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="map" color={color} size={26} />
-          ),
-        }}
-      />
+      
+        <Tab.Screen
+          name="Map"
+          component={Map}
+          options={{
+            tabBarLabel: 'Map',
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="map" color={color} size={26} />
+            ),
+          }}
+        />
+      
       <Tab.Screen
         name="Notifications"
         component={Notifications}
