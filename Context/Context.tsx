@@ -1,29 +1,15 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
+import { LatLng } from 'react-native-maps';
+import {LocationObject} from 'expo-location';
+
 import {SPARQLQueryDispatcher} from '../AppComponents/API/QueryDispatcher';
 import {Entity} from '../AppComponents/CustomTypes';
 import {WikiContextState} from '../AppComponents/CustomTypes';
 
-const endpointUrl = 'https://query.wikidata.org/sparql';
-
-const sparqlQuery = `SELECT ?a ?aLabel ?lat ?long WHERE {
-  ?a wdt:P131+ wd:Q90 .  # administrative territorial entity = Paris
-  ?a p:P625 ?statement . # coordinate-location statement
-  ?statement psv:P625 ?coordinate_node .
-  ?coordinate_node wikibase:geoLatitude ?lat .
-  ?coordinate_node wikibase:geoLongitude ?long .
-
-  FILTER (ABS(?lat - 48.8738) < 0.01)
-  FILTER (ABS(?long - 2.2950) < 0.01)
-
-  SERVICE wikibase:label {
-    bd:serviceParam wikibase:language "en" .
-  }
-} ORDER BY DESC(?lat)`;
-
-
-
 const contextDefaultData: WikiContextState = {
     entities: [],
+    setUserLocation: () => {},
+
 }
 
 interface Props {
@@ -34,23 +20,24 @@ export const WikiContext = React.createContext<WikiContextState>(contextDefaultD
 
 export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [entities, setEntities] = React.useState([] as Entity[]);
+    const [userLocation, setUserLocation] = React.useState({} as LocationObject['coords']);
 
     const getData = () => {
-        const queryDispatcher = new SPARQLQueryDispatcher( endpointUrl );
-        queryDispatcher.query( sparqlQuery )
-        .then( response => setEntities(response.results.bindings) );
+        const queryDispatcher = new SPARQLQueryDispatcher({latitude: 48.8738, longitude: 2.2950} as LatLng );
+        queryDispatcher.query()
+        .then( response => {
+            setEntities(response.results.bindings);
+        });
+    
     }
 
     React.useEffect(() => {
-        getData();
-    },[])
-
-    // React.useEffect(() => {
-    //     console.log(entities);
-    // },[])
+        if(userLocation.latitude !== undefined)
+            getData();
+    },[userLocation]);
 
     return (
-        <WikiContext.Provider value={{entities}}>{children}</WikiContext.Provider>
+        <WikiContext.Provider value={{entities, setUserLocation}}>{children}</WikiContext.Provider>
     )
 }
 

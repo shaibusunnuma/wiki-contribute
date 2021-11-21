@@ -1,3 +1,7 @@
+import { LatLng } from 'react-native-maps';
+import {LocationObject} from 'expo-location';
+
+
 export type Entity = {
   a : Object;
   aLabel: {value: string};
@@ -7,6 +11,7 @@ export type Entity = {
 
 type WikiContextState = {
     entities : Entity[];
+    setUserLocation: React.Dispatch<React.SetStateAction<LocationObject['coords']>>
 }
 
 export type Mark = {

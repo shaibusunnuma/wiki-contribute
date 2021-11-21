@@ -1,14 +1,34 @@
+import { LatLng } from 'react-native-maps';
+
 export class SPARQLQueryDispatcher {
     endpoint: string;
-	constructor( endpoint: string ) {
-		this.endpoint = endpoint;
+	sparqlQuery: string;
+	constructor( latlong: LatLng ) {
+		this.endpoint = 'https://query.wikidata.org/sparql';
+		this.sparqlQuery = `SELECT ?a ?aLabel ?lat ?long WHERE {
+			?a wdt:P131+ wd:Q90 .  # administrative territorial entity = Paris
+			?a p:P625 ?statement . # coordinate-location statement
+			?statement psv:P625 ?coordinate_node .
+			?coordinate_node wikibase:geoLatitude ?lat .
+			?coordinate_node wikibase:geoLongitude ?long .
+
+			FILTER (ABS(?lat - ${latlong.latitude}) < 0.01)
+			FILTER (ABS(?long - ${latlong.longitude}) < 0.01)
+
+			SERVICE wikibase:label {
+				bd:serviceParam wikibase:language "en" .
+			}
+		} ORDER BY DESC(?lat)`;
 	}
 
-	query( sparqlQuery: string ) {
-		const fullUrl = this.endpoint + '?query=' + encodeURIComponent( sparqlQuery );
-		const headers = { 'Accept': 'application/sparql-results+json' };
 
+
+	query() {
+		console.log("querying...");
+		const fullUrl = this.endpoint + '?query=' + encodeURIComponent( this.sparqlQuery );
+		const headers = { 'Accept': 'application/sparql-results+json' };
 		return fetch( fullUrl, { headers } ).then( body => body.json() );
+		
 	}
 }
 
