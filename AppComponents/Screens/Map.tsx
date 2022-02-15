@@ -5,25 +5,6 @@ import { WikiContext } from '../../Context/Context';
 
 import { Mark } from '../CustomTypes'
 
-
-// var markers: Mark[] = [
-//   {
-//     coordinates: {latitude: 37.78825,longitude: -122.4323,},
-//     title: 'Foo Place',
-//     description: '1234 Foo Drive',
-//   },
-//   {
-//     coordinates: {latitude: 37.78825,longitude: -122.4322,},
-//     title: 'Foo Place',
-//     description: '1234 Foo Drive',
-//   },
-//   {
-//     coordinates: {latitude: 37.78825,longitude: -122.4322,},
-//     title: 'Foo Place',
-//     description: '1234 Foo Drive',
-//   },
-// ];
-
 // const defaultRegion: Region = {
 //     latitude: 24.4849,
 //     longitude: 54.3541,
@@ -75,19 +56,22 @@ export default function Map() {
 
     const createMarkers = () => {
       const markers: Mark[] = [];
-      for(let i = 0; i < 30; i++) {
-        const m = entities[i];
-        const marker: Mark = {
-          coordinates: {
-            latitude: m.lat.value * 1,
-            longitude: m.long.value * 1,
-          },
-          title: m.aLabel.value,
-          description: m.aLabel.value,
-        };
-        markers.push(marker);
-      }
-      setMarkers(markers);
+      console.log(entities.length);
+      console.log(entities[0]);
+      //entities.forEach(entity =>{
+        // const m = entity;
+        // const marker: Mark = {
+        //   coordinates: {
+        //     latitude: m.lat.value * 1,
+        //     longitude: m.long.value * 1,
+        //   },
+        //   title: m.aLabel.value,
+        //   description: m.aLabel.value,
+        // };
+        // markers.push(marker);
+     // })
+      
+      //setMarkers(markers);
     }
 
     React.useEffect(() => {

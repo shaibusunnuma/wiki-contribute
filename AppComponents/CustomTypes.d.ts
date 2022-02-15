@@ -3,10 +3,9 @@ import {LocationObject} from 'expo-location';
 
 
 export type Entity = {
-  a : Object;
-  aLabel: {value: string};
-  lat: {value: number};
-  long: {value: number};
+  location : Object;
+  place: Object
+  placeLabel: Object
 }
 
 type WikiContextState = {

@@ -34,23 +34,23 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
 
     const getData = async() => {
         try{
-            //await cache.remove('wiki');
+            await cache.remove('wiki');
             const cachedData = await cache.get("wiki");
             if(cachedData !== undefined){
+                console.log('cache');
                 const data = JSON.parse(cachedData);
 
                 setEntities(data);
-                //console.log(data);
             }else{
-                console.log('Querying this time');
                 const queryDispatcher = new SPARQLQueryDispatcher({latitude: 48.8738, longitude: 2.2950} as LatLng );
                 queryDispatcher.query()
                 .then( response => {
+                    //console.log(response.results.bindings);
                     setEntities(response.results.bindings);
-                    return response.results.bindings;
+                    // return response.results.bindings;
                 })
                 .then(async(response)=>{
-                    await cache.set("wiki", JSON.stringify(response));
+                    //await cache.set("wiki", JSON.stringify(response));
                 })
             }
         }catch(e){
@@ -61,9 +61,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     }
 
     React.useEffect(() => {
-        if(userLocation.latitude !== undefined)
+        //if(userLocation.latitude !== undefined)
             getData();
-    },[userLocation]);
+    },[]);
 
     return (
         <WikiContext.Provider value={{entities, setUserLocation}}>{children}</WikiContext.Provider>
