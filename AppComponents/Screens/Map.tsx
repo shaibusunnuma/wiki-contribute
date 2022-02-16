@@ -53,25 +53,29 @@ export default function Map() {
     //       )
     //     }
     // }
+    const getCoords = (coords: string) => {
+      const str = coords.split("(")[1];
+      const coordinates = str.substring(0, str.length - 1).split(" ");
+      return coordinates;
+    }
 
     const createMarkers = () => {
       const markers: Mark[] = [];
       console.log(entities.length);
-      console.log(entities[0]);
-      //entities.forEach(entity =>{
-        // const m = entity;
-        // const marker: Mark = {
-        //   coordinates: {
-        //     latitude: m.lat.value * 1,
-        //     longitude: m.long.value * 1,
-        //   },
-        //   title: m.aLabel.value,
-        //   description: m.aLabel.value,
-        // };
-        // markers.push(marker);
-     // })
-      
-      //setMarkers(markers);
+      entities.forEach(entity =>{
+        const coords = getCoords(entity.location.value);
+        const marker: Mark = {
+          coordinates: {
+            latitude: +coords[1],
+            longitude: +coords[0],
+          },
+          title: entity.placeLabel.value,
+          description: entity.placeLabel.value,
+        };
+        markers.push(marker);
+     })
+     console.log(markers);
+      setMarkers(markers);
     }
 
     React.useEffect(() => {
