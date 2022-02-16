@@ -7,7 +7,7 @@ export class SPARQLQueryDispatcher {
 		this.endpoint = 'https://query.wikidata.org/sparql';
 		this.sparqlQuery = `SELECT ?place ?placeLabel ?location WHERE {
 			?place wdt:P625 ?location.
-			FILTER(geof:distance(?location, "Point(2.2950 48.8738)"^^geo:wktLiteral) < 0.5). 
+			FILTER(geof:distance(?location, "Point(${latlong.latitude} ${latlong.longitude} )"^^geo:wktLiteral) < 0.5). 
 			SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 		}`;
 	}
