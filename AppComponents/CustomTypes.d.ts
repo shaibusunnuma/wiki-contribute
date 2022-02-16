@@ -1,4 +1,4 @@
-import { LatLng } from 'react-native-maps';
+import { LatLng, Region } from 'react-native-maps';
 import {LocationObject} from 'expo-location';
 
 
@@ -9,6 +9,7 @@ export type Entity = {
 }
 
 type WikiContextState = {
+    region: Region;
     entities : Entity[];
     setUserLocation: React.Dispatch<React.SetStateAction<LocationObject['coords']>>
 }
