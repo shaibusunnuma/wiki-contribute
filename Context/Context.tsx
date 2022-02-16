@@ -42,10 +42,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
 
                 setEntities(data);
             }else{
-                const queryDispatcher = new SPARQLQueryDispatcher({latitude: 48.8738, longitude: 2.2950} as LatLng );
+                const queryDispatcher = new SPARQLQueryDispatcher({latitude: -73.99645,longitude: 40.72956} as LatLng );
                 queryDispatcher.query()
                 .then( response => {
-                    //console.log(response.results.bindings);
                     setEntities(response.results.bindings);
                     // return response.results.bindings;
                 })
