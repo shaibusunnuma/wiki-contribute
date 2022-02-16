@@ -1,6 +1,7 @@
 import React from 'react';
-import { LatLng } from 'react-native-maps';
+import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
+import * as Location from 'expo-location';
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SPARQLQueryDispatcher } from '../AppComponents/API/QueryDispatcher';
@@ -8,9 +9,9 @@ import {Entity} from '../AppComponents/CustomTypes';
 import {WikiContextState} from '../AppComponents/CustomTypes';
 
 const contextDefaultData: WikiContextState = {
+    region: {} as Region,
     entities: [],
     setUserLocation: () => {},
-
 }
 
 interface Props {
@@ -31,6 +32,40 @@ export const WikiContext = React.createContext<WikiContextState>(contextDefaultD
 export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [entities, setEntities] = React.useState([] as Entity[]);
     const [userLocation, setUserLocation] = React.useState({} as LocationObject['coords']);
+    const [permissionStatus, setPermissionStatus] = React.useState('');
+    const [region, setRegion] = React.useState({} as Region);
+
+    const getUserLocation = async() => {
+        const { status } = await  Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            setPermissionStatus('Permission to access location was denied');
+            return;
+        }
+        console.log('Getting user location...');
+        setPermissionStatus('granted');
+        let location = await Location.getCurrentPositionAsync({});
+        setRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+        } as Region);
+        setUserLocation(location.coords);
+   }
+
+    const watch_location = async () => {  
+        if (permissionStatus === 'granted') {     
+            console.log('Tracking user location');
+            let location = await Location.watchPositionAsync({
+                accuracy:Location.Accuracy.High,
+                timeInterval: 10000,
+                distanceInterval: 80,
+            },
+
+            (newLocation)=>console.log(newLocation.coords)
+            )
+        }
+    }
 
     const getData = async() => {
         try{
@@ -61,11 +96,16 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
 
     React.useEffect(() => {
         //if(userLocation.latitude !== undefined)
-            getData();
+        getUserLocation();
+        getData();
     },[]);
 
+    React.useEffect(() =>{
+        watch_location();
+    },[permissionStatus])
+
     return (
-        <WikiContext.Provider value={{entities, setUserLocation}}>{children}</WikiContext.Provider>
+        <WikiContext.Provider value={{region, entities, setUserLocation}}>{children}</WikiContext.Provider>
     )
 }
 
