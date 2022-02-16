@@ -3,9 +3,9 @@ import {LocationObject} from 'expo-location';
 
 
 export type Entity = {
-  location : Object;
-  place: Object
-  placeLabel: Object
+  location : {value: string};
+  place: {value: string}
+  placeLabel: {value: string}
 }
 
 type WikiContextState = {
