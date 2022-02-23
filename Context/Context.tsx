@@ -32,12 +32,15 @@ export const WikiContext = React.createContext<WikiContextState>(contextDefaultD
 
 export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [entities, setEntities] = React.useState([] as Entity[]);
-    const [userLocation, setUserLocation] = React.useState({} as LocationObject['coords']);
+    const [userLocation, setUserLocation] = React.useState({} as LatLng);
     const [permissionStatus, setPermissionStatus] = React.useState('');
     const [region, setRegion] = React.useState({} as Region);
 
     const getUserLocation = async() => {
         const { status } = await  Location.requestForegroundPermissionsAsync();
+        // const prev_location = await cache.get('prev_location');
+        // if(prev_location !== undefined)
+        //     console.log(JSON.parse(prev_location))
         if (status !== 'granted') {
             setPermissionStatus('Permission to access location was denied');
             return;
@@ -51,7 +54,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
         } as Region);
-        setUserLocation(location.coords);
+        await cache.set("prev_location", JSON.stringify({latitude: location.coords.latitude,
+            longitude: location.coords.longitude,}));
+        setUserLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
    }
 
     const watch_location = async () => {  
@@ -62,32 +67,40 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                 timeInterval: 10000,
                 distanceInterval: 80,
             },
-
             (newLocation)=> {
                 const distance = getDistance(
-                    // {latitude: userLocation.latitude, longitude: userLocation.longitude},
-                    // {latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude}
                     { latitude: userLocation.latitude, longitude: userLocation.longitude },
                     { latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude }
                 );
-                console.log(distance);
-                //console.log(newLocation.coords);
-            }//console.log(newLocation.coords)
+                console.log(distance)
+                if(distance > 1000){
+                    setUserLocation({ latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude });
+
+                }         
+            }
             )
         }
     }
 
+    const GetDistance = (prevLocation: {latitude: string, longitude: string}) => {
+        const distance = getDistance(
+            { latitude: userLocation.latitude, longitude: userLocation.longitude },
+            { latitude: prevLocation.latitude, longitude: prevLocation.longitude }
+        )
+        return distance;
+    }
+
     const getData = async() => {
         try{
-            //await cache.remove('wiki');
             const cachedData = await cache.get("wiki");
-            if(cachedData !== undefined){
-                console.log('cache');
+            const prev_location = await cache.get('prev_location');
+            if(cachedData !== undefined && prev_location !== undefined){
+                if(GetDistance(JSON.parse(prev_location)) < 1000)
+                console.log('Getting data from cache...');
                 const data = JSON.parse(cachedData);
-
                 setEntities(data);
             }else{
-                console.log('Querying...')
+                console.log('Querying wikidata...')
                 const queryDispatcher = new SPARQLQueryDispatcher({latitude: -73.99645,longitude: 40.72956} as LatLng );
                 queryDispatcher.query()
                 .then( response => {
@@ -98,8 +111,8 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                     await cache.set("wiki", JSON.stringify(response));
                 })
             }
-        }catch(e){
-            console.log(e);
+        }catch(error){
+            console.log(error);
         }
         
     
