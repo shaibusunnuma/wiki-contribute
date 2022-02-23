@@ -1,6 +1,7 @@
 import React from 'react';
 import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
+import {getDistance} from 'geolib';
 import * as Location from 'expo-location';
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -62,14 +63,23 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                 distanceInterval: 80,
             },
 
-            (newLocation)=>console.log(newLocation.coords)
+            (newLocation)=> {
+                const distance = getDistance(
+                    // {latitude: userLocation.latitude, longitude: userLocation.longitude},
+                    // {latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude}
+                    { latitude: userLocation.latitude, longitude: userLocation.longitude },
+                    { latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude }
+                );
+                console.log(distance);
+                //console.log(newLocation.coords);
+            }//console.log(newLocation.coords)
             )
         }
     }
 
     const getData = async() => {
         try{
-            await cache.remove('wiki');
+            //await cache.remove('wiki');
             const cachedData = await cache.get("wiki");
             if(cachedData !== undefined){
                 console.log('cache');
@@ -77,14 +87,15 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
 
                 setEntities(data);
             }else{
+                console.log('Querying...')
                 const queryDispatcher = new SPARQLQueryDispatcher({latitude: -73.99645,longitude: 40.72956} as LatLng );
                 queryDispatcher.query()
                 .then( response => {
                     setEntities(response.results.bindings);
-                    // return response.results.bindings;
+                    return response.results.bindings;
                 })
                 .then(async(response)=>{
-                    //await cache.set("wiki", JSON.stringify(response));
+                    await cache.set("wiki", JSON.stringify(response));
                 })
             }
         }catch(e){
@@ -95,14 +106,14 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     }
 
     React.useEffect(() => {
-        //if(userLocation.latitude !== undefined)
-        getUserLocation();
-        getData();
-    },[]);
+        if(userLocation.latitude !== undefined) getData();
+        else getUserLocation();
+        
+    },[userLocation]);
 
     React.useEffect(() =>{
-        watch_location();
-    },[permissionStatus])
+        if(userLocation.latitude !== undefined) watch_location();
+    },[permissionStatus, userLocation]);
 
     return (
         <WikiContext.Provider value={{region, entities, setUserLocation}}>{children}</WikiContext.Provider>

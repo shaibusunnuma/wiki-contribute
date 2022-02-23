@@ -15,7 +15,6 @@ export class SPARQLQueryDispatcher {
 
 
 	query() {
-		console.log("querying...");
 		const fullUrl = this.endpoint + '?query=' + encodeURIComponent( this.sparqlQuery );
 		const headers = { 'Accept': 'application/sparql-results+json' };
 		return fetch( fullUrl, { headers } ).then( body => body.json() );
