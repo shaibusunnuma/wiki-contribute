@@ -11,7 +11,7 @@ export type Entity = {
 type WikiContextState = {
     region: Region;
     entities : Entity[];
-    setUserLocation: React.Dispatch<React.SetStateAction<LocationObject['coords']>>
+    setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
 }
 
 export type Mark = {
