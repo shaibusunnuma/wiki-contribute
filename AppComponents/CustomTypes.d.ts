@@ -2,10 +2,12 @@ import { LatLng, Region } from 'react-native-maps';
 import {LocationObject} from 'expo-location';
 
 
-export type Entity = {
-  location : {value: string};
+export interface Entity {
+  lat : {value: string}
+  long : {value: number}
   place: {value: string}
   placeLabel: {value: string}
+  placeDescription: {value: string}
 }
 
 type WikiContextState = {

@@ -73,10 +73,10 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                     { latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude }
                 );
                 console.log(distance)
-                if(distance > 1000){
-                    setUserLocation({ latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude });
+                // if(distance > 1000){
+                //     setUserLocation({ latitude: newLocation.coords.latitude, longitude: newLocation.coords.longitude });
 
-                }         
+                // }         
             }
             )
         }
@@ -92,14 +92,15 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
 
     const getData = async() => {
         try{
-            const cachedData = await cache.get("wiki");
-            const prev_location = await cache.get('prev_location');
-            if(cachedData !== undefined && prev_location !== undefined){
-                if(GetDistance(JSON.parse(prev_location)) < 1000)
-                console.log('Getting data from cache...');
-                const data = JSON.parse(cachedData);
-                setEntities(data);
-            }else{
+            // const cachedData = await cache.get("wiki");
+            // cache.remove('wiki');
+            // const prev_location = await cache.get('prev_location');
+            // if(cachedData !== undefined && prev_location !== undefined){
+            //     if(GetDistance(JSON.parse(prev_location)) < 1000)
+            //     console.log('Getting data from cache...');
+            //     const data = JSON.parse(cachedData);
+            //     setEntities(data);
+            // }else{
                 console.log('Querying wikidata...')
                 const queryDispatcher = new SPARQLQueryDispatcher({latitude: -73.99645,longitude: 40.72956} as LatLng );
                 queryDispatcher.query()
@@ -110,7 +111,7 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                 .then(async(response)=>{
                     await cache.set("wiki", JSON.stringify(response));
                 })
-            }
+            //}
         }catch(error){
             console.log(error);
         }
@@ -124,9 +125,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         
     },[userLocation]);
 
-    React.useEffect(() =>{
-        if(userLocation.latitude !== undefined) watch_location();
-    },[permissionStatus, userLocation]);
+    // React.useEffect(() =>{
+    //     if(userLocation.latitude !== undefined) watch_location();
+    // },[permissionStatus, userLocation]);
 
     return (
         <WikiContext.Provider value={{region, entities, setUserLocation}}>{children}</WikiContext.Provider>

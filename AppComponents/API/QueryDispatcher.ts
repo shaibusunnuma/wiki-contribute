@@ -5,14 +5,22 @@ export class SPARQLQueryDispatcher {
 	sparqlQuery: string;
 	constructor( latlong: LatLng ) {
 		this.endpoint = 'https://query.wikidata.org/sparql';
-		this.sparqlQuery = `SELECT ?place ?placeLabel ?location WHERE {
-			?place wdt:P625 ?location.
-			FILTER(geof:distance(?location, "Point(${latlong.latitude} ${latlong.longitude} )"^^geo:wktLiteral) < 0.5). 
-			SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-		}`;
+		this.sparqlQuery = `SELECT ?place ?placeLabel ?placeDescription ?lat ?long  WHERE {
+			?place wdt:P131+ wd:Q60 .  # administrative territorial entity = Paris
+			?place p:P625 ?statement . # coordinate-location statement
+			?statement psv:P625 ?coordinate_node .
+			?coordinate_node wikibase:geoLatitude ?lat .
+			?coordinate_node wikibase:geoLongitude ?long .
+
+			FILTER (ABS(?lat - 40.72956) < 0.05)
+			FILTER (ABS(?long - -73.99645) < 0.05)
+
+			SERVICE wikibase:label {
+				bd:serviceParam wikibase:language "en" .
+			}
+			} ORDER BY DESC(?lat)
+		`
 	}
-
-
 
 	query() {
 		const fullUrl = this.endpoint + '?query=' + encodeURIComponent( this.sparqlQuery );
@@ -22,16 +30,3 @@ export class SPARQLQueryDispatcher {
 	}
 }
 
-
-// const endpointUrl = 'https://query.wikidata.org/sparql';
-// const sparqlQuery = `SELECT ?place ?placeLabel ?location WHERE {
-//   SERVICE wikibase:box {
-//     ?place wdt:P625 ?location .
-//     bd:serviceParam wikibase:cornerWest "Point(2.295 48.8738)"^^geo:wktLiteral .
-//     bd:serviceParam wikibase:cornerEast "Point(2.33575 48.861088888)"^^geo:wktLiteral .
-//   }
-//   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
-// }`;
-
-// const queryDispatcher = new SPARQLQueryDispatcher( endpointUrl );
-// queryDispatcher.query( sparqlQuery ).then( console.log );
