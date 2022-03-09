@@ -1,5 +1,5 @@
 import React from 'react';
-import { LatLng, Region } from 'react-native-maps';
+import { Address, LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
 import {getDistance} from 'geolib';
 import * as Location from 'expo-location';
@@ -35,6 +35,7 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [userLocation, setUserLocation] = React.useState({} as LatLng);
     const [permissionStatus, setPermissionStatus] = React.useState('');
     const [region, setRegion] = React.useState({} as Region);
+    const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
 
     const getUserLocation = async() => {
         const { status } = await  Location.requestForegroundPermissionsAsync();
@@ -49,7 +50,7 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         setPermissionStatus('granted');
         let location = await Location.getCurrentPositionAsync({});
         const address = await Location.reverseGeocodeAsync(location.coords);
-        console.log(address)
+        setAddress(address)
         setRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -104,9 +105,10 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             //     setEntities(data);
             // }else{
                 console.log('Querying wikidata...')
-                const queryDispatcher = new SPARQLQueryDispatcher(userLocation);
+                const queryDispatcher = new SPARQLQueryDispatcher(userLocation, address[0].city);
                 queryDispatcher.query()
                 .then( response => {
+                    //console.log(response.results.bindings)
                     setEntities(response.results.bindings);
                     return response.results.bindings;
                 })

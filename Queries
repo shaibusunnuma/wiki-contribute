@@ -35,4 +35,4 @@ FILTER(geof:distance(?location, "Point(2.2950 48.8738)"^^geo:wktLiteral) < 0.5).
 SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 Point(2.2950 48.8738 Paris
--73.99645 40.72956 New York
+40.72956 -73.99645 New York
