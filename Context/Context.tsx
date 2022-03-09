@@ -48,11 +48,13 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         console.log('Getting user location...');
         setPermissionStatus('granted');
         let location = await Location.getCurrentPositionAsync({});
+        const address = await Location.reverseGeocodeAsync(location.coords);
+        console.log(address)
         setRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.05922,
+            longitudeDelta: 0.01421
         } as Region);
         // await cache.set("prev_location", JSON.stringify({latitude: location.coords.latitude,
         //     longitude: location.coords.longitude,}));
