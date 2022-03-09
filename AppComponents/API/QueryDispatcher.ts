@@ -12,8 +12,8 @@ export class SPARQLQueryDispatcher {
 			?coordinate_node wikibase:geoLatitude ?lat .
 			?coordinate_node wikibase:geoLongitude ?long .
 
-			FILTER (ABS(?lat - 40.72956) < 0.05)
-			FILTER (ABS(?long - -73.99645) < 0.05)
+			FILTER (ABS(?lat - ${latlong.latitude}) < 0.005)
+			FILTER (ABS(?long - ${latlong.longitude}) < 0.005)
 
 			SERVICE wikibase:label {
 				bd:serviceParam wikibase:language "en" .

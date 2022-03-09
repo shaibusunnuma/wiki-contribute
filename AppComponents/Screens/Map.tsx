@@ -15,25 +15,19 @@ export default function Map() {
   // const onRegionChanged = (region: Region) => {
   //   setRegion(region);
   // }
-  
-  const getCoords = (coords: string) => {
-    const str = coords.split("(")[1];
-    const coordinates = str.substring(0, str.length - 1).split(" ");
-    return coordinates;
-  }
+ 
 
   const createMarkers = () => {
     const markers: Mark[] = [];
     console.log(entities.length);
     entities.forEach(entity =>{
-      const coords = getCoords(entity.location.value);
       const marker: Mark = {
         coordinates: {
-          latitude: +coords[1],
-          longitude: +coords[0],
+          latitude: +entity.lat.value,
+          longitude: +entity.long.value,
         },
         title: entity.placeLabel.value,
-        description: entity.placeLabel.value,
+        description: entity.placeDescription === undefined ? entity.placeLabel.value : entity.placeDescription.value,
       };
       markers.push(marker);
     })

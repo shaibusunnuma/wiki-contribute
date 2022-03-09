@@ -3,7 +3,7 @@ import {LocationObject} from 'expo-location';
 
 
 export interface Entity {
-  lat : {value: string}
+  lat : {value: number}
   long : {value: number}
   place: {value: string}
   placeLabel: {value: string}

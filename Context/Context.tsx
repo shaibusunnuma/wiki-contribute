@@ -54,8 +54,8 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
         } as Region);
-        await cache.set("prev_location", JSON.stringify({latitude: location.coords.latitude,
-            longitude: location.coords.longitude,}));
+        // await cache.set("prev_location", JSON.stringify({latitude: location.coords.latitude,
+        //     longitude: location.coords.longitude,}));
         setUserLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
    }
 
@@ -102,7 +102,7 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             //     setEntities(data);
             // }else{
                 console.log('Querying wikidata...')
-                const queryDispatcher = new SPARQLQueryDispatcher({latitude: -73.99645,longitude: 40.72956} as LatLng );
+                const queryDispatcher = new SPARQLQueryDispatcher(userLocation);
                 queryDispatcher.query()
                 .then( response => {
                     setEntities(response.results.bindings);
