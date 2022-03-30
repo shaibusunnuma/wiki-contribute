@@ -42,24 +42,25 @@ export default function Map() {
 
   return (
     <>  
-      {region.latitude !== undefined && <MapView
-        style={{ flex: 1 }}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        //onRegionChange={onRegionChanged}
-        initialRegion={region}
-      >
-        {markers.map((marker, index) => {
-            return (
-            <Marker
-                key={index}
-                coordinate={marker.coordinates}
-                title={marker.title}
-                image={require('../../assets/marker_map_icon.png')}
-                description={marker.description}
-            />)
-        })}
-      </MapView>
+      {region.latitude !== undefined && 
+        <MapView
+          style={{ flex: 1 }}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          //onRegionChange={onRegionChanged}
+          initialRegion={region}
+        >
+          {markers.map((marker, index) => {
+              return (
+              <Marker
+                  key={index}
+                  coordinate={marker.coordinates}
+                  title={marker.title}
+                  image={require('../../assets/marker_map_icon.png')}
+                  description={marker.description}
+              />)
+          })}
+        </MapView>
       }
     </>
   );
