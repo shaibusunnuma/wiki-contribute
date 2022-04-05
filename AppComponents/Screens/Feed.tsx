@@ -3,6 +3,7 @@ import { Text, View, SafeAreaView, StyleSheet, FlatList, TouchableOpacity } from
 import {Entity} from '../CustomTypes'
 import { WikiContext } from '../../Context/Context';
 
+//@ts-ignore
 const Item = ({ entity }) => (
   <TouchableOpacity onPress={() =>console.log(entity)}style={styles.item}>
     <Text style={styles.title}>{entity.placeLabel.value}</Text>
@@ -14,6 +15,7 @@ const Item = ({ entity }) => (
 export function Feed() {
   const {entities} = React.useContext(WikiContext);
 
+  //@ts-ignore
   const renderItem = ({ item }) => (
     <Item entity={item} />
   );
