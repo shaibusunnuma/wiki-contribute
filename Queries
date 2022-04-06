@@ -36,3 +36,6 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 Point(2.2950 48.8738 Paris
 40.72956 -73.99645 New York
+
+"latitude": 37.33233141,
+"longitude": -122.0312186,
