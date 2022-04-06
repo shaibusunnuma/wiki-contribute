@@ -19,7 +19,6 @@ export default function Map() {
 
   const createMarkers = () => {
     const markers: Mark[] = [];
-    console.log(entities.length);
     entities.forEach(entity =>{
       const marker: Mark = {
         coordinates: {
@@ -28,6 +27,7 @@ export default function Map() {
         },
         title: entity.placeLabel.value,
         description: entity.placeDescription === undefined ? entity.placeLabel.value : entity.placeDescription.value,
+        QID: entity.place.value.split('/')[4], //TODO : replace hardcoded index.
       };
       markers.push(marker);
     })
@@ -58,6 +58,7 @@ export default function Map() {
                   title={marker.title}
                   image={require('../../assets/marker_map_icon.png')}
                   description={marker.description}
+                  onPress={() => console.log(marker)}
               />)
           })}
         </MapView>

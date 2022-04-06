@@ -20,4 +20,5 @@ export type Mark = {
     coordinates: LatLng;
     title: string;
     description: string;
+    QID: string;
 }
