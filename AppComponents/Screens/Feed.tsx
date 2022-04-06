@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    marginVertical: 1,
+    marginHorizontal: 5,
   },
   title: {
-    fontSize: 32,
+    fontSize: 18,
   },
 })
