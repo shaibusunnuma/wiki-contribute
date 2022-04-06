@@ -5,8 +5,8 @@ import { WikiContext } from '../../Context/Context';
 
 import { Mark } from '../CustomTypes'
 
-
-export default function Map() {
+//@ts-ignore
+export default function Map({navigation}) {
   const { region, entities, setUserLocation } = React.useContext(WikiContext);
 
   const [markers, setMarkers] = React.useState([] as Mark[]);
@@ -58,7 +58,7 @@ export default function Map() {
                   title={marker.title}
                   image={require('../../assets/marker_map_icon.png')}
                   description={marker.description}
-                  onPress={() => console.log(marker)}
+                  onPress={() => navigation.navigate('Properties',{entity: marker})}
               />)
           })}
         </MapView>
