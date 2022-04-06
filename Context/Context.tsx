@@ -1,7 +1,7 @@
 import React from 'react';
 import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
-import {getDistance} from 'geolib';
+import { getDistance } from 'geolib';
 import * as Location from 'expo-location';
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const cache = new Cache({
-    namespace: "myapp",
+    namespace: "WikiContext",
     policy: {
         maxEntries: 50000, // if unspecified, it can have unlimited entries
         stdTTL: 0 // the standard ttl as number in seconds, default: 0 (unlimited)
@@ -37,18 +37,26 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [region, setRegion] = React.useState({} as Region);
     const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
 
+    
+
     const getUserLocation = async() => {
         const { status } = await  Location.requestForegroundPermissionsAsync();
-        // const prev_location = await cache.get('prev_location');
-        // if(prev_location !== undefined)
-        //     console.log(JSON.parse(prev_location))
+
         if (status !== 'granted') {
             setPermissionStatus('Permission to access location was denied');
             return;
         }
-        console.log('Getting user location...');
-        setPermissionStatus('granted');
-        let location = await Location.getCurrentPositionAsync({});
+
+        let location: LocationObject  = {} as LocationObject;
+
+        const prev_location = await cache.get('prev_location');
+        if(prev_location !== undefined){
+            location = JSON.parse(prev_location);
+        }else{
+            console.log('Getting user location...');
+            setPermissionStatus('granted');
+            location = await Location.getCurrentPositionAsync({});
+        }
         const address = await Location.reverseGeocodeAsync(location.coords);
         setAddress(address)
         setRegion({
@@ -57,10 +65,11 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             latitudeDelta: 0.05922,
             longitudeDelta: 0.01421
         } as Region);
-        // await cache.set("prev_location", JSON.stringify({latitude: location.coords.latitude,
-        //     longitude: location.coords.longitude,}));
+        await cache.set("prev_location", JSON.stringify(location));
         setUserLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
+        
    }
+
 
     const watch_location = async () => {  
         if (permissionStatus === 'granted') {     

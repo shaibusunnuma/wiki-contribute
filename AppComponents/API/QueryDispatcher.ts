@@ -43,7 +43,6 @@ export class SPARQLQueryDispatcher {
 			const cityQid = res[res.length - 1]
 			this.getEntityQuery(cityQid);
 			const entitiesQueryUrl = this.endpoint + '?query=' + encodeURIComponent( this.entitiesQuery );
-			console.log(this.entitiesQuery)
 			return fetch( entitiesQueryUrl, { headers } ).then( body => body.json() )
 		});
 		

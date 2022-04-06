@@ -5,7 +5,6 @@ import {Entity} from '../CustomTypes'
 //@ts-ignore
 export function EntityProperties({route}) {
   const {entity} = route.params;
-  console.log(entity);
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Details</Text>
