@@ -37,7 +37,8 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const [region, setRegion] = React.useState({} as Region);
     const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
 
-    
+    // cache.remove('wiki');
+    // cache.remove('prev_location')
 
     const getUserLocation = async() => {
         const { status } = await  Location.requestForegroundPermissionsAsync();
@@ -46,17 +47,24 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             setPermissionStatus('Permission to access location was denied');
             return;
         }
+        setPermissionStatus('granted');
 
-        let location: LocationObject  = {} as LocationObject;
-
+        console.log('Getting user location...');
+        const location = await Location.getCurrentPositionAsync({});
         const prev_location = await cache.get('prev_location');
         if(prev_location !== undefined){
-            location = JSON.parse(prev_location);
-        }else{
-            console.log('Getting user location...');
-            setPermissionStatus('granted');
-            location = await Location.getCurrentPositionAsync({});
+            const oldloc = JSON.parse(prev_location) as LocationObject;
+            const distance = getDistance(
+                    { latitude: oldloc.coords.latitude, longitude:  oldloc.coords.longitude },
+                    { latitude: location.coords.latitude, longitude: location.coords.longitude }
+                );
+            console.log(distance);
+            if(distance > 1000){
+                await cache.set("prev_location", JSON.stringify(location));
+                cache.remove('wiki');
+            }
         }
+
         const address = await Location.reverseGeocodeAsync(location.coords);
         setAddress(address)
         setRegion({
@@ -65,7 +73,7 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
             latitudeDelta: 0.05922,
             longitudeDelta: 0.01421
         } as Region);
-        await cache.set("prev_location", JSON.stringify(location));
+        
         setUserLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
         
    }
@@ -74,9 +82,9 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     const watch_location = async () => {  
         if (permissionStatus === 'granted') {     
             console.log('Tracking user location');
-            let location = await Location.watchPositionAsync({
+            await Location.watchPositionAsync({
                 accuracy:Location.Accuracy.High,
-                timeInterval: 10000,
+                timeInterval: 100000,
                 distanceInterval: 80,
             },
             (newLocation)=> {
@@ -94,49 +102,39 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         }
     }
 
-    const GetDistance = (prevLocation: {latitude: string, longitude: string}) => {
-        const distance = getDistance(
-            { latitude: userLocation.latitude, longitude: userLocation.longitude },
-            { latitude: prevLocation.latitude, longitude: prevLocation.longitude }
-        )
-        return distance;
-    }
-
     const getData = async() => {
         try{
-            // const cachedData = await cache.get("wiki");
-            // cache.remove('wiki');
-            // const prev_location = await cache.get('prev_location');
-            // if(cachedData !== undefined && prev_location !== undefined){
-            //     if(GetDistance(JSON.parse(prev_location)) < 1000)
-            //     console.log('Getting data from cache...');
-            //     const data = JSON.parse(cachedData);
-            //     setEntities(data);
-            // }else{
+            const cachedData = await cache.get("wiki");
+            if(cachedData !== undefined ){
+                console.log('Getting data from cache...');
+                const data = JSON.parse(cachedData);
+                setEntities(data);
+            }else{
                 console.log('Querying wikidata...')
                 const queryDispatcher = new SPARQLQueryDispatcher(userLocation, address[0].city);
                 queryDispatcher.query()
                 .then( response => {
-                    //console.log(response.results.bindings)
                     setEntities(response.results.bindings);
                     return response.results.bindings;
                 })
                 .then(async(response)=>{
                     await cache.set("wiki", JSON.stringify(response));
                 })
-            //}
+            }
         }catch(error){
-            console.log(error);
+            console.log(error.message);
         }
         
     
     }
 
     React.useEffect(() => {
-        if(userLocation.latitude !== undefined) getData();
-        else getUserLocation();
+        if(userLocation.latitude === undefined) getUserLocation();
+        else getData();
         
     },[userLocation]);
+
+    React.useEffect(() => console.log(userLocation),[userLocation])
 
     // React.useEffect(() =>{
     //     if(userLocation.latitude !== undefined) watch_location();
