@@ -12,19 +12,23 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <>
-    <Search />
-    <WikiProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Navigation}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Properties" component={EntityProperties} options={{ title: 'Welcome' }}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-    </WikiProvider>
+      <Search />
+      <WikiProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={Navigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="Properties" 
+            component={EntityProperties} 
+            options={{ title: 'Properties' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      </WikiProvider>
     </>
   );
 }

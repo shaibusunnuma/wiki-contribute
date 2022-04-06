@@ -5,7 +5,12 @@ import { WikiContext } from '../../Context/Context';
 
 //@ts-ignore
 const Item = ({ entity, navigation }) => (
-  <TouchableOpacity onPress={() =>console.log(navigation.navigate('Properties'))} style={styles.item}>
+  <TouchableOpacity 
+    onPress={
+      () =>navigation.navigate('Properties',
+      {entity: entity})
+    } 
+    style={styles.item}>
     <Text style={styles.title}>{entity.placeLabel.value}</Text>
   </TouchableOpacity>
 );
