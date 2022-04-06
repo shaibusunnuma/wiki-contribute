@@ -134,8 +134,6 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         
     },[userLocation]);
 
-    React.useEffect(() => console.log(userLocation),[userLocation])
-
     // React.useEffect(() =>{
     //     if(userLocation.latitude !== undefined) watch_location();
     // },[permissionStatus, userLocation]);

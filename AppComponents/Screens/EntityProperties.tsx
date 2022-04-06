@@ -1,7 +1,13 @@
 import React from 'react';
-import { Text, SafeAreaView} from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {SPARQLQueryDispatcher} from '../API/PropertiesQueryDispatcher';
 
+//@ts-ignore
+const Item = ({ property }) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{property.wdLabel.value} : {property.ps_Label.value}</Text>
+  </View>
+);
 
 //@ts-ignore
 export function EntityProperties({route}) {
@@ -9,7 +15,6 @@ export function EntityProperties({route}) {
   const [properties, setProperties] = React.useState([]);
   const [recoin, setRecoin] = React.useState([])
 
-  let props = [];
 
   const getQID = () => {
     if(entity.QID !== undefined) {return entity.QID}
@@ -23,7 +28,6 @@ export function EntityProperties({route}) {
     .then( response => {
         const props = response.results.bindings;
         setProperties(props)
-        console.log(response)
     })
     // queryDispatcher.queryRecoinProperties()
     // .then(response => {
@@ -34,12 +38,40 @@ export function EntityProperties({route}) {
   React.useEffect(() => {
     loadProperties();
   },[]);
+  
+  //@ts-ignore
+  const renderItem = ({ item }) => (
+    <Item  property={item} />
+  );
 
-  console.log(getQID());
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Details</Text>
+      {properties.length !== 0 && 
+        <FlatList
+          data={properties}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      }
     </SafeAreaView>
   );
 }
+
+
+const styles = StyleSheet.create({
+  mainView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems:'center'
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+})
 
