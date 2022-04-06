@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {Feed, Notifications, Profile, Map} from '../Screens'
+import {Feed, Notifications, Profile, Map} from '../Screens';
 
 const Tab = createMaterialBottomTabNavigator();
 

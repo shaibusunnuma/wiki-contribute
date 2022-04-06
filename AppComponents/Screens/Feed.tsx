@@ -4,20 +4,20 @@ import {Entity} from '../CustomTypes'
 import { WikiContext } from '../../Context/Context';
 
 //@ts-ignore
-const Item = ({ entity }) => (
-  <TouchableOpacity onPress={() =>console.log(entity)}style={styles.item}>
+const Item = ({ entity, navigation }) => (
+  <TouchableOpacity onPress={() =>console.log(navigation.navigate('Properties'))} style={styles.item}>
     <Text style={styles.title}>{entity.placeLabel.value}</Text>
   </TouchableOpacity>
 );
 
 
-
-export function Feed() {
+//@ts-ignore
+export function Feed({navigation}) {
   const {entities} = React.useContext(WikiContext);
 
   //@ts-ignore
   const renderItem = ({ item }) => (
-    <Item entity={item} />
+    <Item navigation={navigation} entity={item} />
   );
 
   return (

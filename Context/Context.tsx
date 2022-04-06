@@ -1,5 +1,5 @@
 import React from 'react';
-import { Address, LatLng, Region } from 'react-native-maps';
+import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
 import {getDistance} from 'geolib';
 import * as Location from 'expo-location';
