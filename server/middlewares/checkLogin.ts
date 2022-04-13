@@ -3,11 +3,10 @@ import generalConfig from '../config';
 
 
 export default function confirmLogin(req: Request, res: Response, next: NextFunction) {
-    if (req.query.username === '' && req.query.password === '') {
-        generalConfig.credentials.username = '';
-        generalConfig.credentials.password = '';
+    if(req.query.username == undefined || req.query.password == undefined){
+        generalConfig.credentials.username = 'client';
+        generalConfig.credentials.password = 'clientpassword';
         generalConfig.anonymous = true;
-        console.log('User is not logged in');
     }else{
         generalConfig.credentials.username = req.query.username!.toString();
         generalConfig.credentials.password = req.query.password!.toString();

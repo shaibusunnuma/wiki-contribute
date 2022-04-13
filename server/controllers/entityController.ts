@@ -5,14 +5,14 @@ const wbEdit = require('wikibase-edit')(generalConfig)
 
 const router = express.Router();
 
-router.get('/edit'), (async(req: Request, res: Response) => {
+router.get('/edit', async(req: Request, res: Response) => {
     try{
         wbEdit.entity.edit({
             id: req.query.id,
-            labels: req.query.labels,
-            descriptions: req.query.description,
-            aliases: req.query.aliases,
-            summary: req.query.summary,
+            labels: JSON.parse(req.query.labels!.toString()),
+            descriptions: JSON.parse(req.query.descriptions!.toString()),
+            aliases: JSON.parse(req.query.aliases!.toString()),
+            summary: 'Edited'
         })
         res.status(200).send('Success');
     }catch(e){
