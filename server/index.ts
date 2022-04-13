@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express'; 
-import router from './routes/entity';
+import router from './controllers/entityController';
 import checkLogin from './middlewares/checkLogin';
 
 const app: Express = express();

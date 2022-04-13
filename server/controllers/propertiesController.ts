@@ -19,4 +19,19 @@ router.get('/create'), (async(req: Request, res: Response) => {
     }
 })
 
+router.get('/update'), (async(req: Request, res: Response) => {
+    try{
+        wbEdit.claim.update({
+            id: req.query.id,
+            property: req.query.property,
+            oldValue: req.query.oldValue,
+            newValue: req.query.newValue,
+        })
+        res.status(200).send('Success');
+    }catch(e){
+        console.log(e)
+        res.status(500).send('fail');
+    }
+})
+
 export default router;
