@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import express from 'express';
 import { Request, Response } from 'express';
 import generalConfig from '../config'
