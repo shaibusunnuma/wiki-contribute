@@ -8,11 +8,55 @@ const router = express.Router();
 router.get('/edit'), (async(req: Request, res: Response) => {
     try{
         wbEdit.entity.edit({
-            id: 'Q494',
+            id: req.query.id,
             labels: req.query.labels,
             descriptions: req.query.description,
             aliases: req.query.aliases,
             summary: req.query.summary,
+        })
+        res.status(200).send('Success');
+    }catch(e){
+        res.status(500).send('fail');
+        console.log(e)
+    }
+})
+
+//TODO: add controller for create entity and add entity
+
+router.get('/label'), (async(req: Request, res: Response) => {
+    try{
+        wbEdit.label.set({
+            id: req.query.id,
+            language: req.query.language,
+            value: req.query.value,
+        })
+        res.status(200).send('Success');
+    }catch(e){
+        res.status(500).send('fail');
+        console.log(e)
+    }
+})
+
+router.get('/description'), (async(req: Request, res: Response) => {
+    try{
+        wbEdit.description.set({
+            id: req.query.id,
+            language: req.query.language,
+            value: req.query.value,
+        })
+        res.status(200).send('Success');
+    }catch(e){
+        res.status(500).send('fail');
+        console.log(e)
+    }
+})
+
+router.get('/alias'), (async(req: Request, res: Response) => {
+    try{
+        wbEdit.description.add({
+            id: req.query.id,
+            language: req.query.language,
+            value: req.query.value, //TODO pass an array
         })
         res.status(200).send('Success');
     }catch(e){
