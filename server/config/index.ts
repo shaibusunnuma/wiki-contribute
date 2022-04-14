@@ -1,4 +1,4 @@
-const generalConfig = {
+export default {
   instance: 'https://test.wikidata.org',
   wgScriptPath: '/w',
 
@@ -12,5 +12,3 @@ const generalConfig = {
   bot: false,
   maxlag: 5
 }
-
-export default generalConfig;
