@@ -1,37 +1,32 @@
-import express from 'express';
-import { Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import generalConfig from '../config'
 const wbEdit = require('wikibase-edit')(generalConfig)
 
-const router = express.Router();
-
-router.get('/create'), (async(req: Request, res: Response) => {
+export const addProperty = async(args: { [argName: string]: any; }) => {
     try{
         wbEdit.claim.create({
-            id: req.query.id,
-            property: req.query.property,
-            value: req.query.value,
+            id: args.id,
+            property: args.property,
+            value: args.value,
         })
-        res.status(200).send('Success');
+        return 'Success';
     }catch(e){
         console.log(e)
-        res.status(500).send('fail');
+        return 'Fail';
     }
-})
+}
 
-router.get('/update'), (async(req: Request, res: Response) => {
+export const updateProperty = async(args: { [argName: string]: any; }) => {
     try{
         wbEdit.claim.update({
-            id: req.query.id,
-            property: req.query.property,
-            oldValue: req.query.oldValue,
-            newValue: req.query.newValue,
+            id: args.id,
+            property: args.property,
+            oldValue: args.oldValue,
+            newValue: args.newValue,
         })
-        res.status(200).send('Success');
+        return 'Success';
     }catch(e){
         console.log(e)
-        res.status(500).send('fail');
+        return 'Fail';
     }
-})
-
-export default router;
+}
