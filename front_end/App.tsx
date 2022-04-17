@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './AppComponents/Search';
@@ -11,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
+    <SafeAreaProvider>
       <Search />
       <WikiProvider>
       <NavigationContainer>
@@ -29,6 +30,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
       </WikiProvider>
-    </>
+    </SafeAreaProvider>
   );
 }
