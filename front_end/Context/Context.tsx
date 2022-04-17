@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
 import { getDistance } from 'geolib';
