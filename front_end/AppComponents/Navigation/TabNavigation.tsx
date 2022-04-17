@@ -8,7 +8,7 @@ const Tab = createMaterialBottomTabNavigator();
 export function MyTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Feed"
+      initialRouteName="Map"
       activeColor="#ffffff"
     //   labelStyle={{ fontSize: 12 }}
       barStyle={{ backgroundColor: '#006699' }}
