@@ -70,8 +70,8 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
         setRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
-            latitudeDelta: 0.05922,
-            longitudeDelta: 0.01421
+            latitudeDelta: 0,
+            longitudeDelta: 0.01
         } as Region);
         
         setUserLocation({latitude: location.coords.latitude, longitude: location.coords.longitude});
