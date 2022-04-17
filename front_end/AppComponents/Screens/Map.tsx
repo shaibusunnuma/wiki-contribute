@@ -1,7 +1,7 @@
 import * as React from 'react';
 import MapView, { Marker, Region, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { WikiContext } from '../../Context/Context';
+import { WikiContext } from '../../Context';
 
 import { Mark } from '../CustomTypes'
 

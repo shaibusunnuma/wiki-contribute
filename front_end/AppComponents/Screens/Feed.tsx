@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, SafeAreaView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import {Entity} from '../CustomTypes'
-import { WikiContext } from '../../Context/Context';
+import { WikiContext } from '../../Context';
 
 //@ts-ignore
 const Item = ({ entity, navigation }) => (
