@@ -3,7 +3,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Search from './AppComponents/Search';
+import Search from './AppComponents/CommonComponents/Search';
 import {WikiProvider} from './Context';
 import Navigation from './AppComponents/Navigation';
 
