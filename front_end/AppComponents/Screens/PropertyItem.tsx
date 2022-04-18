@@ -45,7 +45,6 @@ const ImageValue = ({ value }) => (
 
 const styles = StyleSheet.create({
   itemContainer: {
-    borderColor: 'blue',
     padding: 0,
     marginVertical: 0,
     marginHorizontal: 0,

@@ -1,3 +1,3 @@
-import { MyTabs } from './TabNavigation'
+import MyTabs from './TabNavigation'
 
 export default MyTabs;

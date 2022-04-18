@@ -5,7 +5,7 @@ import {Feed, Notifications, Profile, Map} from '../Screens';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export function MyTabs() {
+export default () => {
   return (
     <Tab.Navigator
       initialRouteName="Map"
