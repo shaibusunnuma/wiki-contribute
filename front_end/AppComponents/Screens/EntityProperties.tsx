@@ -1,13 +1,7 @@
 import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import { SafeAreaView, StyleSheet, FlatList} from 'react-native';
 import {SPARQLQueryDispatcher} from '../API/PropertiesQueryDispatcher';
-
-//@ts-ignore
-const Item = ({ property }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{property.wdLabel.value} : {property.ps_Label.value}</Text>
-  </View>
-);
+import Item from './PropertyItem';
 
 //@ts-ignore
 export function EntityProperties({route}) {
@@ -45,7 +39,7 @@ export function EntityProperties({route}) {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <SafeAreaView style={styles.mainView}>
       {properties.length !== 0 && 
         <FlatList
           data={properties}
@@ -61,17 +55,8 @@ export function EntityProperties({route}) {
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems:'center'
-  },
-  item: {
-    backgroundColor: 'white',
-    padding: 20,
-    marginVertical: 0,
-    marginHorizontal: 0,
-  },
-  title: {
-    fontSize: 16,
-  },
+    // justifyContent: 'center',
+    // alignItems:'center'
+  }
 })
 
