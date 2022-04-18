@@ -1,13 +1,21 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, FlatList} from 'react-native';
+import Modal from 'react-native-modal';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { SafeAreaView, StyleSheet, FlatList, View, Button, TouchableOpacity} from 'react-native';
 import {SPARQLQueryDispatcher} from '../API/PropertiesQueryDispatcher';
 import Item from './PropertyItem';
+import AddProperty from './AddPropertyForm';
 
 //@ts-ignore
-export function EntityProperties({route}) {
+export function EntityProperties({route, navigation}) {
   const {entity} = route.params;
   const [properties, setProperties] = React.useState([]);
   const [recoin, setRecoin] = React.useState([])
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
 
   const getQID = () => {
@@ -29,6 +37,17 @@ export function EntityProperties({route}) {
     // })
   }
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Statements',
+      headerRight: () => (
+              <TouchableOpacity onPress={toggleModal}>
+                <MaterialCommunityIcons name="plus" size={24} color="black" />
+              </TouchableOpacity>
+            )
+    })
+  }, [])
+
   React.useEffect(() => {
     loadProperties();
   },[]);
@@ -47,6 +66,15 @@ export function EntityProperties({route}) {
           keyExtractor={(item, index) => index.toString()}
         />
       }
+      <Modal
+        isVisible={isModalVisible}>
+        <View>
+          <AddProperty />
+          <View>
+            <Button title="Hide modal" onPress={toggleModal} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
