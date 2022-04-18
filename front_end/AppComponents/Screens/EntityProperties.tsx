@@ -1,14 +1,20 @@
+//@ts-nocheck
 import React from 'react';
+import { SafeAreaView, StyleSheet, FlatList, View, Button, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SafeAreaView, StyleSheet, FlatList, View, Button, TouchableOpacity} from 'react-native';
 import {SPARQLQueryDispatcher} from '../API/PropertiesQueryDispatcher';
-import Item from '../CommonComponents/PropertyItem';
+import Item from '../CommonComponents/PropertyListItem';
 import AddProperty from '../CommonComponents/AddPropertyForm';
 import EditProperty from '../CommonComponents/EditPropertyForm';
+import {RootStackParamList} from '../CustomTypes'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-//@ts-ignore
-export function EntityProperties({route, navigation}) {
+
+
+type EntityListProps = NativeStackScreenProps<RootStackParamList, 'Properties'>;
+
+export function EntityProperties({route, navigation}: EntityListProps) {
   const {entity} = route.params;
   const [properties, setProperties] = React.useState([]);
   const [modalType, setModalType] = React.useState('');
@@ -42,7 +48,6 @@ export function EntityProperties({route, navigation}) {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Statements',
       headerRight: () => (
               <TouchableOpacity onPress={toggleModal}>
                 <MaterialCommunityIcons name="plus" size={24} color="black" />

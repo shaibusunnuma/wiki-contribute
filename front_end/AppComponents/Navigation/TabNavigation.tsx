@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -5,14 +6,13 @@ import {Feed, Notifications, Profile, Map} from '../Screens';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default () => {
+export default ():JSX.Element => {
   return (
     <Tab.Navigator
+      id="tabStack"
       initialRouteName="Map"
       activeColor="#ffffff"
-    //   labelStyle={{ fontSize: 12 }}
       barStyle={{ backgroundColor: '#006699' }}
-      style={{ backgroundColor: 'tomato' }}
     >
       <Tab.Screen
         name="Feed"

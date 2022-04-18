@@ -1,5 +1,12 @@
 import { LatLng, Region } from 'react-native-maps';
 import {LocationObject} from 'expo-location';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+export type RootStackParamList = {
+  Home: undefined;
+  Properties: { entity: Entity };
+};
+
 
 
 export interface Entity {

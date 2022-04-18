@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './AppComponents/CommonComponents/Search';
 import {WikiProvider} from './Context';
 import Navigation from './AppComponents/Navigation';
+import { RootStackParamList } from './AppComponents/CustomTypes';
 
 import { EntityProperties } from './AppComponents/Screens/EntityProperties';
 
@@ -14,7 +15,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
@@ -23,18 +24,19 @@ export default function App() {
         <Search />
         <WikiProvider>
         <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
+          {/* @ts-ignore */}
+          <RootStack.Navigator id="rootStack" initialRouteName="Home">
+            <RootStack.Screen
               name="Home"
               component={Navigation}
               options={{ headerShown: false }}
             />
-            <Stack.Screen 
+            <RootStack.Screen 
               name="Properties" 
               component={EntityProperties} 
               options={{ title: 'Properties' }}
             />
-          </Stack.Navigator>
+          </RootStack.Navigator>
         </NavigationContainer>
         </WikiProvider>
       </ApolloProvider>

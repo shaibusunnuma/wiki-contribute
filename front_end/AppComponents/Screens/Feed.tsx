@@ -1,35 +1,22 @@
 import React from 'react';
-import { Text, SafeAreaView, StyleSheet, FlatList, TouchableOpacity, View } from 'react-native';
-import { ListItem } from "@rneui/base";
+import { SafeAreaView, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native';
+import Item from '../CommonComponents/EntityListItem';
 import { WikiContext } from '../../Context';
+import { RootStackParamList, Entity} from '../CustomTypes';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RouteProp } from '@react-navigation/native';
 
-//@ts-ignore
-const Item = ({ entity, navigation, setQID }) => (
-  <ListItem 
-    Component={TouchableOpacity}
-    containerStyle={styles.itemContainer}
-    onPress={() => {
-      const placeValue = entity.place.value.split('/')
-      setQID(placeValue[placeValue.length - 1]);
-      navigation.navigate('Properties',{entity: entity})
-    }}
-    onLongPress={() => console.log("onLongPress()")}
-  >
-  <View style={styles.item}>
-    <Text style={styles.title}>{entity.placeLabel.value}</Text>
-  </View>
-    
-  </ListItem>
-);
+interface FeedProps {
+    navigation: NativeStackNavigationProp<RootStackParamList, "Properties", undefined>;
+    route: RouteProp<RootStackParamList, "Properties">;
 
+}
 
-//@ts-ignore
-export function Feed({navigation}) {
+export function Feed({navigation, route}: FeedProps) {
   const {entities, setQID} = React.useContext(WikiContext);
 
-  //@ts-ignore
-  const renderItem = ({ item }) => (
-    <Item navigation={navigation} entity={item} setQID={setQID}/>
+  const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
+    <Item route={route} navigation={navigation} entity={item} setQID={setQID}/>
   );
 
   return (
