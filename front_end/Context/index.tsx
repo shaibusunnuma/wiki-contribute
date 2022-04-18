@@ -13,6 +13,8 @@ const contextDefaultData: WikiContextState = {
     region: {} as Region,
     entities: [],
     setUserLocation: () => {},
+    QID: '',
+    setQID: () => {},
 }
 
 interface Props {
@@ -31,14 +33,14 @@ const cache = new Cache({
 export const WikiContext = React.createContext<WikiContextState>(contextDefaultData);
 
 export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
+    const [QID, setQID] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [entities, setEntities] = React.useState([] as Entity[]);
     const [userLocation, setUserLocation] = React.useState({} as LatLng);
     const [permissionStatus, setPermissionStatus] = React.useState('');
     const [region, setRegion] = React.useState({} as Region);
     const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
-
-    // cache.remove('wiki');
-    // cache.remove('prev_location')
 
     const getUserLocation = async() => {
         const { status } = await  Location.requestForegroundPermissionsAsync();
@@ -139,7 +141,14 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
     // },[permissionStatus, userLocation]);
 
     return (
-        <WikiContext.Provider value={{region, entities, setUserLocation}}>{children}</WikiContext.Provider>
+        <WikiContext.Provider 
+        value={{
+            region, 
+            entities, 
+            setUserLocation,
+            QID,
+            setQID,
+        }}>{children}</WikiContext.Provider>
     )
 }
 

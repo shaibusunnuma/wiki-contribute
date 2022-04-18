@@ -14,6 +14,8 @@ type WikiContextState = {
     region: Region;
     entities : Entity[];
     setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
+    QID: string;
+    setQID: React.Dispatch<React.SetStateAction<string, string>>
 }
 
 export type Mark = {

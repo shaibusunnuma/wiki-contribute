@@ -4,12 +4,15 @@ import { ListItem } from "@rneui/base";
 import { WikiContext } from '../../Context';
 
 //@ts-ignore
-const Item = ({ entity, navigation }) => (
+const Item = ({ entity, navigation, setQID }) => (
   <ListItem 
     Component={TouchableOpacity}
     containerStyle={styles.itemContainer}
-    onPress={() =>navigation.navigate('Properties',{entity: entity})
-    }
+    onPress={() => {
+      const placeValue = entity.place.value.split('/')
+      setQID(placeValue[placeValue.length - 1]);
+      navigation.navigate('Properties',{entity: entity})
+    }}
     onLongPress={() => console.log("onLongPress()")}
   >
   <View style={styles.item}>
@@ -22,11 +25,11 @@ const Item = ({ entity, navigation }) => (
 
 //@ts-ignore
 export function Feed({navigation}) {
-  const {entities} = React.useContext(WikiContext);
+  const {entities, setQID} = React.useContext(WikiContext);
 
   //@ts-ignore
   const renderItem = ({ item }) => (
-    <Item navigation={navigation} entity={item} />
+    <Item navigation={navigation} entity={item} setQID={setQID}/>
   );
 
   return (
