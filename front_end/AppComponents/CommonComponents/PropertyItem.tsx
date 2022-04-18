@@ -4,25 +4,26 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ListItem, Card } from "@rneui/base";
 
 //@ts-ignore
-export default ({ property }) => {
-    let Value;
-    if (property.wdLabel.value ===  'image'){
-        Value = <ImageValue value={property.ps_Label.value} />
-    } else {
-        Value = <TextValue value={property.ps_Label.value} />
-    }
+export default ({ property, setModalType, setIsModalVisible }) => {
+    const Value = (property.wdLabel.value ===  'image') 
+      ? <ImageValue value={property.ps_Label.value} /> : <TextValue value={property.ps_Label.value} />
+
+    const toggleModal = () => {
+      setModalType('edit');
+      setIsModalVisible(true);
+    };
+
     return (
     <ListItem containerStyle={styles.itemContainer}>
         <Card containerStyle={styles.card}>
             <View style={styles.top}>
                 <Text style={styles.property}>{property.wdLabel.value}</Text>
-                <TouchableOpacity style={styles.iconContainer} onPress={() =>console.log('You clicked a property')}>
+                <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
                     <MaterialCommunityIcons name="pencil" size={18} color="black" />
                 </TouchableOpacity>
             </View>
             <Card.Divider />
             {Value}
-            {/* <Text style={styles.value}> {property.ps_Label.value}</Text> */}
         </Card>
     </ListItem>
     )
