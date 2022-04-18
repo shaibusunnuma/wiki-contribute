@@ -3,17 +3,20 @@ import Modal from 'react-native-modal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView, StyleSheet, FlatList, View, Button, TouchableOpacity} from 'react-native';
 import {SPARQLQueryDispatcher} from '../API/PropertiesQueryDispatcher';
-import Item from './PropertyItem';
-import AddProperty from './AddPropertyForm';
+import Item from '../CommonComponents/PropertyItem';
+import AddProperty from '../CommonComponents/AddPropertyForm';
+import EditProperty from '../CommonComponents/EditPropertyForm';
 
 //@ts-ignore
 export function EntityProperties({route, navigation}) {
   const {entity} = route.params;
   const [properties, setProperties] = React.useState([]);
+  const [modalType, setModalType] = React.useState('');
   const [recoin, setRecoin] = React.useState([])
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   
   const toggleModal = () => {
+    setModalType('add');
     setIsModalVisible(!isModalVisible);
   };
 
@@ -54,7 +57,11 @@ export function EntityProperties({route, navigation}) {
   
   //@ts-ignore
   const renderItem = ({ item }) => (
-    <Item  property={item} />
+    <Item  
+      property={item} 
+      setModalType={setModalType} 
+      setIsModalVisible={setIsModalVisible}
+    />
   );
 
   return (
@@ -69,7 +76,7 @@ export function EntityProperties({route, navigation}) {
       <Modal
         isVisible={isModalVisible}>
         <View>
-          <AddProperty />
+          {modalType === 'add' ? <AddProperty /> : <EditProperty />}
           <View>
             <Button color="white" title="Hide modal" onPress={toggleModal} />
           </View>
