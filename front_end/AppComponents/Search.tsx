@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Animated, { Easing } from "react-native-reanimated";
+import Animated, { EasingNode } from "react-native-reanimated";
 const {Value, timing} = Animated
 
 //calculate window size
@@ -32,12 +32,12 @@ export default function Search(){
         const input_box_translate_x_config: any = {
             duration: 0,
             toValue: 0,
-            easing: Easing.inOut(Easing.ease)
+            easing: EasingNode.inOut(EasingNode.ease)
         }
         const back_button_opacity_config: any = {
             duration: 200,
             toValue: 1,
-            easing: Easing.inOut(Easing.ease)
+            easing: EasingNode.inOut(EasingNode.ease)
         }
 
         timing(_input_box_translate_x, input_box_translate_x_config).start();
@@ -50,12 +50,12 @@ export default function Search(){
         const input_box_translate_x_config: any = {
             duration: 200,
             toValue: width,
-            easing: Easing.inOut(Easing.ease)
+            easing: EasingNode.inOut(EasingNode.ease)
         }
         const back_button_opacity_config: any = {
             duration: 50,
             toValue: 0,
-            easing: Easing.inOut(Easing.ease)
+            easing: EasingNode.inOut(EasingNode.ease)
         }
 
         timing(_input_box_translate_x, input_box_translate_x_config).start();
