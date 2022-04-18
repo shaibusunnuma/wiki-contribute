@@ -123,8 +123,8 @@ export const WikiProvider = ({children}: React.PropsWithChildren<Props>) =>{
                     await cache.set("wiki", JSON.stringify(response));
                 })
             }
-        }catch(error){
-            console.log(error.message);
+        }catch(e){
+            console.log(e);
         }
         
     
