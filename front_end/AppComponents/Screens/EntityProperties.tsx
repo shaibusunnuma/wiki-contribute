@@ -71,7 +71,7 @@ export function EntityProperties({route, navigation}) {
         <View>
           <AddProperty />
           <View>
-            <Button title="Hide modal" onPress={toggleModal} />
+            <Button color="white" title="Hide modal" onPress={toggleModal} />
           </View>
         </View>
       </Modal>
@@ -83,8 +83,8 @@ export function EntityProperties({route, navigation}) {
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems:'center'
+    justifyContent: 'center',
+    alignItems:'center'
   }
 })
 
