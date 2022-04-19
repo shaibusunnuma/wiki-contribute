@@ -1,5 +1,5 @@
 import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
-import {addProperty, updateProperty} from '../controllers/propertiesController';
+import { addProperty, updateProperty } from '../controllers/propertiesController';
 import PropertyUpdateType from './type_defs/propertyUpdateType';
 import PropertyCreationType from './type_defs/propertyCreationType';
 
@@ -20,12 +20,12 @@ const rootMutation = new GraphQLObjectType({
         editEntity: {
             type: GraphQLString,
             args: {
-                username: {type: GraphQLString},
-                password: {type: GraphQLString},
-                id: {type: GraphQLString},
-                labels: {type: GraphQLString},
-                descriptions: {type: GraphQLString},
-                aliases: {type: GraphQLList(GraphQLString)},//TODO create types for labels and descriptions and aliases.
+                username: { type: GraphQLString },
+                password: { type: GraphQLString },
+                id: { type: GraphQLString },
+                labels: { type: GraphQLString },
+                descriptions: { type: GraphQLString },
+                aliases: { type: GraphQLList(GraphQLString) },//TODO create types for labels and descriptions and aliases.
             },
             resolve: (root, args) => {
                 console.log('Edit entity');
@@ -35,11 +35,11 @@ const rootMutation = new GraphQLObjectType({
         addProperty: {
             type: PropertyCreationType,
             args: {
-                username: {type: GraphQLString},
-                password: {type: GraphQLString},
-                id: {type: GraphQLString},
-                property: {type: GraphQLString},
-                value: {type: GraphQLString},
+                username: { type: GraphQLString },
+                password: { type: GraphQLString },
+                id: { type: GraphQLString },
+                property: { type: GraphQLString },
+                value: { type: GraphQLString },
             },
             resolve: (root, args) => {
                 addProperty(args);
@@ -48,12 +48,12 @@ const rootMutation = new GraphQLObjectType({
         updateProperty: {
             type: PropertyUpdateType,
             args: {
-                username: {type: GraphQLString},
-                password: {type: GraphQLString},
-                id: {type: GraphQLString},
-                property: {type: GraphQLString},
-                oldValue: {type: GraphQLString},
-                newValue: {type: GraphQLString},
+                username: { type: GraphQLString },
+                password: { type: GraphQLString },
+                id: { type: GraphQLString },
+                property: { type: GraphQLString },
+                oldValue: { type: GraphQLString },
+                newValue: { type: GraphQLString },
             },
             resolve: (root, args) => {
                 updateProperty(args);
