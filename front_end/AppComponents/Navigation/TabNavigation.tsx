@@ -1,62 +1,61 @@
 // @ts-nocheck
-import * as React from 'react';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {Feed, Notifications, Profile, Map} from '../Screens';
+import * as React from "react";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feed, Notifications, Map, Settings } from "../Screens";
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default ():JSX.Element => {
+export default (): JSX.Element => {
   return (
     <Tab.Navigator
       id="tabStack"
       initialRouteName="Map"
       activeColor="#ffffff"
-      barStyle={{ backgroundColor: '#006699' }}
+      barStyle={{ backgroundColor: "#006699" }}
     >
       <Tab.Screen
         name="Feed"
         component={Feed}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
       />
-      
+
       <Tab.Screen
         name="Map"
         component={Map}
         options={{
-          tabBarLabel: 'Map',
+          tabBarLabel: "Map",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="map" color={color} size={26} />
           ),
         }}
       />
-      
+
       <Tab.Screen
         name="Notifications"
         component={Notifications}
         options={{
-          tabBarLabel: 'Updates',
+          tabBarLabel: "Updates",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Settings"
+        component={Settings}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
+            <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),
         }}
       />
-      
     </Tab.Navigator>
   );
-}
+};
