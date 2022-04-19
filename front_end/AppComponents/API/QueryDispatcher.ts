@@ -1,21 +1,21 @@
 import { LatLng } from 'react-native-maps';
 
 export class SPARQLQueryDispatcher {
-    endpoint: string;
+	endpoint: string;
 	entitiesQuery: string;
 	locationQuery: string;
 	coords: LatLng;
-	constructor( latlong: LatLng, city: string | null,) {
+	constructor(latlong: LatLng, city: string | null,) {
 		this.coords = latlong;
 		this.entitiesQuery = "";
 		this.endpoint = 'https://query.wikidata.org/sparql';
-		this.locationQuery=`SELECT DISTINCT ?item WHERE {
+		this.locationQuery = `SELECT DISTINCT ?item WHERE {
 			?item ?label "${city}"@en;
 				wdt:P31 wd:Q515.
 			SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 			}`
 	}
-	getEntityQuery(cityQid: string){
+	getEntityQuery(cityQid: string) {
 		this.entitiesQuery = `SELECT ?place ?placeLabel ?placeDescription ?lat ?long  WHERE {
 			?place wdt:P131+ wd:${cityQid} .  # administrative territorial entity
 			?place p:P625 ?statement . # coordinate-location statement
@@ -31,25 +31,25 @@ export class SPARQLQueryDispatcher {
 			}
 			} ORDER BY DESC(?lat)
 		`
-	} 
+	}
 
 	query() {
-		const locationQueryUrl = this.endpoint + '?query=' + encodeURIComponent( this.locationQuery );
+		const locationQueryUrl = this.endpoint + '?query=' + encodeURIComponent(this.locationQuery);
 		const headers = { 'Accept': 'application/sparql-results+json' };
-		return fetch( locationQueryUrl, { headers } ).then( body => body.json() )
-		.then(data => {
-			try {
-				const res = data.results.bindings[0].item.value.split('/');
-				const cityQid = res[res.length - 1]
-				this.getEntityQuery(cityQid);
-				const entitiesQueryUrl = this.endpoint + '?query=' + encodeURIComponent( this.entitiesQuery );
-				return fetch( entitiesQueryUrl, { headers } ).then( body => body.json() )
-			} catch (error) {
-				console.log(error)
-			}
-			
-		});
-		
+		return fetch(locationQueryUrl, { headers }).then(body => body.json())
+			.then(data => {
+				try {
+					const res = data.results.bindings[0].item.value.split('/');
+					const cityQid = res[res.length - 1]
+					this.getEntityQuery(cityQid);
+					const entitiesQueryUrl = this.endpoint + '?query=' + encodeURIComponent(this.entitiesQuery);
+					return fetch(entitiesQueryUrl, { headers }).then(body => body.json())
+				} catch (error) {
+					console.log(error)
+				}
+
+			});
+
 	}
 }
 
