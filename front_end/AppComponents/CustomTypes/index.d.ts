@@ -22,7 +22,9 @@ type WikiContextState = {
     entities : Entity[];
     setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
     QID: string;
-    setQID: React.Dispatch<React.SetStateAction<string, string>>
+    setQID: React.Dispatch<React.SetStateAction<string, string>>;
+    username: string;
+    password: string;
 }
 
 export type Mark = {
