@@ -24,6 +24,7 @@ type WikiContextState = {
   QID: string;
   setQID: React.Dispatch<React.SetStateAction<string, string>>;
   clearCache: () => void;
+  refreshWiki: () => void;
   username: string;
   password: string;
 }

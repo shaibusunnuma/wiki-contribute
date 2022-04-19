@@ -22,7 +22,7 @@ interface FeedProps {
 }
 
 export default function ({ navigation, route }: FeedProps) {
-  const { entities, setQID } = React.useContext(WikiContext);
+  const { entities, setQID, refreshWiki } = React.useContext(WikiContext);
   const [refresh, setRefresh] = React.useState(false);
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
@@ -38,7 +38,11 @@ export default function ({ navigation, route }: FeedProps) {
         ListEmptyComponent={() => <Text>No items</Text>}
         initialNumToRender={20}
         refreshing={false}
-        onRefresh={() => console.log("onRefresh()")}
+        onRefresh={() => {
+          setRefresh(true);
+          refreshWiki();
+          // setRefresh(false);
+        }}
       />
     </SafeAreaView>
   );

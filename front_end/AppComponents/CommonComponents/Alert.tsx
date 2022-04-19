@@ -7,5 +7,11 @@ export default (clearCache) =>
       onPress: () => console.log("Cancel Pressed"),
       style: "cancel",
     },
-    { text: "OK", onPress: clearCache },
+    {
+      text: "OK",
+      onPress: () => {
+        clearCache();
+        Alert.alert("Cache Cleared");
+      },
+    },
   ]);

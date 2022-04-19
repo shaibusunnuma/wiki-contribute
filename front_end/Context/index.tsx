@@ -16,6 +16,7 @@ const contextDefaultData: WikiContextState = {
   QID: "",
   setQID: () => {},
   clearCache: () => {},
+  refreshWiki: () => {},
   username: "",
   password: "",
 };
@@ -157,6 +158,12 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }
   };
 
+  const refreshWiki = async () => {
+    clearCache();
+    // await cache.remove("wiki");
+    await getData();
+  };
+
   React.useEffect(() => {
     if (userLocation.latitude === undefined) getUserLocation();
     else getData();
@@ -175,6 +182,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         QID,
         setQID,
         clearCache,
+        refreshWiki,
         username,
         password,
       }}
