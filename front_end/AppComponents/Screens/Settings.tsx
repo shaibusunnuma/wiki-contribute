@@ -8,8 +8,11 @@ import {
   CheckRow,
   SwitchRow,
 } from "react-native-settings-view";
+import { WikiContext } from "../../Context";
+import createAlert from "../CommonComponents/Alert";
 
 export default () => {
+  const { clearCache } = React.useContext(WikiContext);
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
       <SettingsPage style={{ flex: 1 }}>
@@ -71,10 +74,7 @@ export default () => {
         </SectionRow>
       </SettingsPage>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Button
-          title="Clear Cache"
-          onPress={() => console.log("clear cache")}
-        />
+        <Button title="Clear Cache" onPress={() => createAlert(clearCache)} />
         <Text style={{}}>Version 1.0.0</Text>
       </View>
     </View>

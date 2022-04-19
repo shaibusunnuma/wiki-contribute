@@ -15,6 +15,7 @@ const contextDefaultData: WikiContextState = {
   setUserLocation: () => {},
   QID: "",
   setQID: () => {},
+  clearCache: () => {},
   username: "",
   password: "",
 };
@@ -123,6 +124,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }
   };
 
+  const clearCache = () => {
+    cache.remove("wiki");
+    cache.remove("prev_location");
+  };
+
   const getData = async () => {
     try {
       const cachedData = await cache.get("wiki");
@@ -168,6 +174,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         setUserLocation,
         QID,
         setQID,
+        clearCache,
         username,
         password,
       }}
