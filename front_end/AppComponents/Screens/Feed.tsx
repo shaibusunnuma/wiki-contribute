@@ -4,6 +4,7 @@ import {
   StyleSheet,
   FlatList,
   ListRenderItemInfo,
+  Text,
 } from "react-native";
 import Item from "../CommonComponents/EntityListItem";
 import { WikiContext } from "../../Context";
@@ -22,6 +23,7 @@ interface FeedProps {
 
 export default function ({ navigation, route }: FeedProps) {
   const { entities, setQID } = React.useContext(WikiContext);
+  const [refresh, setRefresh] = React.useState(false);
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
     <Item route={route} navigation={navigation} entity={item} setQID={setQID} />
@@ -33,6 +35,10 @@ export default function ({ navigation, route }: FeedProps) {
         data={entities}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={() => <Text>No items</Text>}
+        initialNumToRender={20}
+        refreshing={false}
+        onRefresh={() => console.log("onRefresh()")}
       />
     </SafeAreaView>
   );
