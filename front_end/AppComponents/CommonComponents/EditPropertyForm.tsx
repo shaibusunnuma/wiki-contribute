@@ -15,19 +15,19 @@ export default () => {
 
   //TODO: pass user inputs
   const editProperty = () => {
-    updateProperty({
-      variables: {
-        username: "Shaibu108",
-        password: "Brainiac@108",
-        id: "Q494",
-        property: "P196",
-        oldValue: "Q193995",
-        newValue: "Q38",
-      },
-    });
-
-    if (error) {
-      console.log(error);
+    try {
+      updateProperty({
+        variables: {
+          username: "Shaibu108",
+          password: "Brainiac@108",
+          id: "Q494",
+          property: "P196",
+          oldValue: "Q193995",
+          newValue: "Q38",
+        },
+      });
+    } catch (e) {
+      console.log(e);
     }
   };
 
