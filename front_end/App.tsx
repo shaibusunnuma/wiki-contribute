@@ -49,7 +49,7 @@ const retryLink = new RetryLink({
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: from([errorLink, httpLink, retryLink]),
+  link: from([errorLink, retryLink, httpLink]),
 });
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -58,7 +58,6 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <SafeAreaProvider>
-        <Search />
         <WikiProvider>
           <NavigationContainer>
             {/* @ts-ignore */}

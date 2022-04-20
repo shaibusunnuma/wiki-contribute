@@ -11,6 +11,7 @@ import { WikiContext } from "../../Context";
 import { RootStackParamList, Entity } from "../CustomTypes";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
+import Search from "../CommonComponents/Search";
 
 interface FeedProps {
   navigation: NativeStackNavigationProp<
@@ -30,21 +31,24 @@ export default function ({ navigation, route }: FeedProps) {
   );
 
   return (
-    <SafeAreaView style={styles.mainView}>
-      <FlatList
-        data={entities}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        ListEmptyComponent={() => <Text>No items</Text>}
-        initialNumToRender={20}
-        refreshing={false}
-        onRefresh={() => {
-          setRefresh(true);
-          refreshWiki();
-          // setRefresh(false);
-        }}
-      />
-    </SafeAreaView>
+    <>
+      <Search />
+      <SafeAreaView style={styles.mainView}>
+        <FlatList
+          data={entities}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={() => <Text>No items</Text>}
+          initialNumToRender={20}
+          refreshing={false}
+          onRefresh={() => {
+            setRefresh(true);
+            refreshWiki();
+            // setRefresh(false);
+          }}
+        />
+      </SafeAreaView>
+    </>
   );
 }
 
