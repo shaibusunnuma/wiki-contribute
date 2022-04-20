@@ -8,8 +8,11 @@ import { WikiProvider } from "./Context";
 import Navigation from "./AppComponents/Navigation";
 import client from "./GraphQL/Config";
 import { RootStack } from "./AppComponents/Navigation/ScreenStacks";
+import { StatusBar } from "react-native";
 
 export default function App() {
+  StatusBar.setHidden(false);
+  StatusBar.setBarStyle("dark-content");
   return (
     <ApolloProvider client={client}>
       <SafeAreaProvider>
