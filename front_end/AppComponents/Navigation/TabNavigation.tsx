@@ -1,7 +1,7 @@
 // @ts-nocheck
 import * as React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import {
   FeedStackScreen,
   NotificationsStackScreen,
@@ -22,9 +22,13 @@ export default (): JSX.Element => {
         name="FeedTab"
         component={FeedStackScreen}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "List",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+            <MaterialCommunityIcons
+              name="format-list-bulleted"
+              color={color}
+              size={26}
+            />
           ),
         }}
       />
@@ -35,7 +39,7 @@ export default (): JSX.Element => {
         options={{
           tabBarLabel: "Map",
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="map" color={color} size={26} />
+            <Entypo name="location" size={26} color={color} />
           ),
         }}
       />
