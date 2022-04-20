@@ -5,7 +5,9 @@ export class SPARQLQueryDispatcher {
 	entitiesQuery: string;
 	locationQuery: string;
 	coords: LatLng;
-	constructor(latlong: LatLng, city: string | null,) {
+	range: string;
+	constructor(latlong: LatLng, city: string | null, range: string) {
+		this.range = range;
 		this.coords = latlong;
 		this.entitiesQuery = "";
 		this.endpoint = 'https://query.wikidata.org/sparql';
@@ -23,8 +25,8 @@ export class SPARQLQueryDispatcher {
 			?coordinate_node wikibase:geoLatitude ?lat .
 			?coordinate_node wikibase:geoLongitude ?long .
 
-			FILTER (ABS(?lat - ${this.coords.latitude}) < 0.008)
-			FILTER (ABS(?long - ${this.coords.longitude}) < 0.008)
+			FILTER (ABS(?lat - ${this.coords.latitude}) < ${this.range})
+			FILTER (ABS(?long - ${this.coords.longitude}) < ${this.range})
 
 			SERVICE wikibase:label {
 				bd:serviceParam wikibase:language "en" .

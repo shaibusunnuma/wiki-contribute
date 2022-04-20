@@ -9,14 +9,21 @@ import {
   CheckRow,
   SwitchRow,
 } from "react-native-settings-view";
+import Modal from "react-native-modal";
 import { WikiContext } from "../../Context";
 import createAlert from "../CommonComponents/Alert";
 import { RootStackParamList } from "../CustomTypes";
+import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
 
 type EntityListProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export default ({ route, navigation }: EntityListProps) => {
-  const { clearCache } = React.useContext(WikiContext);
+  const { clearCache, queryRange } = React.useContext(WikiContext);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
@@ -45,6 +52,15 @@ export default ({ route, navigation }: EntityListProps) => {
               type: "font-awesome",
             }}
             onPress={() => console.log("contact")}
+          />
+          <BaseRow
+            text="Query range"
+            leftIcon={{
+              name: "tag",
+              type: "font-awesome",
+            }}
+            rightContent={<Text>{queryRange}</Text>}
+            onPress={toggleModal}
           />
           <CheckRow
             text="Notifications"
@@ -78,10 +94,20 @@ export default ({ route, navigation }: EntityListProps) => {
           />
         </SectionRow>
       </SettingsPage>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View
+        style={{ flex: 0.5, justifyContent: "center", alignItems: "center" }}
+      >
         <Button title="Clear Cache" onPress={() => createAlert(clearCache)} />
         <Text style={{}}>Version 1.0.0</Text>
       </View>
+      <Modal isVisible={isModalVisible}>
+        <View>
+          <EditQueryRangeForm toggleModal={toggleModal} />
+          <View>
+            <Button color="white" title="Hide modal" onPress={toggleModal} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

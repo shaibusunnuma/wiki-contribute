@@ -29,8 +29,10 @@ type WikiContextState = {
   setQID: React.Dispatch<React.SetStateAction<string, string>>;
   clearCache: () => void;
   refreshWiki: () => void;
+  setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
   username: string;
   password: string;
+  queryRange: string;
 }
 
 export type Mark = {

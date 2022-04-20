@@ -17,8 +17,10 @@ const contextDefaultData: WikiContextState = {
   setQID: () => {},
   clearCache: () => {},
   refreshWiki: () => {},
+  setQueryRange: () => {},
   username: "",
   password: "",
+  queryRange: "",
 };
 
 interface Props {
@@ -41,6 +43,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [QID, setQID] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [queryRange, setQueryRange] = React.useState("0.008");
   const [entities, setEntities] = React.useState([] as Entity[]);
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
   const [permissionStatus, setPermissionStatus] = React.useState("");
@@ -139,9 +142,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         setEntities(data);
       } else {
         console.log("Querying wikidata...");
+        console.log(queryRange);
         const queryDispatcher = new SPARQLQueryDispatcher(
           userLocation,
-          address[0].city
+          address[0].city,
+          queryRange
         );
         queryDispatcher
           .query()
@@ -185,6 +190,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         refreshWiki,
         username,
         password,
+        queryRange,
+        setQueryRange,
       }}
     >
       {children}
