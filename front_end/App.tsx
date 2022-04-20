@@ -1,58 +1,13 @@
+//@ts-nocheck
+import "react-native-gesture-handler";
 import * as React from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  from,
-  HttpLink,
-} from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Search from "./AppComponents/CommonComponents/Search";
 import { WikiProvider } from "./Context";
 import Navigation from "./AppComponents/Navigation";
-import { RootStackParamList } from "./AppComponents/CustomTypes";
-import { onError } from "@apollo/client/link/error";
-import { RetryLink } from "@apollo/client/link/retry";
-
-import { EntityProperties } from "./AppComponents/Screens/EntityProperties";
-
-const httpLink = new HttpLink({ uri: "http://localhost:3000/graphql" });
-
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.map(({ message, locations, path }) => {
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      );
-    });
-  }
-  if (networkError) console.log(`[Network error]: ${networkError}`);
-});
-
-const retryLink = new RetryLink({
-  delay: {
-    initial: 300,
-
-    max: Infinity,
-
-    jitter: true,
-  },
-
-  attempts: {
-    max: 5,
-
-    retryIf: (error, _operation) => !!error,
-  },
-});
-
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: from([errorLink, retryLink, httpLink]),
-});
-
-const RootStack = createNativeStackNavigator<RootStackParamList>();
+import client from "./GraphQL/Config";
+import { RootStack } from "./AppComponents/Navigation/ScreenStacks";
 
 export default function App() {
   return (
@@ -60,17 +15,11 @@ export default function App() {
       <SafeAreaProvider>
         <WikiProvider>
           <NavigationContainer>
-            {/* @ts-ignore */}
             <RootStack.Navigator id="rootStack" initialRouteName="Home">
               <RootStack.Screen
                 name="Home"
                 component={Navigation}
                 options={{ headerShown: false }}
-              />
-              <RootStack.Screen
-                name="Properties"
-                component={EntityProperties}
-                options={{ title: "Properties" }}
               />
             </RootStack.Navigator>
           </NavigationContainer>

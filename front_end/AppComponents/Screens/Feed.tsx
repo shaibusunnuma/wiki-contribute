@@ -8,26 +8,26 @@ import {
 } from "react-native";
 import Item from "../CommonComponents/EntityListItem";
 import { WikiContext } from "../../Context";
-import { RootStackParamList, Entity } from "../CustomTypes";
+import { FeedStackParamList, Entity } from "../CustomTypes";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
 import Search from "../CommonComponents/Search";
 
 interface FeedProps {
   navigation: NativeStackNavigationProp<
-    RootStackParamList,
+    FeedStackParamList,
     "Properties",
     undefined
   >;
-  route: RouteProp<RootStackParamList, "Properties">;
+  route: RouteProp<FeedStackParamList, "Properties">;
 }
 
-export default function ({ navigation, route }: FeedProps) {
+export default function ({ navigation }: FeedProps) {
   const { entities, setQID, refreshWiki } = React.useContext(WikiContext);
   const [refresh, setRefresh] = React.useState(false);
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
-    <Item route={route} navigation={navigation} entity={item} setQID={setQID} />
+    <Item navigation={navigation} entity={item} setQID={setQID} />
   );
 
   return (

@@ -2,8 +2,12 @@
 import * as React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Feed, Notifications, Map, Settings } from "../Screens";
-
+import {
+  FeedStackScreen,
+  NotificationsStackScreen,
+  SettingsStackScreen,
+} from "./ScreenStacks";
+import { Map } from "../Screens";
 const Tab = createMaterialBottomTabNavigator();
 
 export default (): JSX.Element => {
@@ -15,8 +19,8 @@ export default (): JSX.Element => {
       barStyle={{ backgroundColor: "#006699" }}
     >
       <Tab.Screen
-        name="Feed"
-        component={Feed}
+        name="FeedTab"
+        component={FeedStackScreen}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color }) => (
@@ -37,18 +41,19 @@ export default (): JSX.Element => {
       />
 
       <Tab.Screen
-        name="Notifications"
-        component={Notifications}
+        name="NotificationsTab"
+        component={NotificationsStackScreen}
         options={{
           tabBarLabel: "Updates",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
+          title: "Notifications",
         }}
       />
       <Tab.Screen
-        name="Settings"
-        component={Settings}
+        name="SettingsTab"
+        component={SettingsStackScreen}
         options={{
           tabBarLabel: "Settings",
           tabBarIcon: ({ color }) => (

@@ -1,5 +1,6 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
-import { Text, View, Button } from "react-native";
+import { View, Button, Text } from "react-native";
 import {
   SectionRow,
   SettingsPage,
@@ -10,9 +11,13 @@ import {
 } from "react-native-settings-view";
 import { WikiContext } from "../../Context";
 import createAlert from "../CommonComponents/Alert";
+import { RootStackParamList } from "../CustomTypes";
 
-export default () => {
+type EntityListProps = NativeStackScreenProps<RootStackParamList, "Home">;
+
+export default ({ route, navigation }: EntityListProps) => {
   const { clearCache } = React.useContext(WikiContext);
+
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
       <SettingsPage style={{ flex: 1 }}>
