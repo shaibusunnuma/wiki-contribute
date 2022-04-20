@@ -25,17 +25,36 @@ interface FeedProps {
 export default function ({ navigation }: FeedProps) {
   const { entities, setQID, refreshWiki } = React.useContext(WikiContext);
   const [refresh, setRefresh] = React.useState(false);
+  const [filteredData, setFilteredData] = React.useState(entities);
+  const [search, setSearch] = React.useState("");
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
     <Item navigation={navigation} entity={item} setQID={setQID} />
   );
 
+  const searchFilterFunction = (text: string) => {
+    if (text) {
+      const newData = entities.filter(function (item) {
+        const itemData = item.placeLabel.value
+          ? item.placeLabel.value.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredData(newData);
+      setSearch(text);
+    } else {
+      setFilteredData(entities);
+      setSearch(text);
+    }
+  };
+
   return (
     <>
-      <Search />
       <SafeAreaView style={styles.mainView}>
+        <Search searchFunction={searchFilterFunction} />
         <FlatList
-          data={entities}
+          data={filteredData}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           ListEmptyComponent={() => <Text>No items</Text>}
@@ -59,18 +78,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "100%",
     width: "100%",
-  },
-  itemContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    marginVertical: 1,
-    marginHorizontal: 5,
-  },
-  item: {
-    width: "100%",
-    margin: 0,
-  },
-  title: {
-    fontSize: 18,
   },
 });

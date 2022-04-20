@@ -1,7 +1,7 @@
 //@ts-nocheck
-import * as React from "react";
+import React from "react";
 import MapView, { Marker, Region, PROVIDER_GOOGLE } from "react-native-maps";
-import { StatusBar } from "react-native";
+import { SafeAreaView } from "react-native";
 import * as Location from "expo-location";
 import { WikiContext } from "../../Context";
 
@@ -44,7 +44,7 @@ export default function Map({ navigation }) {
   }, [entities]);
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {region.latitude !== undefined && (
         <MapView
           style={{ flex: 1 }}
@@ -69,6 +69,6 @@ export default function Map({ navigation }) {
           })}
         </MapView>
       )}
-    </>
+    </SafeAreaView>
   );
 }

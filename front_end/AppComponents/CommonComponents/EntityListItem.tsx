@@ -32,7 +32,7 @@ export default ({ entity, navigation, setQID }: EntityListItemProps) => (
     onLongPress={() => console.log("onLongPress()")}
   >
     <View style={styles.item}>
-      <Text style={styles.title}>{entity.placeLabel.value}</Text>
+      <Text style={styles.title}>{entity.placeLabel.value.toUpperCase()}</Text>
     </View>
   </ListItem>
 );
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   title: {
-    fontSize: 18,
+    fontSize: 15,
   },
 });
