@@ -56,7 +56,7 @@ export default ({ route, navigation }: EntityListProps) => {
           <BaseRow
             text="Query range"
             leftIcon={{
-              name: "tag",
+              name: "globe",
               type: "font-awesome",
             }}
             rightContent={<Text>{queryRange}</Text>}

@@ -5,6 +5,7 @@ import {
   FlatList,
   ListRenderItemInfo,
   Text,
+  View,
 } from "react-native";
 import Item from "../CommonComponents/EntityListItem";
 import { WikiContext } from "../../Context";
@@ -12,6 +13,7 @@ import { FeedStackParamList, Entity } from "../CustomTypes";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";
 import Search from "../CommonComponents/Search";
+import { Chase } from "react-native-animated-spinkit";
 
 interface FeedProps {
   navigation: NativeStackNavigationProp<
@@ -23,7 +25,8 @@ interface FeedProps {
 }
 
 export default function ({ navigation }: FeedProps) {
-  const { entities, setQID, refreshWiki } = React.useContext(WikiContext);
+  const { entities, setQID, refreshWiki, loadingData } =
+    React.useContext(WikiContext);
   const [refresh, setRefresh] = React.useState(false);
   const [filteredData, setFilteredData] = React.useState(entities);
   const [search, setSearch] = React.useState("");
@@ -48,24 +51,50 @@ export default function ({ navigation }: FeedProps) {
       setSearch(text);
     }
   };
+  React.useEffect(() => {
+    setFilteredData(entities);
+  }, [entities]);
 
   return (
     <>
       <SafeAreaView style={styles.mainView}>
         <Search searchFunction={searchFilterFunction} />
-        <FlatList
-          data={filteredData}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          ListEmptyComponent={() => <Text>No items</Text>}
-          initialNumToRender={20}
-          refreshing={false}
-          onRefresh={() => {
-            setRefresh(true);
-            refreshWiki();
-            // setRefresh(false);
-          }}
-        />
+        {!loadingData ? (
+          <FlatList
+            data={filteredData}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text>No items</Text>
+                <Text>
+                  Increase Query Range in Settings to query wider region
+                </Text>
+              </View>
+            )}
+            initialNumToRender={20}
+            refreshing={false}
+            onRefresh={() => {
+              setRefresh(true);
+              refreshWiki();
+            }}
+          />
+        ) : (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
+            <View style={{ padding: 10 }}>
+              <Chase size={48} color="#006699" />
+            </View>
+            <Text>Loading WikiData...</Text>
+          </View>
+        )}
       </SafeAreaView>
     </>
   );

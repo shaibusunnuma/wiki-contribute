@@ -14,7 +14,7 @@ export default function Search({ searchFunction }) {
         <SearchBar
           style={styles.search_bar}
           placeholder="Search here"
-          onPress={() => alert("onPress")}
+          onPress={() => console.log("search")}
           onChangeText={(text) => searchFunction(text)}
           onClearPress={() => searchFunction("")}
         />

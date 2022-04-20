@@ -6,7 +6,7 @@ import * as Location from "expo-location";
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SPARQLQueryDispatcher } from "../AppComponents/API/QueryDispatcher";
-import { Entity } from "../AppComponents/CustomTypes";
+import { Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
 
 const contextDefaultData: WikiContextState = {
@@ -21,6 +21,10 @@ const contextDefaultData: WikiContextState = {
   username: "",
   password: "",
   queryRange: "",
+  loadingData: false,
+  setLoadingData: () => {},
+  setMarkers: () => {},
+  markers: [] as Mark[],
 };
 
 interface Props {
@@ -43,6 +47,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [QID, setQID] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [markers, setMarkers] = React.useState([] as Mark[]);
+  const [loadingData, setLoadingData] = React.useState(true);
   const [queryRange, setQueryRange] = React.useState("0.008");
   const [entities, setEntities] = React.useState([] as Entity[]);
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
@@ -140,6 +146,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         console.log("Getting data from cache...");
         const data = JSON.parse(cachedData);
         setEntities(data);
+        setLoadingData(false);
       } else {
         console.log("Querying wikidata...");
         console.log(queryRange);
@@ -152,6 +159,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
           .query()
           .then((response) => {
             setEntities(response.results.bindings);
+            setLoadingData(false);
             return response.results.bindings;
           })
           .then(async (response) => {
@@ -165,7 +173,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
 
   const refreshWiki = async () => {
     clearCache();
-    // await cache.remove("wiki");
+    setMarkers([]);
+    setLoadingData(true);
     await getData();
   };
 
@@ -192,6 +201,10 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         password,
         queryRange,
         setQueryRange,
+        loadingData,
+        setLoadingData,
+        setMarkers,
+        markers,
       }}
     >
       {children}

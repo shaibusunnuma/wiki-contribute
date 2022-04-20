@@ -1,17 +1,19 @@
 //@ts-nocheck
 import React from "react";
 import MapView, { Marker, Region, PROVIDER_GOOGLE } from "react-native-maps";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View, Text } from "react-native";
 import * as Location from "expo-location";
 import { WikiContext } from "../../Context";
+import { Fold } from "react-native-animated-spinkit";
 
 import { Mark } from "../CustomTypes";
 
 //@ts-ignore
 export default function Map({ navigation }) {
-  const { region, entities, setUserLocation } = React.useContext(WikiContext);
+  const { region, entities, markers, setMarkers, setUserLocation } =
+    React.useContext(WikiContext);
 
-  const [markers, setMarkers] = React.useState([] as Mark[]);
+  //const [markers, setMarkers] = React.useState([] as Mark[]);
 
   // const onRegionChanged = (region: Region) => {
   //   setRegion(region);
@@ -45,7 +47,7 @@ export default function Map({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      {region.latitude !== undefined && (
+      {region.latitude !== undefined ? (
         <MapView
           style={{ flex: 1 }}
           provider={PROVIDER_GOOGLE}
@@ -68,6 +70,15 @@ export default function Map({ navigation }) {
             );
           })}
         </MapView>
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View style={{ padding: 10 }}>
+            <Fold size={48} color="#006699" />
+          </View>
+          <Text>Loading WikiData...</Text>
+        </View>
       )}
     </SafeAreaView>
   );
