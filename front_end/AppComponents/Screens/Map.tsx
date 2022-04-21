@@ -1,7 +1,12 @@
 //@ts-nocheck
 import React from "react";
-import MapView, { Marker, Region, PROVIDER_GOOGLE } from "react-native-maps";
-import { SafeAreaView, View, Text } from "react-native";
+import MapView, {
+  Marker,
+  Region,
+  PROVIDER_GOOGLE,
+  Callout,
+} from "react-native-maps";
+import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import { WikiContext } from "../../Context";
 import { Fold } from "react-native-animated-spinkit";
@@ -60,13 +65,23 @@ export default function Map({ navigation }) {
               <Marker
                 key={index}
                 coordinate={marker.coordinates}
-                title={marker.title}
                 image={require("../../assets/marker_map_icon.png")}
-                description={marker.description}
-                onPress={() =>
-                  navigation.navigate("Properties", { entity: marker })
-                }
-              />
+              >
+                <Callout
+                  tooltip
+                  onPress={() =>
+                    navigation.navigate("Properties", { entity: marker })
+                  }
+                >
+                  <View style={styles.calloutView}>
+                    <Text>
+                      {marker.title}
+                      {"\n"}
+                      {marker.description}
+                    </Text>
+                  </View>
+                </Callout>
+              </Marker>
             );
           })}
         </MapView>
@@ -83,3 +98,12 @@ export default function Map({ navigation }) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  calloutView: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 8,
+  },
+});
