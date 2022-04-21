@@ -31,6 +31,8 @@ type WikiContextState = {
   queryRange: string;
   loadingData: boolean;
   markers: Mark[];
+  loadProperties: (qid: string) => void;
+  properties: any[];
 }
 
 export type Mark = {

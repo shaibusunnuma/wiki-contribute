@@ -1,11 +1,11 @@
 import { LatLng } from 'react-native-maps';
 
-export class SPARQLQueryDispatcher {
+export class PropertiesSPARQLQueryDispatcher {
 	QID: string;
 	endpoint: string;
 	recoin_endpoint: string;
 	sparqlQuery: string;
-	constructor( QID: string ) {
+	constructor(QID: string) {
 		this.QID = QID;
 		this.endpoint = 'https://query.wikidata.org/sparql';
 		this.recoin_endpoint = `https://recoin.toolforge.org/getmissingattributes.php?lang=en&subject=${QID}&n=10`
@@ -28,15 +28,15 @@ export class SPARQLQueryDispatcher {
 	}
 
 	query() {
-		const fullUrl = this.endpoint + '?query=' + encodeURIComponent( this.sparqlQuery );
+		const fullUrl = this.endpoint + '?query=' + encodeURIComponent(this.sparqlQuery);
 		const headers = { 'Accept': 'application/sparql-results+json' };
-		return fetch( fullUrl, { headers } ).then( body => body.json() )
+		return fetch(fullUrl, { headers }).then(body => body.json())
 		//.then( response => console.log(response))
 	}
 
-	queryRecoinProperties(){
+	queryRecoinProperties() {
 		return fetch(this.recoin_endpoint).then(body => body.json())
-		.then( response => console.log(response))
+			.then(response => console.log(response))
 	}
 }
 

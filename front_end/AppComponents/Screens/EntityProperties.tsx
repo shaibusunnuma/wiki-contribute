@@ -11,19 +11,19 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { SPARQLQueryDispatcher } from "../API/PropertiesQueryDispatcher";
 import Item from "../CommonComponents/PropertyListItem";
 import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
 import { RootStackParamList } from "../CustomTypes";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Chase } from "react-native-animated-spinkit";
+import { WikiContext } from "../../Context";
 
 type EntityListProps = NativeStackScreenProps<RootStackParamList, "Properties">;
 
 export function EntityProperties({ route, navigation }: EntityListProps) {
+  const { properties, loadProperties } = React.useContext(WikiContext);
   const { entity } = route.params;
-  const [properties, setProperties] = React.useState([]);
   const [modalType, setModalType] = React.useState("");
   const [recoin, setRecoin] = React.useState([]);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
@@ -40,19 +40,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     return entity.place.value.split("/")[4];
   };
 
-  const loadProperties = async () => {
-    console.log("Querying entity properties...");
-    const queryDispatcher = new SPARQLQueryDispatcher(getQID());
-    queryDispatcher.query().then((response) => {
-      const props = response.results.bindings;
-      setProperties(props);
-    });
-    // queryDispatcher.queryRecoinProperties()
-    // .then(response => {
-    //   console.log(response)
-    // })
-  };
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -64,7 +51,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   }, []);
 
   React.useEffect(() => {
-    loadProperties();
+    loadProperties(getQID());
   }, []);
 
   //@ts-ignore

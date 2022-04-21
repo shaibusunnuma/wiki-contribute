@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SPARQLQueryDispatcher } from "../AppComponents/API/QueryDispatcher";
 import { Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
+import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
 
 const contextDefaultData: WikiContextState = {
   region: {} as Region,
@@ -25,6 +26,8 @@ const contextDefaultData: WikiContextState = {
   setLoadingData: () => {},
   setMarkers: () => {},
   markers: [] as Mark[],
+  loadProperties: (qid: string) => {},
+  properties: [],
 };
 
 interface Props {
@@ -57,16 +60,15 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [address, setAddress] = React.useState(
     {} as Location.LocationGeocodedAddress[]
   );
+  const [properties, setProperties] = React.useState([]);
 
   const getUserLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
-
     if (status !== "granted") {
       setPermissionStatus("Permission to access location was denied");
       return;
     }
     setPermissionStatus("granted");
-
     console.log("Getting user location...");
     const location = await Location.getCurrentPositionAsync({});
     const prev_location = await cache.get("prev_location");
@@ -104,7 +106,36 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     });
   };
 
-  const watch_location = async () => {
+  const addPropertiesToCache = async (qid: string, properties: string) => {
+    const cache_data = await cache.peek(qid);
+    if (cache_data === undefined) {
+      console.log("Adding properties to cache...");
+      await cache.set(qid, properties);
+    }
+  };
+
+  const loadProperties = async (qid: string) => {
+    const cache_data = await cache.peek(qid);
+    if (cache_data !== undefined) {
+      console.log("Getting properties from cache...");
+      setProperties(JSON.parse(cache_data));
+    } else {
+      console.log("Fetching properties");
+      const queryDispatcher = new PropertiesSPARQLQueryDispatcher(qid);
+      queryDispatcher.query().then((response) => {
+        const props = response.results.bindings;
+        addPropertiesToCache(qid, JSON.stringify(props));
+        setProperties(props);
+      });
+    }
+
+    // queryDispatcher.queryRecoinProperties()
+    // .then(response => {
+    //   console.log(response)
+    // })
+  };
+
+  const watchLocation = async () => {
     if (permissionStatus === "granted") {
       console.log("Tracking user location");
       await Location.watchPositionAsync(
@@ -134,9 +165,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }
   };
 
-  const clearCache = () => {
-    cache.remove("wiki");
-    cache.remove("prev_location");
+  const clearCache = async () => {
+    await cache.clearAll();
   };
 
   const getData = async () => {
@@ -149,7 +179,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         setLoadingData(false);
       } else {
         console.log("Querying wikidata...");
-        console.log(queryRange);
         const queryDispatcher = new SPARQLQueryDispatcher(
           userLocation,
           address[0].city,
@@ -205,6 +234,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         setLoadingData,
         setMarkers,
         markers,
+        loadProperties,
+        properties,
       }}
     >
       {children}
