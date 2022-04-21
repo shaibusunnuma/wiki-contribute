@@ -6,6 +6,7 @@ import {
   FlatList,
   View,
   Button,
+  Text,
   TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
@@ -16,6 +17,7 @@ import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
 import { RootStackParamList } from "../CustomTypes";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Chase } from "react-native-animated-spinkit";
 
 type EntityListProps = NativeStackScreenProps<RootStackParamList, "Properties">;
 
@@ -76,12 +78,21 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
 
   return (
     <SafeAreaView style={styles.mainView}>
-      {properties.length !== 0 && (
+      {properties.length !== 0 ? (
         <FlatList
           data={properties}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
         />
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View style={{ padding: 10 }}>
+            <Chase size={48} color="#006699" />
+          </View>
+          <Text>Loading Properties...</Text>
+        </View>
       )}
       <Modal isVisible={isModalVisible}>
         <View>
