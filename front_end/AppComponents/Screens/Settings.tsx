@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
-import { View, Button, Text } from "react-native";
+import { View, Button, Text, SafeAreaView } from "react-native";
 import {
   SectionRow,
   SettingsPage,
@@ -26,7 +26,7 @@ export default ({ route, navigation }: EntityListProps) => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
+    <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <SettingsPage style={{ flex: 1 }}>
         <SectionRow>
           <NavigateRow
@@ -108,6 +108,6 @@ export default ({ route, navigation }: EntityListProps) => {
           </View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };

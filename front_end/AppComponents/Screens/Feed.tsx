@@ -81,7 +81,6 @@ export default function ({ navigation }: FeedProps) {
             initialNumToRender={20}
             refreshing={false}
             onRefresh={() => {
-              setRefresh(true);
               refreshWiki();
             }}
           />

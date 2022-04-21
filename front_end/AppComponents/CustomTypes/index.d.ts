@@ -7,12 +7,6 @@ export type FeedStackParamList = {
   Properties: { entity: Entity };
 };
 
-export type RootStackParamList = {
-  Home: undefined;
-};
-
-
-
 export interface Entity {
   lat: { value: number }
   long: { value: number }

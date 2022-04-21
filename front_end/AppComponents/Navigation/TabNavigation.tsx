@@ -1,28 +1,28 @@
 // @ts-nocheck
 import * as React from "react";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
-import {
-  FeedStackScreen,
-  NotificationsStackScreen,
-  SettingsStackScreen,
-} from "./ScreenStacks";
-import { Map } from "../Screens";
-const Tab = createMaterialBottomTabNavigator();
+import { FeedStackScreen } from "./ScreenStacks";
+import { Map, Settings, Notifications } from "../Screens";
+const Tab = createBottomTabNavigator();
 
 export default (): JSX.Element => {
   return (
     <Tab.Navigator
       id="tabStack"
       initialRouteName="Map"
-      activeColor="#ffffff"
-      barStyle={{ backgroundColor: "#006699" }}
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#006699" },
+      }}
     >
       <Tab.Screen
         name="FeedTab"
         component={FeedStackScreen}
         options={{
+          headerShown: false,
           tabBarLabel: "List",
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "#81BAD6",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="format-list-bulleted"
@@ -34,21 +34,27 @@ export default (): JSX.Element => {
       />
 
       <Tab.Screen
-        name="Map"
+        name="MapTab"
         component={Map}
         options={{
           tabBarLabel: "Map",
+          headerShown: false,
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "#81BAD6",
           tabBarIcon: ({ color }) => (
             <Entypo name="location" size={26} color={color} />
           ),
+          title: "Map",
         }}
       />
 
       <Tab.Screen
         name="NotificationsTab"
-        component={NotificationsStackScreen}
+        component={Notifications}
         options={{
           tabBarLabel: "Updates",
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "#81BAD6",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
@@ -57,12 +63,15 @@ export default (): JSX.Element => {
       />
       <Tab.Screen
         name="SettingsTab"
-        component={SettingsStackScreen}
+        component={Settings}
         options={{
           tabBarLabel: "Settings",
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "#81BAD6",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),
+          title: "Settings",
         }}
       />
     </Tab.Navigator>

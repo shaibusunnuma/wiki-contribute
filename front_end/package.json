@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.5.10",
     "@freakycoder/react-native-bounceable": "^0.2.5",
+    "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/material-bottom-tabs": "^6.2.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.1",
@@ -28,6 +29,7 @@
     "react-native-animated-spinkit": "^1.4.1",
     "react-native-cache": "^2.0.2",
     "react-native-dynamic-search-bar": "^2.0.2",
+    "react-native-dynamic-vector-icons": "WrathChaos/react-native-dynamic-vector-icons#expo",
     "react-native-elements": "^3.4.2",
     "react-native-form-component": "^2.3.3",
     "react-native-gesture-handler": "~2.1.0",
@@ -40,7 +42,6 @@
     "react-native-snackbar": "^2.4.0",
     "react-native-spinkit": "^1.5.1",
     "react-native-vector-icons": "^9.1.0",
-    "react-native-dynamic-vector-icons": "WrathChaos/react-native-dynamic-vector-icons#expo",
     "react-native-web": "0.17.1"
   },
   "devDependencies": {
