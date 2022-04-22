@@ -65,7 +65,7 @@ const MapValue = ({ value }) => (
     <TouchableOpacity
       style={styles.iconContainer}
       onPress={() => {
-        openMap({ latitude: +value[0], longitude: +value[1] });
+        openMap({ latitude: +value[1], longitude: +value[0] });
         console.log(+value[1]);
       }}
     >
