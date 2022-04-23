@@ -28,6 +28,7 @@ const contextDefaultData: WikiContextState = {
   markers: [] as Mark[],
   loadProperties: (qid: string) => {},
   properties: [],
+  missingProperties: [],
 };
 
 interface Props {
@@ -61,6 +62,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     {} as Location.LocationGeocodedAddress[]
   );
   const [properties, setProperties] = React.useState([]);
+  const [missingProperties, setMissingProperties] = React.useState([]);
 
   const getUserLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -117,6 +119,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const loadProperties = async (qid: string) => {
     const cache_data = await cache.peek(qid);
     if (cache_data !== undefined) {
+      //TODO: cache missing properties, specify cache name with either properties or missing properties.
       console.log("Getting properties from cache...");
       setProperties(JSON.parse(cache_data));
     } else {
@@ -127,12 +130,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         addPropertiesToCache(qid, JSON.stringify(props));
         setProperties(props);
       });
+      queryDispatcher.queryRecoinProperties().then((response) => {
+        setMissingProperties(response.missing_properties);
+        //console.log(response.missing_properties);
+      });
     }
-
-    // queryDispatcher.queryRecoinProperties()
-    // .then(response => {
-    //   console.log(response)
-    // })
   };
 
   const watchLocation = async () => {
@@ -236,6 +238,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         markers,
         loadProperties,
         properties,
+        missingProperties,
       }}
     >
       {children}
