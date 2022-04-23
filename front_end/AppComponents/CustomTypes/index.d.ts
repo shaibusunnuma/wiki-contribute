@@ -33,6 +33,7 @@ type WikiContextState = {
   markers: Mark[];
   loadProperties: (qid: string) => void;
   properties: any[];
+  missingProperties: any[];
 }
 
 export type Mark = {

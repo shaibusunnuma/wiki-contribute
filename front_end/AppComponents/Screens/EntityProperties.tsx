@@ -25,7 +25,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   const { properties, loadProperties } = React.useContext(WikiContext);
   const { entity } = route.params;
   const [modalType, setModalType] = React.useState("");
-  const [recoin, setRecoin] = React.useState([]);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   const toggleModal = () => {
@@ -65,6 +64,10 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
 
   return (
     <SafeAreaView style={styles.mainView}>
+      <View style={{ width: "100%", backgroundColor: "white" }}>
+        <Button title="Missing properties" />
+      </View>
+
       {properties.length !== 0 ? (
         <FlatList
           data={properties}
@@ -73,7 +76,11 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
         />
       ) : (
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <View style={{ padding: 10 }}>
             <Chase size={48} color="#006699" />
