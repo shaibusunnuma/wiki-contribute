@@ -36,7 +36,6 @@ export class PropertiesSPARQLQueryDispatcher {
 
 	queryRecoinProperties() {
 		return fetch(this.recoin_endpoint).then(body => body.json())
-			.then(response => console.log(response))
 	}
 }
 
