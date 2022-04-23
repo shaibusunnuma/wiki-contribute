@@ -65,7 +65,12 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   return (
     <SafeAreaView style={styles.mainView}>
       <View style={{ width: "100%", backgroundColor: "white" }}>
-        <Button title="Missing properties" />
+        <Button
+          title="Missing properties"
+          onPress={() => {
+            navigation.push("missingProperties");
+          }}
+        />
       </View>
 
       {properties.length !== 0 ? (
