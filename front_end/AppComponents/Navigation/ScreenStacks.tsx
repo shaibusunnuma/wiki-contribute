@@ -2,6 +2,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Feed, Notifications, Settings } from "../Screens";
 import { EntityProperties } from "../Screens/EntityProperties";
+import MissingProperties from "../Screens/MissingProperties";
 
 const SettingsStack = createNativeStackNavigator();
 const FeedStack = createNativeStackNavigator();
@@ -18,6 +19,11 @@ export const FeedStackScreen = () => (
       name="Properties"
       component={EntityProperties}
       options={{ title: "Properties" }}
+    />
+    <FeedStack.Screen
+      name="missingProperties"
+      component={MissingProperties}
+      options={{ title: "Missing Properties" }}
     />
   </FeedStack.Navigator>
 );
