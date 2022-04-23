@@ -11,7 +11,7 @@ import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
 
 //@ts-ignore
-export default ({ missingProperty, setModalType, setIsModalVisible }) => {
+export default ({ item, setModalType, setIsModalVisible }) => {
   const toggleModal = () => {
     setModalType("add");
     setIsModalVisible(true);
@@ -21,19 +21,17 @@ export default ({ missingProperty, setModalType, setIsModalVisible }) => {
     <ListItem containerStyle={styles.itemContainer}>
       <Card containerStyle={styles.card}>
         <View style={styles.top}>
-          <Text style={styles.property}>Missing Property</Text>
+          <Text style={styles.property}>{item.property}</Text>
           <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
-            <MaterialCommunityIcons name="pencil" size={18} color="black" />
+            <MaterialCommunityIcons name="plus" size={20} color="black" />
           </TouchableOpacity>
         </View>
         <Card.Divider />
-        {TextValue}
+        <Text style={styles.value}>{item.label}</Text>
       </Card>
     </ListItem>
   );
 };
-
-const TextValue = ({ value }) => <Text style={styles.value}>{value}</Text>;
 
 const styles = StyleSheet.create({
   itemContainer: {
