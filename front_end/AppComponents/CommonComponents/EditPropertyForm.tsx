@@ -71,13 +71,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 50,
     padding: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#E6E6E6",
   },
   input: {
     paddingHorizontal: 10,
     height: 43,
     margin: 0,
-    borderWidth: 0.5,
   },
   button: {
     alignItems: "center",
