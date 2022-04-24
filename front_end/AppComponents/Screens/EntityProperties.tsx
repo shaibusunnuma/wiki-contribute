@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Modal from "react-native-modal";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import Item from "../CommonComponents/PropertyListItem";
 import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
@@ -96,8 +96,10 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       <Modal isVisible={isModalVisible}>
         <View>
           {modalType === "add" ? <AddProperty /> : <EditProperty />}
-          <View>
-            <Button color="white" title="Hide modal" onPress={toggleModal} />
+          <View style={{ padding: 10, alignItems: "center" }}>
+            <TouchableOpacity onPress={toggleModal}>
+              <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
