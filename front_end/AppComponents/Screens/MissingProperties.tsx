@@ -6,7 +6,6 @@ import {
   FlatList,
   Text,
   View,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import Item from "../CommonComponents/MissingPropertyListItem";
@@ -69,11 +68,6 @@ export default function MissingProperties() {
             <Text>No missing properties</Text>
           </View>
         )}
-        initialNumToRender={20}
-        //   refreshing={false}
-        //   onRefresh={() => {
-        //     refreshWiki();
-        //   }}
       />
       <Modal isVisible={isModalVisible}>
         <View>

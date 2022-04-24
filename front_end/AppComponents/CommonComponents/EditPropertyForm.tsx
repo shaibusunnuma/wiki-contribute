@@ -1,47 +1,16 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { WikiContext } from "../../Context";
-import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-export default () => {
-  const [oldValue, setOldValue] = React.useState("");
-  const [newValue, setNewValue] = React.useState("");
-  const { username, password, selectedEntityQID, selectedPropertyPID } =
-    React.useContext(WikiContext);
-
-  const [updateProperty, { error }] = useMutation(UPDATE_PROPERTY_MUTATION);
-
-  //TODO: pass user inputs
-  const editProperty = () => {
-    try {
-      updateProperty({
-        variables: {
-          username: username,
-          password: password,
-          id: selectedEntityQID,
-          property: selectedPropertyPID,
-          oldValue: oldValue,
-          newValue: newValue,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
+export default ({
+  editProperty,
+  oldValue,
+  setOldValue,
+  newValue,
+  setNewValue,
+}) => {
   return (
     <View style={styles.container}>
-      {/* <FormItem
-        label="Property ID"
-        textInputStyle={styles.input}
-        isRequired
-        showErrorIcon={false}
-        value={propertyID}
-        onChangeText={(propertyID) => setPropertyID(propertyID)}
-        asterik
-      /> */}
       <FormItem
         label="Old Value"
         textInputStyle={styles.input}

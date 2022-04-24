@@ -9,29 +9,57 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { useMutation } from "@apollo/client";
 import Modal from "react-native-modal";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Chase } from "react-native-animated-spinkit";
 import Item from "../CommonComponents/PropertyListItem";
 import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
-import { RootStackParamList } from "../CustomTypes";
+import { FeedStackParamList } from "../CustomTypes";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Chase } from "react-native-animated-spinkit";
 import { WikiContext } from "../../Context";
+import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-type EntityListProps = NativeStackScreenProps<RootStackParamList, "Properties">;
+type EntityListProps = NativeStackScreenProps<FeedStackParamList, "Properties">;
 
 export function EntityProperties({ route, navigation }: EntityListProps) {
-  const { properties, loadProperties } = React.useContext(WikiContext);
+  const {
+    properties,
+    loadProperties,
+    username,
+    password,
+    selectedEntityQID,
+    selectedPropertyPID,
+  } = React.useContext(WikiContext);
   const { entity } = route.params;
   const [modalType, setModalType] = React.useState("");
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [oldValue, setOldValue] = React.useState("");
+  const [newValue, setNewValue] = React.useState("");
+  const [updateProperty, { error }] = useMutation(UPDATE_PROPERTY_MUTATION);
 
   const toggleModal = () => {
     setModalType("add");
     setIsModalVisible(!isModalVisible);
   };
 
+  const editProperty = () => {
+    try {
+      updateProperty({
+        variables: {
+          username: username,
+          password: password,
+          id: selectedEntityQID,
+          property: selectedPropertyPID,
+          oldValue: oldValue,
+          newValue: newValue,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const getQID = () => {
     if (entity.QID !== undefined) {
       return entity.QID;
@@ -43,6 +71,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={toggleModal}>
+          {/* @ts-ignore */}
           <MaterialCommunityIcons name="plus" size={24} color="black" />
         </TouchableOpacity>
       ),
@@ -95,7 +124,17 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       )}
       <Modal isVisible={isModalVisible}>
         <View>
-          {modalType === "add" ? <AddProperty /> : <EditProperty />}
+          {modalType === "add" ? (
+            <AddProperty />
+          ) : (
+            <EditProperty
+              editProperty={editProperty}
+              oldValue={oldValue}
+              setOldValue={setOldValue}
+              newValue={newValue}
+              setNewValue={setNewValue}
+            />
+          )}
           <View style={{ padding: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={toggleModal}>
               <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
