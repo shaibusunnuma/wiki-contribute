@@ -1,10 +1,10 @@
 export default {
-  instance: 'https://test.wikidata.org',
+  instance: 'https://www.wikidata.org',
   wgScriptPath: '/w',
 
   credentials: {
-    username: 'Shaibu108',
-    password: 'Brainiac@108',
+    username: 'username',
+    password: 'userpassword',
   },
   anonymous: false,
   summary: 'some edit summary common to all the edits',
