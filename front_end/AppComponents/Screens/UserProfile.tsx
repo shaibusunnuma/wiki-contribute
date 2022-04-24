@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -6,11 +7,19 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Button,
 } from "react-native";
+import Modal from "react-native-modal";
 import { WikiContext } from "../../Context";
+import EditProfile from "../CommonComponents/EditProfileForm";
+import { Ionicons } from "@expo/vector-icons";
 
 export default () => {
   const { username, password } = React.useContext(WikiContext);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -20,9 +29,21 @@ export default () => {
             uri: "https://bootdey.com/img/Content/avatar/avatar6.png",
           }}
         />
-        <Text style={styles.username}>username</Text>
-        <Text>*********</Text>
+        <TouchableOpacity onPress={toggleModal}>
+          <View style={styles.userInfo}>
+            <Text style={styles.username}>{username}</Text>
+            <Text>*********</Text>
+          </View>
+        </TouchableOpacity>
       </View>
+      <Modal isVisible={isModalVisible}>
+        <EditProfile />
+        <View style={{ padding: 10, alignItems: "center" }}>
+          <TouchableOpacity onPress={toggleModal}>
+            <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -45,5 +66,8 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 20,
+  },
+  userInfo: {
+    alignItems: "center",
   },
 });
