@@ -1,43 +1,10 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
-import { WikiContext } from "../../Context";
 
-export default () => {
-  const [propertyID, setPropertyID] = React.useState("");
-  const [value, setValue] = React.useState("");
-
-  const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
-
-  //TODO: pass in user inputs
-  const createProperty = () => {
-    addProperty({
-      variables: {
-        username: "Shaibu108",
-        password: "Brainiac@108",
-        id: "Q494",
-        property: "P196",
-        value: "Q38",
-      },
-    });
-
-    if (error) {
-      console.log(error);
-    }
-  };
-
+export default ({ createProperty, value, setValue }) => {
   return (
     <View style={styles.container}>
-      <FormItem
-        label="Property ID"
-        textInputStyle={styles.input}
-        isRequired
-        value={propertyID}
-        onChangeText={(propertyID) => setPropertyID(propertyID)}
-        asterik
-      />
       <FormItem
         label="Value"
         textInputStyle={styles.input}

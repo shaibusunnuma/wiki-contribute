@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import {
   View,
@@ -9,11 +8,13 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
+import { WikiContext } from "../../Context";
 
 //@ts-ignore
-export default ({ item, setModalType, setIsModalVisible }) => {
+export default ({ item, setIsModalVisible }) => {
+  const { setSelectedPropertyPID } = React.useContext(WikiContext);
   const toggleModal = () => {
-    setModalType("add");
+    setSelectedPropertyPID(item.property);
     setIsModalVisible(true);
   };
 
@@ -23,6 +24,7 @@ export default ({ item, setModalType, setIsModalVisible }) => {
         <View style={styles.top}>
           <Text style={styles.property}>{item.property}</Text>
           <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
+            {/* @ts-ignore */}
             <MaterialCommunityIcons name="plus" size={20} color="black" />
           </TouchableOpacity>
         </View>

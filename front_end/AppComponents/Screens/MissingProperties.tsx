@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import { WikiContext } from "../../Context";
 import {
@@ -11,25 +10,46 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Item from "../CommonComponents/MissingPropertyListItem";
+import { useMutation } from "@apollo/client";
 import Modal from "react-native-modal";
-import AddProperty from "../CommonComponents/AddPropertyForm";
+import AddMissingProperty from "../CommonComponents/AddMissingPropertyForm";
 import { Ionicons } from "@expo/vector-icons";
+import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
 export default function MissingProperties() {
-  const { missingProperties } = React.useContext(WikiContext);
-  const [modalType, setModalType] = React.useState("");
+  const {
+    missingProperties,
+    username,
+    password,
+    selectedEntityQID,
+    selectedPropertyPID,
+  } = React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
 
   const renderItem = ({ item }) => (
-    <Item
-      item={item}
-      setModalType={setModalType}
-      setIsModalVisible={setIsModalVisible}
-    />
+    <Item item={item} setIsModalVisible={setIsModalVisible} />
   );
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+  };
+
+  const createProperty = () => {
+    addProperty({
+      variables: {
+        username: username,
+        password: password,
+        id: selectedEntityQID,
+        property: selectedPropertyPID,
+        value: "Q38",
+      },
+    });
+
+    if (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -57,9 +77,14 @@ export default function MissingProperties() {
       />
       <Modal isVisible={isModalVisible}>
         <View>
-          <AddProperty />
+          <AddMissingProperty
+            createProperty={createProperty}
+            value={value}
+            setValue={setValue}
+          />
           <View style={{ padding: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={toggleModal}>
+              {/* @ts-ignore */}
               <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
             </TouchableOpacity>
           </View>
