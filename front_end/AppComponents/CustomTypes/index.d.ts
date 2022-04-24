@@ -29,6 +29,8 @@ type WikiContextState = {
   clearCache: () => void;
   refreshWiki: () => void;
   setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
+  setUsername: React.Dispatch<React.SetStateAction<string, string>>
+  setPassword: React.Dispatch<React.SetStateAction<string, string>>
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>
   username: string;

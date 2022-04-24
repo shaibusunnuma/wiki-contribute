@@ -19,6 +19,8 @@ const contextDefaultData: WikiContextState = {
   clearCache: () => {},
   refreshWiki: () => {},
   setQueryRange: () => {},
+  setUsername: () => {},
+  setPassword: () => {},
   username: "",
   password: "",
   queryRange: "",
@@ -239,6 +241,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         loadProperties,
         properties,
         missingProperties,
+        setUsername,
+        setPassword,
       }}
     >
       {children}
