@@ -7,6 +7,11 @@ export type FeedStackParamList = {
   Properties: { entity: Entity };
 };
 
+export type SettingsStackParamList = {
+  Settings: undefined;
+  Profile: undefined;
+}
+
 export interface Entity {
   lat: { value: number }
   long: { value: number }

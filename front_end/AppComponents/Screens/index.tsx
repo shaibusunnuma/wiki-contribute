@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import Map from "./Map";
 import Settings from "./Settings";
 import Feed from "./Feed";
+import Profile from "./UserProfile";
 
 export function Notifications() {
   return (
@@ -12,4 +13,4 @@ export function Notifications() {
   );
 }
 
-export { Map, Feed, Settings };
+export { Map, Feed, Settings, Profile };

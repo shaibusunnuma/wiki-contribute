@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Feed, Notifications, Settings } from "../Screens";
+import { Feed, Notifications, Settings, Profile } from "../Screens";
 import { EntityProperties } from "../Screens/EntityProperties";
 import MissingProperties from "../Screens/MissingProperties";
 
@@ -31,6 +31,7 @@ export const FeedStackScreen = () => (
 export const SettingsStackScreen = () => (
   <SettingsStack.Navigator initialRouteName="Settings">
     <SettingsStack.Screen name="Settings" component={Settings} />
+    <SettingsStack.Screen name="Profile" component={Profile} />
   </SettingsStack.Navigator>
 );
 

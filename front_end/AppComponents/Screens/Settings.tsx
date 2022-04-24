@@ -12,12 +12,15 @@ import {
 import Modal from "react-native-modal";
 import { WikiContext } from "../../Context";
 import createAlert from "../CommonComponents/Alert";
-import { RootStackParamList } from "../CustomTypes";
+import { SettingsStackParamList } from "../CustomTypes";
 import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
 
-type EntityListProps = NativeStackScreenProps<RootStackParamList, "Home">;
-
-export default ({ route, navigation }: EntityListProps) => {
+type EntityListProps = NativeStackScreenProps<
+  SettingsStackParamList,
+  "Settings"
+>;
+//ts-ignore
+export default ({ route, navigation }) => {
   const { clearCache, queryRange } = React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
@@ -35,7 +38,9 @@ export default ({ route, navigation }: EntityListProps) => {
               name: "account",
               type: "material-community",
             }}
-            onPress={() => console.log("terms")}
+            onPress={() => {
+              navigation.push("Profile");
+            }}
           />
           <NavigateRow
             text="Privacy Policy"

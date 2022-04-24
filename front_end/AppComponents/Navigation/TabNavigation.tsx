@@ -2,7 +2,7 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
-import { FeedStackScreen } from "./ScreenStacks";
+import { FeedStackScreen, SettingsStackScreen } from "./ScreenStacks";
 import { Map, Settings, Notifications } from "../Screens";
 const Tab = createBottomTabNavigator();
 
@@ -63,9 +63,10 @@ export default (): JSX.Element => {
       />
       <Tab.Screen
         name="SettingsTab"
-        component={Settings}
+        component={SettingsStackScreen}
         options={{
           tabBarLabel: "Settings",
+          headerShown: false,
           tabBarActiveTintColor: "white",
           tabBarInactiveTintColor: "#81BAD6",
           tabBarIcon: ({ color }) => (

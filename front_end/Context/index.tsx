@@ -49,8 +49,8 @@ export const WikiContext =
 
 export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [QID, setQID] = React.useState("");
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState("Username");
+  const [password, setPassword] = React.useState("password");
   const [markers, setMarkers] = React.useState([] as Mark[]);
   const [loadingData, setLoadingData] = React.useState(true);
   const [queryRange, setQueryRange] = React.useState("0.008");
