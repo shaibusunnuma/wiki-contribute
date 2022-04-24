@@ -18,12 +18,12 @@ export default () => {
     try {
       updateProperty({
         variables: {
-          username: "Shaibu108",
-          password: "Brainiac@108",
-          id: "Q494",
-          property: "P196",
-          oldValue: "Q193995",
-          newValue: "Q38",
+          username: username,
+          password: password,
+          id: QID,
+          property: propertyID,
+          oldValue: oldValue,
+          newValue: newValue,
         },
       });
     } catch (e) {
