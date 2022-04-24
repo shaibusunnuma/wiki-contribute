@@ -6,10 +6,10 @@ import { WikiContext } from "../../Context";
 import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
 export default () => {
-  const [propertyID, setPropertyID] = React.useState("");
   const [oldValue, setOldValue] = React.useState("");
   const [newValue, setNewValue] = React.useState("");
-  const { username, password, QID } = React.useContext(WikiContext);
+  const { username, password, selectedEntityQID, selectedPropertyPID } =
+    React.useContext(WikiContext);
 
   const [updateProperty, { error }] = useMutation(UPDATE_PROPERTY_MUTATION);
 
@@ -20,8 +20,8 @@ export default () => {
         variables: {
           username: username,
           password: password,
-          id: QID,
-          property: propertyID,
+          id: selectedEntityQID,
+          property: selectedPropertyPID,
           oldValue: oldValue,
           newValue: newValue,
         },
@@ -33,7 +33,7 @@ export default () => {
 
   return (
     <View style={styles.container}>
-      <FormItem
+      {/* <FormItem
         label="Property ID"
         textInputStyle={styles.input}
         isRequired
@@ -41,7 +41,7 @@ export default () => {
         value={propertyID}
         onChangeText={(propertyID) => setPropertyID(propertyID)}
         asterik
-      />
+      /> */}
       <FormItem
         label="Old Value"
         textInputStyle={styles.input}

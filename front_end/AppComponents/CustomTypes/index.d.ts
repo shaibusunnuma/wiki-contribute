@@ -24,8 +24,10 @@ type WikiContextState = {
   region: Region;
   entities: Entity[];
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
-  QID: string;
-  setQID: React.Dispatch<React.SetStateAction<string, string>>;
+  selectedEntityQID: string;
+  setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
+  selectedPropertyPID: string;
+  setSelectedPropertyPID: React.Dispatch<React.SetStateAction<string, string>>;
   clearCache: () => void;
   refreshWiki: () => void;
   setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;

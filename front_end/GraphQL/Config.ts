@@ -7,7 +7,7 @@ import {
 import { onError } from "@apollo/client/link/error";
 import { RetryLink } from "@apollo/client/link/retry"
 
-const httpLink = new HttpLink({ uri: "http://localhost:3000/graphql" });
+const httpLink = new HttpLink({ uri: "http://10.225.4.112:3000/graphql" });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {

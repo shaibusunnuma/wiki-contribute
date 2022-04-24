@@ -10,9 +10,11 @@ import {
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
 import openMap from "react-native-open-maps";
+import { WikiContext } from "../../Context";
 
 //@ts-ignore
 export default ({ property, setModalType, setIsModalVisible }) => {
+  const { setSelectedPropertyPID } = React.useContext(WikiContext);
   let Value: JSX.Element;
   if (property.wdLabel.value === "image") {
     Value = <ImageValue value={property.ps_Label.value} />;
@@ -29,9 +31,13 @@ export default ({ property, setModalType, setIsModalVisible }) => {
 
   const toggleModal = () => {
     setModalType("edit");
+    setSelectedPropertyPID(getPID());
     setIsModalVisible(true);
   };
 
+  const getPID = () => {
+    return property.wd.value.split("/")[4];
+  };
   return (
     <ListItem containerStyle={styles.itemContainer}>
       <Card containerStyle={styles.card}>

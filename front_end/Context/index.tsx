@@ -14,8 +14,10 @@ const contextDefaultData: WikiContextState = {
   region: {} as Region,
   entities: [],
   setUserLocation: () => {},
-  QID: "",
-  setQID: () => {},
+  selectedEntityQID: "",
+  setSelectedEntityQID: () => {},
+  selectedPropertyPID: "",
+  setSelectedPropertyPID: () => {},
   clearCache: () => {},
   refreshWiki: () => {},
   setQueryRange: () => {},
@@ -50,7 +52,8 @@ export const WikiContext =
   React.createContext<WikiContextState>(contextDefaultData);
 
 export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
-  const [QID, setQID] = React.useState("");
+  const [selectedEntityQID, setSelectedEntityQID] = React.useState("");
+  const [selectedPropertyPID, setSelectedPropertyPID] = React.useState("");
   const [username, setUsername] = React.useState("Username");
   const [password, setPassword] = React.useState("password");
   const [markers, setMarkers] = React.useState([] as Mark[]);
@@ -226,10 +229,12 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         region,
         entities,
         setUserLocation,
-        QID,
-        setQID,
+        selectedEntityQID,
+        setSelectedEntityQID,
         clearCache,
         refreshWiki,
+        selectedPropertyPID,
+        setSelectedPropertyPID,
         username,
         password,
         queryRange,
