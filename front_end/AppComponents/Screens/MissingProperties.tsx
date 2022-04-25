@@ -1,5 +1,5 @@
 import React from "react";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 import {
   SafeAreaView,
   StyleSheet,

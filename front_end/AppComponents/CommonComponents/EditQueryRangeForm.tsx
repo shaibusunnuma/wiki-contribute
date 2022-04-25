@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 import { FormItem } from "react-native-form-component";
 import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 
 export default ({ toggleModal }) => {
   const [value, setValue] = React.useState("");

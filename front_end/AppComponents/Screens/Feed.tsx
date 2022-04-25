@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import Item from "../CommonComponents/EntityListItem";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 import { FeedStackParamList, Entity } from "../CustomTypes";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RouteProp } from "@react-navigation/native";

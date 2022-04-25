@@ -8,7 +8,7 @@ import MapView, {
 } from "react-native-maps";
 import { SafeAreaView, View, Text, StyleSheet } from "react-native";
 import * as Location from "expo-location";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 import { Fold } from "react-native-animated-spinkit";
 
 import { Mark } from "../CustomTypes";

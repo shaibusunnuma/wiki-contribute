@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 
 export default function EditProfileForm() {
   const { setUserCredentials } = React.useContext(WikiContext);

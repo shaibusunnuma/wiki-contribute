@@ -10,7 +10,7 @@ import {
   SwitchRow,
 } from "react-native-settings-view";
 import Modal from "react-native-modal";
-import { WikiContext } from "../../Context";
+import WikiContext from "../../Context";
 import createAlert from "../CommonComponents/Alert";
 import { SettingsStackParamList } from "../CustomTypes";
 import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
