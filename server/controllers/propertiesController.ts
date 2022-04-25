@@ -25,6 +25,7 @@ export const updateProperty = async (args: { [argName: string]: any; }) => {
         username: args.username,
         password: args.password,
     }
+    generalConfig.anonymous = args.anonymous;
     try {
         wbEdit.claim.update({
             id: args.id,

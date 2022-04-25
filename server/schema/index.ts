@@ -1,4 +1,4 @@
-import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLSchema, GraphQLObjectType, GraphQLString, GraphQLList, GraphQLBoolean } from 'graphql';
 import { addProperty, updateProperty } from '../controllers/propertiesController';
 import PropertyUpdateType from './type_defs/propertyUpdateType';
 import PropertyCreationType from './type_defs/propertyCreationType';
@@ -38,6 +38,7 @@ const rootMutation = new GraphQLObjectType({
                 username: { type: GraphQLString },
                 password: { type: GraphQLString },
                 id: { type: GraphQLString },
+                anonymous: { type: GraphQLBoolean },
                 property: { type: GraphQLString },
                 value: { type: GraphQLString },
             },
@@ -51,6 +52,7 @@ const rootMutation = new GraphQLObjectType({
                 username: { type: GraphQLString },
                 password: { type: GraphQLString },
                 id: { type: GraphQLString },
+                anonymous: { type: GraphQLBoolean },
                 property: { type: GraphQLString },
                 oldValue: { type: GraphQLString },
                 newValue: { type: GraphQLString },

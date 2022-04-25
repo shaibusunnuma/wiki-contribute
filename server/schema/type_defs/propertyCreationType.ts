@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLBoolean } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'AddProperty',
@@ -6,6 +6,7 @@ export default new GraphQLObjectType({
   fields: () => ({
     username: { type: GraphQLString },
     password: { type: GraphQLString },
+    anonymous: { type: GraphQLBoolean },
     id: { type: GraphQLString },
     property: { type: GraphQLString },
     value: { type: GraphQLString },
