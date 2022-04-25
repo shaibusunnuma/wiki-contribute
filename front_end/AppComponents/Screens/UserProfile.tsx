@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   Button,
 } from "react-native";
 import Modal from "react-native-modal";
-import WikiContext from "../../Context";
+import { WikiContext } from "../../Context";
 import EditProfile from "../CommonComponents/EditProfileForm";
 import { Ionicons } from "@expo/vector-icons";
 

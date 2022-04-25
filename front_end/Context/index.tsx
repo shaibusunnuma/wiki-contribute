@@ -6,9 +6,33 @@ import * as Location from "expo-location";
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SPARQLQueryDispatcher } from "../AppComponents/API/QueryDispatcher";
-import contextDefaultData from "./DefaultData";
+import { Entity, Mark } from "../AppComponents/CustomTypes";
+import { WikiContextState } from "../AppComponents/CustomTypes";
 import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
-import { WikiContextState, Entity, Mark } from "../AppComponents/CustomTypes";
+
+const contextDefaultData: WikiContextState = {
+  region: {} as Region,
+  entities: [],
+  setUserLocation: () => {},
+  selectedEntityQID: "",
+  setSelectedEntityQID: () => {},
+  selectedPropertyPID: "",
+  setSelectedPropertyPID: () => {},
+  clearCache: () => {},
+  refreshWiki: () => {},
+  setQueryRange: () => {},
+  setUserCredentials: (user_name: string, password: string) => {},
+  username: "",
+  password: "",
+  queryRange: "",
+  loadingData: false,
+  setLoadingData: () => {},
+  setMarkers: () => {},
+  markers: [] as Mark[],
+  loadProperties: (qid: string) => {},
+  properties: [],
+  missingProperties: [],
+};
 
 interface Props {
   children: JSX.Element;
@@ -41,7 +65,8 @@ const missingPropertiesCache = new Cache({
   backend: AsyncStorage,
 });
 
-const WikiContext = React.createContext<WikiContextState>(contextDefaultData);
+export const WikiContext =
+  React.createContext<WikiContextState>(contextDefaultData);
 
 export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [selectedEntityQID, setSelectedEntityQID] = React.useState("");
@@ -55,11 +80,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
   const [permissionStatus, setPermissionStatus] = React.useState("");
   const [region, setRegion] = React.useState({} as Region);
-  const [properties, setProperties] = React.useState([]);
-  const [missingProperties, setMissingProperties] = React.useState([]);
   const [address, setAddress] = React.useState(
     {} as Location.LocationGeocodedAddress[]
   );
+  const [properties, setProperties] = React.useState([]);
+  const [missingProperties, setMissingProperties] = React.useState([]);
 
   const getUserLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -244,9 +269,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     cacheUserCredentials(username, password);
   };
 
-  /*
-   * Use Effects
-   */
   React.useEffect(() => {
     if (userLocation.latitude === undefined) getUserLocation();
     else getData();
@@ -256,35 +278,37 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     StartUp();
   }, []);
 
+  // React.useEffect(() =>{
+  //     if(userLocation.latitude !== undefined) watch_location();
+  // },[permissionStatus, userLocation]);
+
   return (
     <WikiContext.Provider
       value={{
         region,
         entities,
-        selectedEntityQID,
-        selectedPropertyPID,
-        username,
-        queryRange,
-        password,
-        loadingData,
-        markers,
-        properties,
-        missingProperties,
         setUserLocation,
+        selectedEntityQID,
+        setSelectedEntityQID,
+        clearCache,
+        refreshWiki,
+        selectedPropertyPID,
         setSelectedPropertyPID,
+        username,
+        password,
+        queryRange,
         setQueryRange,
+        loadingData,
         setLoadingData,
         setMarkers,
-        setSelectedEntityQID,
+        markers,
         loadProperties,
-        refreshWiki,
+        properties,
+        missingProperties,
         setUserCredentials,
-        clearCache,
       }}
     >
       {children}
     </WikiContext.Provider>
   );
 };
-
-export default WikiContext;

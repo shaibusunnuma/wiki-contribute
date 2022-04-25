@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
-import WikiContext from "../../Context";
+import { WikiContext } from "../../Context";
 
 //@ts-ignore
 export default ({ item, setIsModalVisible }) => {
