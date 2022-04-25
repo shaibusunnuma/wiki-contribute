@@ -7,7 +7,6 @@ export default function EditProfileForm() {
   const { setUserCredentials } = React.useContext(WikiContext);
   const [userNameValue, setUserNameValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
-  setUserCredentials(userNameValue, passwordValue);
 
   return (
     <View style={styles.container}>
