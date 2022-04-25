@@ -21,8 +21,7 @@ const contextDefaultData: WikiContextState = {
   clearCache: () => {},
   refreshWiki: () => {},
   setQueryRange: () => {},
-  setUsername: () => {},
-  setPassword: () => {},
+  setUserCredentials: (user_name: string, password: string) => {},
   username: "",
   password: "",
   queryRange: "",
@@ -39,11 +38,29 @@ interface Props {
   children: JSX.Element;
 }
 
-const cache = new Cache({
-  namespace: "WikiContext",
+const startUpCache = new Cache({
+  namespace: "StartUpCache",
   policy: {
-    maxEntries: 50000, // if unspecified, it can have unlimited entries
+    maxEntries: 5000, // if unspecified, it can have unlimited entries
     stdTTL: 0, // the standard ttl as number in seconds, default: 0 (unlimited)
+  },
+  backend: AsyncStorage,
+});
+
+const propertiesCache = new Cache({
+  namespace: "PropertiesCache",
+  policy: {
+    maxEntries: 50000,
+    stdTTL: 0,
+  },
+  backend: AsyncStorage,
+});
+
+const missingPropertiesCache = new Cache({
+  namespace: "MissingPropertiesCache",
+  policy: {
+    maxEntries: 5000,
+    stdTTL: 0,
   },
   backend: AsyncStorage,
 });
@@ -54,8 +71,8 @@ export const WikiContext =
 export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [selectedEntityQID, setSelectedEntityQID] = React.useState("");
   const [selectedPropertyPID, setSelectedPropertyPID] = React.useState("");
-  const [username, setUsername] = React.useState("Username");
-  const [password, setPassword] = React.useState("password");
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [markers, setMarkers] = React.useState([] as Mark[]);
   const [loadingData, setLoadingData] = React.useState(true);
   const [queryRange, setQueryRange] = React.useState("0.008");
@@ -78,7 +95,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     setPermissionStatus("granted");
     console.log("Getting user location...");
     const location = await Location.getCurrentPositionAsync({});
-    const prev_location = await cache.get("prev_location");
+    const prev_location = await startUpCache.get("prev_location");
     if (prev_location !== undefined) {
       const oldloc = JSON.parse(prev_location) as LocationObject;
       const distance = getDistance(
@@ -93,8 +110,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       );
       console.log(distance);
       if (distance > 1000) {
-        await cache.set("prev_location", JSON.stringify(location));
-        cache.remove("wiki");
+        await startUpCache.set("prev_location", JSON.stringify(location));
+        startUpCache.remove("wiki");
       }
     }
 
@@ -113,32 +130,49 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     });
   };
 
-  const addPropertiesToCache = async (qid: string, properties: string) => {
-    const cache_data = await cache.peek(qid);
-    if (cache_data === undefined) {
+  const addPropertiesToCache = async (
+    qid: string,
+    properties: string,
+    missingProperties: string
+  ) => {
+    const cached_properties = await propertiesCache.peek(qid);
+    const cached_missing_properties = await missingPropertiesCache.peek(qid);
+
+    if (cached_properties === undefined) {
       console.log("Adding properties to cache...");
-      await cache.set(qid, properties);
+      await propertiesCache.set(qid, properties);
+    }
+    if (cached_missing_properties === undefined) {
+      console.log("Adding missing properties to cache...");
+      await missingPropertiesCache.set(qid, missingProperties);
     }
   };
 
   const loadProperties = async (qid: string) => {
-    const cache_data = await cache.peek(qid);
-    if (cache_data !== undefined) {
-      //TODO: cache missing properties, specify cache name with either properties or missing properties.
+    const cached_properties = await propertiesCache.peek(qid);
+    const cached_missing_properties = await missingPropertiesCache.peek(qid);
+    if (cached_properties !== undefined) {
       console.log("Getting properties from cache...");
-      setProperties(JSON.parse(cache_data));
+      setProperties(JSON.parse(cached_properties));
+      setMissingProperties(JSON.parse(cached_missing_properties));
     } else {
-      console.log("Fetching properties");
+      console.log("Fetching properties and missing properties");
+      let props;
+      let missing_props;
       const queryDispatcher = new PropertiesSPARQLQueryDispatcher(qid);
       queryDispatcher.query().then((response) => {
-        const props = response.results.bindings;
-        addPropertiesToCache(qid, JSON.stringify(props));
+        props = response.results.bindings;
         setProperties(props);
       });
       queryDispatcher.queryRecoinProperties().then((response) => {
-        setMissingProperties(response.missing_properties);
-        //console.log(response.missing_properties);
+        missing_props = response.missing_properties;
+        setMissingProperties(missing_props);
       });
+      addPropertiesToCache(
+        qid,
+        JSON.stringify(props),
+        JSON.stringify(missing_props)
+      );
     }
   };
 
@@ -173,12 +207,13 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   };
 
   const clearCache = async () => {
-    await cache.clearAll();
+    await propertiesCache.clearAll();
+    await missingPropertiesCache.clearAll();
   };
 
   const getData = async () => {
     try {
-      const cachedData = await cache.get("wiki");
+      const cachedData = await startUpCache.get("wiki");
       if (cachedData !== undefined) {
         console.log("Getting data from cache...");
         const data = JSON.parse(cachedData);
@@ -199,7 +234,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             return response.results.bindings;
           })
           .then(async (response) => {
-            await cache.set("wiki", JSON.stringify(response));
+            await startUpCache.set("wiki", JSON.stringify(response));
           });
       }
     } catch (e) {
@@ -214,10 +249,34 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     await getData();
   };
 
+  const StartUp = async () => {
+    const user_name = await startUpCache.get("user_name");
+    const password = await startUpCache.get("password");
+    if (user_name !== undefined && password !== undefined) {
+      setUsername(user_name);
+      setPassword(password);
+    }
+  };
+
+  const cacheUserCredentials = async (username: string, password: string) => {
+    startUpCache.set("user_name", username);
+    startUpCache.set("password", password);
+  };
+
+  const setUserCredentials = async (username: string, password: string) => {
+    setUsername(username);
+    setPassword(password);
+    cacheUserCredentials(username, password);
+  };
+
   React.useEffect(() => {
     if (userLocation.latitude === undefined) getUserLocation();
     else getData();
   }, [userLocation]);
+
+  React.useEffect(() => {
+    StartUp();
+  }, []);
 
   // React.useEffect(() =>{
   //     if(userLocation.latitude !== undefined) watch_location();
@@ -246,8 +305,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         loadProperties,
         properties,
         missingProperties,
-        setUsername,
-        setPassword,
+        setUserCredentials,
       }}
     >
       {children}

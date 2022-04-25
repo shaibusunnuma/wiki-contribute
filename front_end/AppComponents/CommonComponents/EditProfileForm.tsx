@@ -4,14 +4,11 @@ import { FormItem } from "react-native-form-component";
 import { WikiContext } from "../../Context";
 
 export default function EditProfileForm() {
-  const { username, password, setUsername, setPassword } =
-    React.useContext(WikiContext);
+  const { setUserCredentials } = React.useContext(WikiContext);
   const [userNameValue, setUserNameValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
-  const save = () => {
-    setUsername(userNameValue);
-    setPassword(passwordValue);
-  };
+  setUserCredentials(userNameValue, passwordValue);
+
   return (
     <View style={styles.container}>
       <View style={styles.info}>
@@ -34,7 +31,10 @@ export default function EditProfileForm() {
           value={passwordValue}
           onChangeText={(value) => setPasswordValue(value)}
         />
-        <Pressable style={styles.button} onPress={save}>
+        <Pressable
+          style={styles.button}
+          onPress={() => setUserCredentials(userNameValue, passwordValue)}
+        >
           <Text style={styles.text}>Save</Text>
         </Pressable>
       </View>
