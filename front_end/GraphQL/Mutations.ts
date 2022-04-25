@@ -5,6 +5,7 @@ export const UPDATE_PROPERTY_MUTATION = gql`
     $username: String!
     $password: String!
     $id: String!
+    $anonymous: Boolean!
     $property: String!
     $oldValue: String!
     $newValue: String!
@@ -13,6 +14,7 @@ export const UPDATE_PROPERTY_MUTATION = gql`
       username: $username
       password: $password
       id: $id
+      anonymous: $anonymous
       property: $property
       oldValue: $oldValue
       newValue: $newValue
@@ -23,13 +25,14 @@ export const UPDATE_PROPERTY_MUTATION = gql`
 `;
 
 export const CREATE_PROPERTY_MUTATION = gql`
-  mutation addProperty($username: String!, $password: String!, $id: String!, $property: String!, $value: String!)
+  mutation addProperty($username: String!, $password: String!, $id: String!, $anonymous: Boolean!, $property: String!, $value: String!)
   {
-    addProperty(username: $username, password: $password, id: $id, property: $property, value: $value)
+    addProperty(username: $username, password: $password, id: $id, anonymous: $anonymous property: $property, value: $value)
     {
       username
       password
       id
+      anonymous
       property
       value
     }

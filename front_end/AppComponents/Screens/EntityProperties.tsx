@@ -31,6 +31,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     password,
     selectedEntityQID,
     selectedPropertyPID,
+    anonymous,
   } = React.useContext(WikiContext);
   const { entity } = route.params;
   const [modalType, setModalType] = React.useState("");
@@ -51,6 +52,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           username: username,
           password: password,
           id: selectedEntityQID,
+          anonymous: anonymous,
           property: selectedPropertyPID,
           oldValue: oldValue,
           newValue: newValue,

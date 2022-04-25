@@ -21,7 +21,8 @@ type EntityListProps = NativeStackScreenProps<
 >;
 //ts-ignore
 export default ({ route, navigation }) => {
-  const { clearCache, queryRange } = React.useContext(WikiContext);
+  const { clearCache, queryRange, setAnonymous } =
+    React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   const toggleModal = () => {
@@ -74,15 +75,13 @@ export default ({ route, navigation }) => {
               name: "ios-notifications",
               type: "ionicon",
             }}
-            onValueChange={(isChecked: boolean) =>
-              console.log("checked", isChecked)
-            }
+            onValueChange={(isChecked: boolean) => setAnonymous(isChecked)}
           />
           <SwitchRow
-            text="Do not disturb"
+            text="Anonymouse mode"
             disabled
             leftIcon={{
-              name: "do-not-disturb",
+              name: "account-cowboy-hat",
               type: "material-community",
             }}
             onValueChange={(isEnabled: boolean) =>

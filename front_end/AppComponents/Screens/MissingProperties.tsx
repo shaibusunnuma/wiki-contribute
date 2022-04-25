@@ -22,6 +22,7 @@ export default function MissingProperties() {
     password,
     selectedEntityQID,
     selectedPropertyPID,
+    anonymous,
   } = React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -40,6 +41,7 @@ export default function MissingProperties() {
       variables: {
         username: username,
         password: password,
+        anonymous: anonymous,
         id: selectedEntityQID,
         property: selectedPropertyPID,
         value: "Q38",

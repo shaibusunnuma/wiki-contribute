@@ -23,6 +23,7 @@ export interface Entity {
 type WikiContextState = {
   region: Region;
   entities: Entity[];
+  anonymous: boolean;
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
   selectedEntityQID: string;
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
@@ -33,7 +34,8 @@ type WikiContextState = {
   setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
   setUserCredentials: (user_name: string, password: string) => void;
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
-  setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>
+  setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>;
+  setAnonymous: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   username: string;
   password: string;
   queryRange: string;

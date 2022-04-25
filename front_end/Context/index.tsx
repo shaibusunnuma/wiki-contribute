@@ -26,8 +26,10 @@ const contextDefaultData: WikiContextState = {
   password: "",
   queryRange: "",
   loadingData: false,
+  anonymous: false,
   setLoadingData: () => {},
   setMarkers: () => {},
+  setAnonymous: () => {},
   markers: [] as Mark[],
   loadProperties: (qid: string) => {},
   properties: [],
@@ -70,6 +72,7 @@ export const WikiContext =
 
 export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [selectedEntityQID, setSelectedEntityQID] = React.useState("");
+  const [anonymous, setAnonymous] = React.useState(false);
   const [selectedPropertyPID, setSelectedPropertyPID] = React.useState("");
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -206,9 +209,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }
   };
 
+  //TODO: specify if user data is to be cleared too
   const clearCache = async () => {
     await propertiesCache.clearAll();
     await missingPropertiesCache.clearAll();
+    await startUpCache.clearAll();
   };
 
   const getData = async () => {
@@ -297,6 +302,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         username,
         password,
         queryRange,
+        anonymous,
         setQueryRange,
         loadingData,
         setLoadingData,
@@ -306,6 +312,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         properties,
         missingProperties,
         setUserCredentials,
+        setAnonymous,
       }}
     >
       {children}

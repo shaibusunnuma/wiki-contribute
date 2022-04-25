@@ -27,9 +27,9 @@ interface FeedProps {
 export default function ({ navigation }: FeedProps) {
   const { entities, setSelectedEntityQID, refreshWiki, loadingData } =
     React.useContext(WikiContext);
-  const [refresh, setRefresh] = React.useState(false);
   const [filteredData, setFilteredData] = React.useState(entities);
   const [search, setSearch] = React.useState("");
+  const renderItemMemo = React.useMemo(() => renderItem, [entities]);
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
     <Item navigation={navigation} entity={item} setQID={setSelectedEntityQID} />

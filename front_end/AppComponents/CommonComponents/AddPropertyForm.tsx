@@ -8,6 +8,13 @@ import { WikiContext } from "../../Context";
 export default () => {
   const [propertyID, setPropertyID] = React.useState("");
   const [value, setValue] = React.useState("");
+  const {
+    username,
+    password,
+    selectedEntityQID,
+    selectedPropertyPID,
+    anonymous,
+  } = React.useContext(WikiContext);
 
   const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
 
@@ -15,11 +22,12 @@ export default () => {
   const createProperty = () => {
     addProperty({
       variables: {
-        username: "Shaibu108",
-        password: "Brainiac@108",
-        id: "Q494",
-        property: "P196",
-        value: "Q38",
+        username: username,
+        password: password,
+        id: selectedEntityQID,
+        property: selectedPropertyPID,
+        anonymous: anonymous,
+        value: value,
       },
     });
 
