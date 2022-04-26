@@ -43,7 +43,7 @@ const rootMutation = new GraphQLObjectType({
                 value: { type: GraphQLString },
             },
             resolve: (root, args) => {
-                addProperty(args);
+                return addProperty(args);
             }
         },
         updateProperty: {
@@ -58,7 +58,7 @@ const rootMutation = new GraphQLObjectType({
                 newValue: { type: GraphQLString },
             },
             resolve: (root, args) => {
-                updateProperty(args);
+                return updateProperty(args);
             }
         },
     })

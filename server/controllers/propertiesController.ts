@@ -8,16 +8,16 @@ export const addProperty = async (args: { [argName: string]: any; }) => {
         password: args.password,
     }
     try {
-        wbEdit.claim.create({
+        await wbEdit.claim.create({
             id: args.id,
             property: args.property,
             value: args.value,
         }, generalConfig)
-        return 'Success';
-    } catch (e) {
-        console.log(e)
-        return 'Fail';
     }
+    catch (err) {
+        return err;
+    }
+
 }
 
 export const updateProperty = async (args: { [argName: string]: any; }) => {
@@ -27,15 +27,13 @@ export const updateProperty = async (args: { [argName: string]: any; }) => {
     }
     generalConfig.anonymous = args.anonymous;
     try {
-        wbEdit.claim.update({
+        await wbEdit.claim.update({
             id: args.id,
             property: args.property,
             oldValue: args.oldValue,
             newValue: args.newValue,
         }, generalConfig)
-        return 'Success';
-    } catch (e) {
-        console.log(e)
-        return 'Fail';
+    } catch (err) {
+        return err;
     }
 }
