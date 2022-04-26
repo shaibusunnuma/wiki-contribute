@@ -44,7 +44,7 @@ export default function MissingProperties() {
         anonymous: anonymous,
         id: selectedEntityQID,
         property: selectedPropertyPID,
-        value: "Q38",
+        value: value,
       },
     });
 
