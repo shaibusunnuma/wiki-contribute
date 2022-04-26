@@ -26,6 +26,9 @@ export default function MissingProperties() {
   } = React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const [isError, setIsError] = React.useState("no error");
+  const [success, setSuccess] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
 
   const renderItem = ({ item }) => (
@@ -34,22 +37,30 @@ export default function MissingProperties() {
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+    setIsError("no error");
+    setSuccess(false);
+    setValue("");
   };
 
-  const createProperty = () => {
-    addProperty({
-      variables: {
-        username: username,
-        password: password,
-        anonymous: anonymous,
-        id: selectedEntityQID,
-        property: selectedPropertyPID,
-        value: value,
-      },
-    });
-
-    if (error) {
-      console.log(error);
+  const createProperty = async () => {
+    setLoading(true);
+    try {
+      await addProperty({
+        variables: {
+          username: username,
+          password: password,
+          anonymous: anonymous,
+          id: selectedEntityQID,
+          property: selectedPropertyPID,
+          value: value,
+        },
+      }).then(() => {
+        setSuccess(true);
+        setLoading(false);
+      });
+    } catch (err) {
+      setLoading(false);
+      setIsError(err.message);
     }
   };
 
@@ -74,6 +85,10 @@ export default function MissingProperties() {
       <Modal isVisible={isModalVisible}>
         <View>
           <AddMissingProperty
+            loading={loading}
+            toggleModal={toggleModal}
+            success={success}
+            isError={isError}
             createProperty={createProperty}
             value={value}
             setValue={setValue}
