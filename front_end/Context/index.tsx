@@ -138,9 +138,9 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     properties: string,
     missingProperties: string
   ) => {
-    const cached_properties = await propertiesCache.peek(qid);
-    const cached_missing_properties = await missingPropertiesCache.peek(qid);
-
+    console.log(properties);
+    const cached_properties = await propertiesCache.get(qid);
+    const cached_missing_properties = await missingPropertiesCache.get(qid);
     if (cached_properties === undefined) {
       console.log("Adding properties to cache...");
       await propertiesCache.set(qid, properties);
@@ -152,30 +152,38 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   };
 
   const loadProperties = async (qid: string) => {
-    const cached_properties = await propertiesCache.peek(qid);
-    const cached_missing_properties = await missingPropertiesCache.peek(qid);
+    const cached_properties = await propertiesCache.get(qid);
+    const cached_missing_properties = await missingPropertiesCache.get(qid);
     if (cached_properties !== undefined) {
       console.log("Getting properties from cache...");
       setProperties(JSON.parse(cached_properties));
       setMissingProperties(JSON.parse(cached_missing_properties));
     } else {
       console.log("Fetching properties and missing properties");
-      let props;
-      let missing_props;
+      let props: React.SetStateAction<any[]>;
+      let missing_props: React.SetStateAction<any[]>;
       const queryDispatcher = new PropertiesSPARQLQueryDispatcher(qid);
-      queryDispatcher.query().then((response) => {
-        props = response.results.bindings;
-        setProperties(props);
-      });
-      queryDispatcher.queryRecoinProperties().then((response) => {
-        missing_props = response.missing_properties;
-        setMissingProperties(missing_props);
-      });
-      addPropertiesToCache(
-        qid,
-        JSON.stringify(props),
-        JSON.stringify(missing_props)
-      );
+      queryDispatcher
+        .queryProperties()
+        .then((response) => {
+          props = response.results.bindings;
+          setProperties(props);
+        })
+        .then(async () => {
+          console.log("Adding properties to cache...");
+          await propertiesCache.set(qid, JSON.stringify(props));
+        });
+
+      queryDispatcher
+        .queryMissingProperties()
+        .then((response) => {
+          missing_props = response.missing_properties;
+          setMissingProperties(missing_props);
+        })
+        .then(async () => {
+          console.log("Adding missing properties to cache...");
+          await missingPropertiesCache.set(qid, JSON.stringify(missing_props));
+        });
     }
   };
 
@@ -282,10 +290,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   React.useEffect(() => {
     StartUp();
   }, []);
-
-  // React.useEffect(() =>{
-  //     if(userLocation.latitude !== undefined) watch_location();
-  // },[permissionStatus, userLocation]);
 
   return (
     <WikiContext.Provider

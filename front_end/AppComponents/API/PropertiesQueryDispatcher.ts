@@ -27,15 +27,17 @@ export class PropertiesSPARQLQueryDispatcher {
 			} ORDER BY ?wd ?statement ?ps_`;
 	}
 
-	query() {
+	async queryProperties() {
 		const fullUrl = this.endpoint + '?query=' + encodeURIComponent(this.sparqlQuery);
 		const headers = { 'Accept': 'application/sparql-results+json' };
-		return fetch(fullUrl, { headers }).then(body => body.json())
+		const body = await fetch(fullUrl, { headers });
+		return await body.json();
 		//.then( response => console.log(response))
 	}
 
-	queryRecoinProperties() {
-		return fetch(this.recoin_endpoint).then(body => body.json())
+	async queryMissingProperties() {
+		const body = await fetch(this.recoin_endpoint);
+		return await body.json();
 	}
 }
 
