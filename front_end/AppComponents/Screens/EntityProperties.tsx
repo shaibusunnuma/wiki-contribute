@@ -180,6 +180,10 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
             />
           ) : (
             <EditProperty
+              loading={loading}
+              toggleModal={toggleModal}
+              success={success}
+              isError={isError}
               editProperty={editProperty}
               oldValue={oldValue}
               setOldValue={setOldValue}
