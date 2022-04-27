@@ -1,62 +1,64 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
-import { WikiContext } from "../../Context";
+import { Circle } from "react-native-animated-spinkit";
 
-export default () => {
-  const [propertyID, setPropertyID] = React.useState("");
-  const [value, setValue] = React.useState("");
-  const {
-    username,
-    password,
-    selectedEntityQID,
-    selectedPropertyPID,
-    anonymous,
-  } = React.useContext(WikiContext);
-
-  const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
-
-  //TODO: pass in user inputs
-  const createProperty = () => {
-    addProperty({
-      variables: {
-        username: username,
-        password: password,
-        id: selectedEntityQID,
-        property: selectedPropertyPID,
-        anonymous: anonymous,
-        value: value,
-      },
-    });
-
-    if (error) {
-      console.log(error);
-    }
-  };
+export default ({
+  createProperty,
+  value,
+  setValue,
+  isError,
+  success,
+  toggleModal,
+  loading,
+  propertyID,
+  setPropertyID,
+}) => {
+  if (success && !loading) {
+    return (
+      <View style={[styles.container, { alignItems: "center" }]}>
+        <Text style={{ padding: 10 }}>Update Successful</Text>
+        <TouchableOpacity style={styles.button} onPress={toggleModal}>
+          <Text style={styles.text}>OK</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <FormItem
-        label="Property ID"
-        textInputStyle={styles.input}
-        isRequired
-        value={propertyID}
-        onChangeText={(propertyID) => setPropertyID(propertyID)}
-        asterik
-      />
-      <FormItem
-        label="Value"
-        textInputStyle={styles.input}
-        isRequired
-        value={value}
-        onChangeText={(value) => setValue(value)}
-        asterik
-      />
-      <Pressable style={styles.button} onPress={createProperty}>
-        <Text style={styles.text}>Submit</Text>
-      </Pressable>
+      {loading ? (
+        <View style={{ alignItems: "center" }}>
+          <Circle size={48} color="#006699" />
+        </View>
+      ) : (
+        <>
+          {isError !== "no error" && (
+            <View style={styles.error}>
+              <Text style={{ color: "red" }}>{isError}</Text>
+            </View>
+          )}
+          <FormItem
+            label="Property ID"
+            textInputStyle={styles.input}
+            isRequired
+            value={propertyID}
+            onChangeText={(propertyID) => setPropertyID(propertyID)}
+            asterik
+          />
+          <FormItem
+            label="Value"
+            textInputStyle={styles.input}
+            isRequired
+            value={value}
+            onChangeText={(value) => setValue(value)}
+            asterik
+          />
+          <TouchableOpacity style={styles.button} onPress={createProperty}>
+            <Text style={styles.text}>Submit</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
@@ -89,5 +91,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  error: {
+    alignItems: "center",
   },
 });

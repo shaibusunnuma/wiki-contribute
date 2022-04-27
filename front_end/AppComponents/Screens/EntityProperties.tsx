@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import {
   SafeAreaView,
@@ -20,6 +19,7 @@ import { FeedStackParamList } from "../CustomTypes";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { WikiContext } from "../../Context";
 import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
+import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
 type EntityListProps = NativeStackScreenProps<FeedStackParamList, "Properties">;
 
@@ -30,42 +30,82 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     username,
     password,
     selectedEntityQID,
-    selectedPropertyPID,
     anonymous,
   } = React.useContext(WikiContext);
   const { entity } = route.params;
   const [modalType, setModalType] = React.useState("");
   const [isModalVisible, setIsModalVisible] = React.useState(false);
   const [oldValue, setOldValue] = React.useState("");
-  const [newValue, setNewValue] = React.useState("");
-  const [updateProperty, { error }] = useMutation(UPDATE_PROPERTY_MUTATION);
+  const [value, setValue] = React.useState("");
+  const [isError, setIsError] = React.useState("no error");
+  const [success, setSuccess] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [propertyPID, setPropertyPID] = React.useState("");
+  const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
+  const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
 
   const toggleModal = () => {
     setModalType("add");
     setIsModalVisible(!isModalVisible);
+    setIsError("no error");
+    setSuccess(false);
+    setValue("");
   };
 
-  const editProperty = () => {
+  const createProperty = async () => {
+    setLoading(true);
     try {
-      updateProperty({
+      if (!value) {
+        throw new Error("Enter inputs");
+      }
+      await addProperty({
+        variables: {
+          username: username,
+          password: password,
+          anonymous: anonymous,
+          id: selectedEntityQID,
+          property: propertyPID,
+          value: value,
+        },
+      }).then(() => {
+        setSuccess(true);
+        setLoading(false);
+      });
+    } catch (err) {
+      setLoading(false);
+      setIsError(err.message);
+    }
+  };
+
+  const editProperty = async () => {
+    setLoading(true);
+    try {
+      if (!value) {
+        throw new Error("Enter inputs");
+      }
+      await updateProperty({
         variables: {
           username: username,
           password: password,
           id: selectedEntityQID,
           anonymous: anonymous,
-          property: selectedPropertyPID,
+          property: propertyPID,
           oldValue: oldValue,
-          newValue: newValue,
+          newValue: value,
         },
+      }).then(() => {
+        setSuccess(true);
+        setLoading(false);
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      setLoading(false);
+      setIsError(err.message);
     }
   };
   const getQID = () => {
-    if (entity.QID !== undefined) {
-      return entity.QID;
-    }
+    // if (entity.QID !== undefined) {
+    //   return entity.QID;
+    // }
     return entity.place.value.split("/")[4];
   };
 
@@ -127,18 +167,29 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       <Modal isVisible={isModalVisible}>
         <View>
           {modalType === "add" ? (
-            <AddProperty />
+            <AddProperty
+              loading={loading}
+              toggleModal={toggleModal}
+              success={success}
+              isError={isError}
+              createProperty={createProperty}
+              value={value}
+              setValue={setValue}
+              propertyID={propertyPID}
+              setPropertyID={setPropertyPID}
+            />
           ) : (
             <EditProperty
               editProperty={editProperty}
               oldValue={oldValue}
               setOldValue={setOldValue}
-              newValue={newValue}
-              setNewValue={setNewValue}
+              newValue={value}
+              setNewValue={setValue}
             />
           )}
           <View style={{ padding: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={toggleModal}>
+              {/* @ts-ignore */}
               <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
             </TouchableOpacity>
           </View>
