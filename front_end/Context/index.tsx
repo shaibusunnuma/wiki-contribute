@@ -9,32 +9,7 @@ import { SPARQLQueryDispatcher } from "../AppComponents/API/QueryDispatcher";
 import { Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
 import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
-
-const contextDefaultData: WikiContextState = {
-  region: {} as Region,
-  entities: [],
-  setUserLocation: () => {},
-  selectedEntityQID: "",
-  setSelectedEntityQID: () => {},
-  selectedPropertyPID: "",
-  setSelectedPropertyPID: () => {},
-  clearCache: () => {},
-  refreshWiki: () => {},
-  setQueryRange: () => {},
-  setUserCredentials: (user_name: string, password: string) => {},
-  username: "",
-  password: "",
-  queryRange: "",
-  loadingData: false,
-  anonymous: false,
-  setLoadingData: () => {},
-  setMarkers: () => {},
-  setAnonymous: () => {},
-  markers: [] as Mark[],
-  loadProperties: (qid: string) => {},
-  properties: [],
-  missingProperties: [],
-};
+import contextDefaultData from "./DefaultData";
 
 interface Props {
   children: JSX.Element;
@@ -90,100 +65,93 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [missingProperties, setMissingProperties] = React.useState([]);
 
   const getUserLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setPermissionStatus("Permission to access location was denied");
-      return;
-    }
-    setPermissionStatus("granted");
-    console.log("Getting user location...");
-    const location = await Location.getCurrentPositionAsync({});
-    const prev_location = await startUpCache.get("prev_location");
-    if (prev_location !== undefined) {
-      const oldloc = JSON.parse(prev_location) as LocationObject;
-      const distance = getDistance(
-        {
-          latitude: oldloc.coords.latitude,
-          longitude: oldloc.coords.longitude,
-        },
-        {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        }
-      );
-      console.log(distance);
-      if (distance > 1000) {
-        await startUpCache.set("prev_location", JSON.stringify(location));
-        startUpCache.remove("wiki");
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setPermissionStatus("Permission to access location was denied");
+        return;
       }
-    }
+      setPermissionStatus("granted");
+      console.log("Getting user location...");
+      const location = await Location.getCurrentPositionAsync({});
+      const prev_location = await startUpCache.get("prev_location");
+      if (prev_location !== undefined) {
+        const oldloc = JSON.parse(prev_location) as LocationObject;
+        const distance = getDistance(
+          {
+            latitude: oldloc.coords.latitude,
+            longitude: oldloc.coords.longitude,
+          },
+          {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }
+        );
+        console.log(distance);
+        if (distance > 1000) {
+          await startUpCache.set("prev_location", JSON.stringify(location));
+          startUpCache.remove("wiki");
+        }
+      }
 
-    const address = await Location.reverseGeocodeAsync(location.coords);
-    setAddress(address);
-    setRegion({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      latitudeDelta: 0,
-      longitudeDelta: 0.01,
-    } as Region);
+      const address = await Location.reverseGeocodeAsync(location.coords);
+      setAddress(address);
+      setRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0,
+        longitudeDelta: 0.01,
+      } as Region);
 
-    setUserLocation({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    });
-  };
-
-  const addPropertiesToCache = async (
-    qid: string,
-    properties: string,
-    missingProperties: string
-  ) => {
-    console.log(properties);
-    const cached_properties = await propertiesCache.get(qid);
-    const cached_missing_properties = await missingPropertiesCache.get(qid);
-    if (cached_properties === undefined) {
-      console.log("Adding properties to cache...");
-      await propertiesCache.set(qid, properties);
-    }
-    if (cached_missing_properties === undefined) {
-      console.log("Adding missing properties to cache...");
-      await missingPropertiesCache.set(qid, missingProperties);
+      setUserLocation({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+    } catch (error: any) {
+      console.log(error);
     }
   };
 
   const loadProperties = async (qid: string) => {
-    const cached_properties = await propertiesCache.get(qid);
-    const cached_missing_properties = await missingPropertiesCache.get(qid);
-    if (cached_properties !== undefined) {
-      console.log("Getting properties from cache...");
-      setProperties(JSON.parse(cached_properties));
-      setMissingProperties(JSON.parse(cached_missing_properties));
-    } else {
-      console.log("Fetching properties and missing properties");
-      let props: React.SetStateAction<any[]>;
-      let missing_props: React.SetStateAction<any[]>;
-      const queryDispatcher = new PropertiesSPARQLQueryDispatcher(qid);
-      queryDispatcher
-        .queryProperties()
-        .then((response) => {
-          props = response.results.bindings;
-          setProperties(props);
-        })
-        .then(async () => {
-          console.log("Adding properties to cache...");
-          await propertiesCache.set(qid, JSON.stringify(props));
-        });
+    try {
+      const cached_properties = await propertiesCache.get(qid);
+      const cached_missing_properties = await missingPropertiesCache.get(qid);
+      if (cached_properties !== undefined) {
+        console.log("Getting properties from cache...");
+        setProperties(JSON.parse(cached_properties));
+        setMissingProperties(JSON.parse(cached_missing_properties));
+      } else {
+        console.log("Fetching properties and missing properties");
+        let props: React.SetStateAction<any[]>;
+        let missing_props: React.SetStateAction<any[]>;
+        const queryDispatcher = new PropertiesSPARQLQueryDispatcher(qid);
+        await queryDispatcher
+          .queryProperties()
+          .then((response) => {
+            props = response.results.bindings;
+            setProperties(props);
+          })
+          .then(async () => {
+            console.log("Adding properties to cache...");
+            await propertiesCache.set(qid, JSON.stringify(props));
+          });
 
-      queryDispatcher
-        .queryMissingProperties()
-        .then((response) => {
-          missing_props = response.missing_properties;
-          setMissingProperties(missing_props);
-        })
-        .then(async () => {
-          console.log("Adding missing properties to cache...");
-          await missingPropertiesCache.set(qid, JSON.stringify(missing_props));
-        });
+        await queryDispatcher
+          .queryMissingProperties()
+          .then((response) => {
+            missing_props = response.missing_properties;
+            setMissingProperties(missing_props);
+          })
+          .then(async () => {
+            console.log("Adding missing properties to cache...");
+            await missingPropertiesCache.set(
+              qid,
+              JSON.stringify(missing_props)
+            );
+          });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -239,7 +207,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
           address[0].city,
           queryRange
         );
-        queryDispatcher
+        await queryDispatcher
           .query()
           .then((response) => {
             setEntities(response.results.bindings);
@@ -263,23 +231,31 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   };
 
   const StartUp = async () => {
-    const user_name = await startUpCache.get("user_name");
-    const password = await startUpCache.get("password");
-    if (user_name !== undefined && password !== undefined) {
-      setUsername(user_name);
-      setPassword(password);
+    try {
+      const user_name = await startUpCache.get("user_name");
+      const password = await startUpCache.get("password");
+      if (user_name !== undefined && password !== undefined) {
+        setUsername(user_name);
+        setPassword(password);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const cacheUserCredentials = async (username: string, password: string) => {
-    startUpCache.set("user_name", username);
-    startUpCache.set("password", password);
+    await startUpCache.set("user_name", username);
+    await startUpCache.set("password", password);
   };
 
   const setUserCredentials = async (username: string, password: string) => {
-    setUsername(username);
-    setPassword(password);
-    cacheUserCredentials(username, password);
+    try {
+      setUsername(username);
+      setPassword(password);
+      await cacheUserCredentials(username, password);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   React.useEffect(() => {
