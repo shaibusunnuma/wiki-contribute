@@ -10,7 +10,7 @@ import { Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
 import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
 import contextDefaultData from "./DefaultData";
-
+import propertySuggestions from "../data/props.json";
 interface Props {
   children: JSX.Element;
 }
@@ -63,6 +63,17 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   );
   const [properties, setProperties] = React.useState([]);
   const [missingProperties, setMissingProperties] = React.useState([]);
+  const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(
+    []
+  );
+
+  const loadPropertySuggestionList = async () => {
+    const suggestions = await propertySuggestions.map((item) => ({
+      id: item.id,
+      title: item.label,
+    }));
+    setPropertySuggestionsList(suggestions);
+  };
 
   const getUserLocation = async () => {
     try {
@@ -293,6 +304,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         missingProperties,
         setUserCredentials,
         setAnonymous,
+        propertySuggestionsList,
       }}
     >
       {children}

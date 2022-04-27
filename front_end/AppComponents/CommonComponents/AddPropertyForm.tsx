@@ -2,6 +2,9 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FormItem } from "react-native-form-component";
 import { Circle } from "react-native-animated-spinkit";
+//import propertySuggestions from "../../data/props.json";
+import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
+import { WikiContext } from "../../Context";
 
 export default ({
   createProperty,
@@ -14,6 +17,48 @@ export default ({
   propertyID,
   setPropertyID,
 }) => {
+  const [suggestionsList, setSuggestionsList] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const dropdownController = React.useRef(null);
+  const searchRef = React.useRef(null);
+  const { propertySuggestionsList } = React.useContext(WikiContext);
+
+  const getSuggestions = React.useCallback(async (text) => {
+    if (typeof text !== "string" || text.length < 3) {
+      setSuggestionsList(null);
+      return;
+    }
+    setIsLoading(true);
+    // const data = propertySuggestions.slice(20);
+    // const suggestions = await data.map((item) => ({
+    //   id: item.id,
+    //   title: item.label,
+    // }));
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+    const items = await response.json();
+    const suggestions = items.map((item) => ({
+      id: item.id,
+      title: item.title,
+    }));
+    setSuggestionsList(suggestions);
+    setIsLoading(false);
+  }, []);
+
+  const GetSuggestions = (text: string) => {
+    if (text.length >= 3) {
+      const newData = propertySuggestionsList.filter(function (item) {
+        const itemData = item.id ? item.id : "";
+        const textData = text;
+        return itemData.indexOf(textData) > -1;
+      });
+      setSuggestionsList(newData);
+      setIsLoading(false);
+    } else {
+      setSuggestionsList([]);
+      setIsLoading(false);
+    }
+  };
+
   if (success && !loading) {
     return (
       <View style={[styles.container, { alignItems: "center" }]}>
@@ -38,14 +83,47 @@ export default ({
               <Text style={{ color: "red" }}>{isError}</Text>
             </View>
           )}
-          <FormItem
-            label="Property ID"
+          <Text style={{ fontWeight: "bold" }}>Property</Text>
+          <AutocompleteDropdown
+            // ref={searchRef}
+            clearOnFocus={false}
+            closeOnSubmit={false}
+            controller={(controller) => {
+              dropdownController.current = controller;
+            }}
+            dataSet={suggestionsList}
+            onChangeText={GetSuggestions}
+            onSelectItem={(item) => {
+              item && setPropertyID(item.id);
+            }}
+            debounce={600}
+            loading={isLoading}
+            useFilter={false}
+            textInputProps={{
+              placeholder: "Type 3+ letters",
+              autoCorrect: false,
+              autoCapitalize: "none",
+              style: {
+                backgroundColor: "#fff",
+                color: "#000",
+                paddingLeft: 10,
+              },
+            }}
+            rightButtonsContainerStyle={{
+              right: 0,
+              top: 0,
+              backgroundColor: "#fff",
+            }}
+            containerStyle={{ paddingBottom: 20 }}
+          />
+          {/* <FormItem
+            label="Property"
             textInputStyle={styles.input}
             isRequired
             value={propertyID}
             onChangeText={(propertyID) => setPropertyID(propertyID)}
             asterik
-          />
+          /> */}
           <FormItem
             label="Value"
             textInputStyle={styles.input}
@@ -70,6 +148,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 20,
     backgroundColor: "#E6E6E6",
+    // zIndex: 100,
   },
   input: {
     paddingHorizontal: 10,

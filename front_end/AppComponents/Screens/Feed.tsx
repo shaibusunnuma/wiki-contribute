@@ -36,7 +36,7 @@ export default function ({ navigation }: FeedProps) {
   );
 
   const searchFilterFunction = (text: string) => {
-    if (text) {
+    if (text.length >= 3) {
       const newData = entities.filter(function (item) {
         const itemData = item.placeLabel.value
           ? item.placeLabel.value.toUpperCase()

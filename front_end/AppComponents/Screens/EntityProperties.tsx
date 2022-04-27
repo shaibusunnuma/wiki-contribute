@@ -54,6 +54,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   };
 
   const createProperty = async () => {
+    console.log(propertyPID);
     setLoading(true);
     try {
       if (!value) {

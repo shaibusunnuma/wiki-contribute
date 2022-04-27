@@ -45,6 +45,7 @@ type WikiContextState = {
   loadProperties: (qid: string) => void;
   properties: any[];
   missingProperties: any[];
+  propertySuggestionsList: any[];
 }
 
 export type Mark = {
