@@ -104,6 +104,8 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     }
   };
   const getQID = () => {
+    // @ts-ignore
+    if (entity.QID !== undefined) return entity.QID; //map returns entity.QID
     return entity.place.value.split("/")[4];
   };
 
@@ -119,6 +121,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   }, []);
 
   React.useEffect(() => {
+    console.log(entity);
     loadProperties(getQID());
   }, []);
 
@@ -135,13 +138,36 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
 
   return (
     <SafeAreaView style={styles.mainView}>
-      <View style={{ width: "100%", backgroundColor: "white" }}>
+      <View
+        style={{
+          width: "100%",
+          backgroundColor: "white",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 10,
+        }}
+      >
         <Button
           title="Missing properties"
           onPress={() => {
             navigation.push("missingProperties");
           }}
         />
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          {/* @ts-ignore */}
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={30}
+            color="black"
+          />
+        </View>
       </View>
 
       {properties.length !== 0 ? (

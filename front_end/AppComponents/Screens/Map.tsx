@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import MapView, {
   Marker,
@@ -12,7 +13,6 @@ import { Fold } from "react-native-animated-spinkit";
 
 import { Mark } from "../CustomTypes";
 
-//@ts-ignore
 export default function Map({ navigation }) {
   const { region, entities, markers, setMarkers, setUserLocation } =
     React.useContext(WikiContext);
