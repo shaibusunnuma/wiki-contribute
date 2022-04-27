@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import {
   View,
@@ -12,8 +11,13 @@ import { ListItem, Card } from "@rneui/base";
 import openMap from "react-native-open-maps";
 import { WikiContext } from "../../Context";
 
-//@ts-ignore
-export default ({ property, setModalType, setIsModalVisible }) => {
+export default ({
+  property,
+  setModalType,
+  setIsModalVisible,
+  setOldValue,
+  setValue,
+}) => {
   const { setSelectedPropertyPID } = React.useContext(WikiContext);
   let Value: JSX.Element;
   if (property.wdLabel.value === "image") {
@@ -33,6 +37,8 @@ export default ({ property, setModalType, setIsModalVisible }) => {
     setModalType("edit");
     setSelectedPropertyPID(getPID());
     setIsModalVisible(true);
+    setOldValue(property.ps_Label.value);
+    setValue(property.ps_Label.value);
   };
 
   const getPID = () => {
@@ -44,6 +50,7 @@ export default ({ property, setModalType, setIsModalVisible }) => {
         <View style={styles.top}>
           <Text style={styles.property}>{property.wdLabel.value}</Text>
           <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
+            {/* @ts-ignore */}
             <MaterialCommunityIcons name="pencil" size={18} color="black" />
           </TouchableOpacity>
         </View>
@@ -75,6 +82,7 @@ const MapValue = ({ value }) => (
         console.log(+value[1]);
       }}
     >
+      {/* @ts-ignore */}
       <Ionicons name="open-outline" size={15} color="black" />
     </TouchableOpacity>
   </View>
@@ -92,6 +100,7 @@ const LinkValue = ({ value }) => (
         }
       }}
     >
+      {/* @ts-ignore */}
       <Ionicons name="open-outline" size={15} color="black" />
     </TouchableOpacity>
   </View>

@@ -29,6 +29,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     loadProperties,
     username,
     password,
+    selectedPropertyPID,
     selectedEntityQID,
     anonymous,
   } = React.useContext(WikiContext);
@@ -89,8 +90,8 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           password: password,
           id: selectedEntityQID,
           anonymous: anonymous,
-          property: propertyPID,
-          oldValue: oldValue,
+          property: selectedPropertyPID,
+          oldValue: oldValue, //get qid of old value
           newValue: value,
         },
       }).then(() => {
@@ -103,9 +104,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     }
   };
   const getQID = () => {
-    // if (entity.QID !== undefined) {
-    //   return entity.QID;
-    // }
     return entity.place.value.split("/")[4];
   };
 
@@ -130,6 +128,8 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       property={item}
       setModalType={setModalType}
       setIsModalVisible={setIsModalVisible}
+      setOldValue={setOldValue}
+      setValue={setValue}
     />
   );
 
@@ -185,8 +185,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
               success={success}
               isError={isError}
               editProperty={editProperty}
-              oldValue={oldValue}
-              setOldValue={setOldValue}
               newValue={value}
               setNewValue={setValue}
             />

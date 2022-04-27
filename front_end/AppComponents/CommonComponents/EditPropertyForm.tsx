@@ -5,8 +5,6 @@ import { Circle } from "react-native-animated-spinkit";
 
 export default ({
   editProperty,
-  oldValue,
-  setOldValue,
   newValue,
   setNewValue,
   success,
@@ -38,14 +36,6 @@ export default ({
               <Text style={{ color: "red" }}>{isError}</Text>
             </View>
           )}
-          <FormItem
-            label="Old Value"
-            textInputStyle={styles.input}
-            isRequired
-            value={oldValue}
-            onChangeText={(value) => setOldValue(value)}
-            asterik
-          />
           <FormItem
             label="New Value"
             textInputStyle={styles.input}
