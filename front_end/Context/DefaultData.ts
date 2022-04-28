@@ -26,6 +26,8 @@ const contextDefaultData: WikiContextState = {
     loadProperties: (qid: string) => { },
     properties: [],
     missingProperties: [],
+    login: false,
+    setLogin: () => { }
 };
 
 export default contextDefaultData;

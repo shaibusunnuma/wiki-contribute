@@ -8,8 +8,8 @@ import { WikiContext } from "../../Context";
 const Tab = createBottomTabNavigator();
 
 export default (): JSX.Element => {
-  const { username, password } = React.useContext(WikiContext);
-  if (!username || !password) {
+  const { login } = React.useContext(WikiContext);
+  if (!login) {
     return <LandingPage />;
   }
   return (

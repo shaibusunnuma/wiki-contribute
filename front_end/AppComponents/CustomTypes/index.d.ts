@@ -45,6 +45,8 @@ type WikiContextState = {
   loadProperties: (qid: string) => void;
   properties: any[];
   missingProperties: any[];
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean, boolean>>;
 }
 
 export type Mark = {

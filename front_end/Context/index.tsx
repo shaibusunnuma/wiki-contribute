@@ -53,6 +53,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [password, setPassword] = React.useState("");
   const [markers, setMarkers] = React.useState([] as Mark[]);
   const [loadingData, setLoadingData] = React.useState(true);
+  const [login, setLogin] = React.useState(false);
   const [queryRange, setQueryRange] = React.useState("0.008");
   const [entities, setEntities] = React.useState([] as Entity[]);
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
@@ -252,6 +253,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     try {
       setUsername(username);
       setPassword(password);
+      setLogin(true);
       await cacheUserCredentials(username, password);
     } catch (err) {
       console.log(err);
@@ -293,6 +295,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         missingProperties,
         setUserCredentials,
         setAnonymous,
+        login,
+        setLogin,
       }}
     >
       {children}
