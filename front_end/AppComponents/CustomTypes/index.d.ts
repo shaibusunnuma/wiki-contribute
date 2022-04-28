@@ -25,10 +25,19 @@ type WikiContextState = {
   region: Region;
   entities: Entity[];
   anonymous: boolean;
-  setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
-  selectedEntityQID: string;
-  setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
+  properties: any[];
+  missingProperties: any[];
+  login: boolean;
   selectedPropertyPID: string;
+  username: string;
+  password: string;
+  queryRange: string;
+  loadingData: boolean;
+  markers: Mark[];
+  selectedEntityQID: string;
+  setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
+  setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
+  loadProperties: (qid: string) => void;
   setSelectedPropertyPID: React.Dispatch<React.SetStateAction<string, string>>;
   clearCache: () => void;
   refreshWiki: () => void;
@@ -37,15 +46,6 @@ type WikiContextState = {
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>;
   setAnonymous: React.Dispatch<React.SetStateAction<boolean, boolean>>;
-  username: string;
-  password: string;
-  queryRange: string;
-  loadingData: boolean;
-  markers: Mark[];
-  loadProperties: (qid: string) => void;
-  properties: any[];
-  missingProperties: any[];
-  login: boolean;
   setLogin: React.Dispatch<React.SetStateAction<boolean, boolean>>;
 }
 

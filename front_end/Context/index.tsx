@@ -238,6 +238,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       if (user_name !== undefined && password !== undefined) {
         setUsername(user_name);
         setPassword(password);
+        setLogin(true);
       }
     } catch (error) {
       console.log(error);
@@ -274,28 +275,28 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       value={{
         region,
         entities,
-        setUserLocation,
+        loadingData,
         selectedEntityQID,
-        setSelectedEntityQID,
-        clearCache,
-        refreshWiki,
+        anonymous,
+        login,
+        markers,
+        properties,
+        missingProperties,
         selectedPropertyPID,
-        setSelectedPropertyPID,
         username,
         password,
         queryRange,
-        anonymous,
+        setSelectedPropertyPID,
+        setUserLocation,
         setQueryRange,
-        loadingData,
         setLoadingData,
         setMarkers,
-        markers,
+        clearCache,
         loadProperties,
-        properties,
-        missingProperties,
+        refreshWiki,
+        setSelectedEntityQID,
         setUserCredentials,
         setAnonymous,
-        login,
         setLogin,
       }}
     >
