@@ -1,12 +1,17 @@
-// @ts-nocheck
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { FeedStackScreen, SettingsStackScreen } from "./ScreenStacks";
-import { Map, Settings, Notifications } from "../Screens";
+import { Map, Notifications, LandingPage } from "../Screens";
+import { WikiContext } from "../../Context";
+
 const Tab = createBottomTabNavigator();
 
 export default (): JSX.Element => {
+  const { username, password } = React.useContext(WikiContext);
+  if (!username || !password) {
+    return <LandingPage />;
+  }
   return (
     <Tab.Navigator
       id="tabStack"

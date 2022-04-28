@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Feed, Notifications, Settings, Profile } from "../Screens";
 import { EntityProperties } from "../Screens/EntityProperties";
