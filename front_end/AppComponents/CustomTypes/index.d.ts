@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type FeedStackParamList = {
   Feed: undefined;
-  Properties: { entity: Entity };
+  Properties: { entity: Entity | Mark };
   missingProperties: undefined;
 };
 
