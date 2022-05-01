@@ -44,6 +44,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   const [propertyPID, setPropertyPID] = React.useState("");
   const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
   const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
+  const [title, setTitle] = React.useState("");
 
   const toggleModal = () => {
     setModalType("add");
@@ -58,7 +59,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     setLoading(true);
     try {
       if (!value) {
-        throw new Error("Enter inputs");
+        throw new Error("Enter value");
       }
       await addProperty({
         variables: {
@@ -105,8 +106,15 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     }
   };
   const getQID = () => {
-    // @ts-ignore
-    if (entity.QID !== undefined) return entity.QID; //map returns entity.QID
+    if (entity.QID !== undefined) {
+      const t =
+        entity.title.length > 20 ? entity.title.slice(0, 20) : entity.title;
+      setTitle(t);
+      return entity.QID;
+    } //map returns entity.QID
+    let t: string = entity.placeLabel.value;
+    t = t.length > 20 ? t.slice(0, 20) + "..." : t;
+    setTitle(t);
     return entity.place.value.split("/")[4];
   };
 
@@ -114,19 +122,17 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={toggleModal}>
-          {/* @ts-ignore */}
           <MaterialCommunityIcons name="plus" size={24} color="black" />
         </TouchableOpacity>
       ),
+      title: title,
     });
-  }, []);
+  }, [title]);
 
   React.useEffect(() => {
-    console.log(entity);
     loadProperties(getQID());
-  }, []);
+  }, [entity]);
 
-  //@ts-ignore
   const renderItem = ({ item }) => (
     <Item
       property={item}
@@ -151,7 +157,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
         <Button
           title="Missing properties"
           onPress={() => {
-            navigation.push("missingProperties");
+            navigation.push("MissingProperties");
           }}
         />
         <View
@@ -162,7 +168,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
             alignItems: "center",
           }}
         >
-          {/* @ts-ignore */}
           <MaterialCommunityIcons
             name="chevron-right"
             size={30}
@@ -218,7 +223,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           )}
           <View style={{ padding: 10, alignItems: "center" }}>
             <TouchableOpacity onPress={toggleModal}>
-              {/* @ts-ignore */}
               <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
             </TouchableOpacity>
           </View>

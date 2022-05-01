@@ -4,6 +4,7 @@ import Map from "./Map";
 import Settings from "./Settings";
 import Feed from "./Feed";
 import Profile from "./UserProfile";
+import LandingPage from "./LandingPage";
 
 export function Notifications() {
   return (
@@ -13,4 +14,4 @@ export function Notifications() {
   );
 }
 
-export { Map, Feed, Settings, Profile };
+export { Map, Feed, Settings, Profile, LandingPage };

@@ -1,3 +1,3 @@
-import MyTabs from './TabNavigation'
+import Navigation from "./TabNavigation";
 
-export default MyTabs;
+export default Navigation;

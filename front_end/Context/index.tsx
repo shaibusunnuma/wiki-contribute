@@ -53,6 +53,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [password, setPassword] = React.useState("");
   const [markers, setMarkers] = React.useState([] as Mark[]);
   const [loadingData, setLoadingData] = React.useState(true);
+  const [login, setLogin] = React.useState(false);
   const [queryRange, setQueryRange] = React.useState("0.008");
   const [entities, setEntities] = React.useState([] as Entity[]);
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
@@ -63,6 +64,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   );
   const [properties, setProperties] = React.useState([]);
   const [missingProperties, setMissingProperties] = React.useState([]);
+<<<<<<< HEAD
   const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(
     []
   );
@@ -74,6 +76,9 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }));
     setPropertySuggestionsList(suggestions);
   };
+=======
+  const [trackLocation, setTrackLocation] = React.useState(false);
+>>>>>>> 7e64512b0d3b4fac88304539f845cc0fbba132ef
 
   const getUserLocation = async () => {
     try {
@@ -248,6 +253,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       if (user_name !== undefined && password !== undefined) {
         setUsername(user_name);
         setPassword(password);
+        setLogin(true);
       }
     } catch (error) {
       console.log(error);
@@ -263,6 +269,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     try {
       setUsername(username);
       setPassword(password);
+      setLogin(true);
       await cacheUserCredentials(username, password);
     } catch (err) {
       console.log(err);
@@ -283,28 +290,31 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       value={{
         region,
         entities,
-        setUserLocation,
+        loadingData,
         selectedEntityQID,
-        setSelectedEntityQID,
-        clearCache,
-        refreshWiki,
+        anonymous,
+        trackLocation,
+        login,
+        markers,
+        properties,
+        missingProperties,
         selectedPropertyPID,
-        setSelectedPropertyPID,
         username,
         password,
         queryRange,
-        anonymous,
+        setSelectedPropertyPID,
+        setUserLocation,
         setQueryRange,
-        loadingData,
         setLoadingData,
         setMarkers,
-        markers,
+        clearCache,
         loadProperties,
-        properties,
-        missingProperties,
+        refreshWiki,
+        setSelectedEntityQID,
         setUserCredentials,
         setAnonymous,
-        propertySuggestionsList,
+        setTrackLocation,
+        setLogin,
       }}
     >
       {children}

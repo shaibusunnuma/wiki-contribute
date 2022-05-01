@@ -4,8 +4,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type FeedStackParamList = {
   Feed: undefined;
-  Properties: { entity: Entity };
-  missingProperties: undefined;
+  Properties: { entity: Entity | Mark };
+  MissingProperties: undefined;
 };
 
 export type SettingsStackParamList = {
@@ -25,27 +25,30 @@ type WikiContextState = {
   region: Region;
   entities: Entity[];
   anonymous: boolean;
-  setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
-  selectedEntityQID: string;
-  setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
+  trackLocation: boolean;
+  properties: any[];
+  missingProperties: any[];
+  login: boolean;
   selectedPropertyPID: string;
+  username: string;
+  password: string;
+  queryRange: string;
+  loadingData: boolean;
+  markers: Mark[];
+  selectedEntityQID: string;
+  setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
+  setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
+  loadProperties: (qid: string) => void;
   setSelectedPropertyPID: React.Dispatch<React.SetStateAction<string, string>>;
   clearCache: () => void;
   refreshWiki: () => void;
   setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
   setUserCredentials: (user_name: string, password: string) => void;
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
+  setTrackLocation: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>;
   setAnonymous: React.Dispatch<React.SetStateAction<boolean, boolean>>;
-  username: string;
-  password: string;
-  queryRange: string;
-  loadingData: boolean;
-  markers: Mark[];
-  loadProperties: (qid: string) => void;
-  properties: any[];
-  missingProperties: any[];
-  propertySuggestionsList: any[];
+  setLogin: React.Dispatch<React.SetStateAction<boolean, boolean>>;
 }
 
 export type Mark = {

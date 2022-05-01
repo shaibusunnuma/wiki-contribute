@@ -1,13 +1,27 @@
 import React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { WikiContext } from "../../Context";
 
-export default function EditProfileForm() {
-  const { setUserCredentials } = React.useContext(WikiContext);
-  const [userNameValue, setUserNameValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
-
+export default function EditProfileForm({
+  handleSubmit,
+  userNameValue,
+  passwordValue,
+  setUserNameValue,
+  setPasswordValue,
+  isError,
+  success,
+  toggleModal,
+}) {
+  if (success) {
+    return (
+      <View style={[styles.container, { alignItems: "center" }]}>
+        <Text style={{ padding: 10 }}>Update Successful</Text>
+        <TouchableOpacity style={styles.button} onPress={toggleModal}>
+          <Text style={styles.text}>OK</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.info}>
@@ -16,6 +30,11 @@ export default function EditProfileForm() {
           edits.
         </Text>
       </View>
+      {isError !== "no error" && (
+        <View style={styles.error}>
+          <Text style={{ color: "red" }}>{isError}</Text>
+        </View>
+      )}
       <View>
         <FormItem
           label="Wikidata Username"
@@ -30,12 +49,9 @@ export default function EditProfileForm() {
           value={passwordValue}
           onChangeText={(value) => setPasswordValue(value)}
         />
-        <Pressable
-          style={styles.button}
-          onPress={() => setUserCredentials(userNameValue, passwordValue)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.text}>Save</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -73,5 +89,8 @@ const styles = StyleSheet.create({
   info: {
     justifyContent: "center",
     paddingBottom: 10,
+  },
+  error: {
+    alignItems: "center",
   },
 });

@@ -6,7 +6,6 @@ import {
   SettingsPage,
   NavigateRow,
   BaseRow,
-  CheckRow,
   SwitchRow,
 } from "react-native-settings-view";
 import Modal from "react-native-modal";
@@ -19,9 +18,9 @@ type EntityListProps = NativeStackScreenProps<
   SettingsStackParamList,
   "Settings"
 >;
-//ts-ignore
+
 export default ({ route, navigation }) => {
-  const { clearCache, queryRange, setAnonymous } =
+  const { clearCache, queryRange, setAnonymous, setTrackLocation } =
     React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
@@ -68,14 +67,14 @@ export default ({ route, navigation }) => {
             rightContent={<Text>{queryRange}</Text>}
             onPress={toggleModal}
           />
-          <CheckRow
-            text="Notifications"
-            checked
+          <SwitchRow
+            text="Track location"
+            disabled
             leftIcon={{
-              name: "ios-notifications",
-              type: "ionicon",
+              name: "my-location",
+              type: "material-icons",
             }}
-            onValueChange={(isChecked: boolean) => setAnonymous(isChecked)}
+            onValueChange={(isEnabled: boolean) => setTrackLocation(isEnabled)}
           />
           <SwitchRow
             text="Anonymouse mode"
@@ -84,9 +83,7 @@ export default ({ route, navigation }) => {
               name: "account-cowboy-hat",
               type: "material-community",
             }}
-            onValueChange={(isEnabled: boolean) =>
-              console.log("checked", isEnabled)
-            }
+            onValueChange={(isEnabled: boolean) => setAnonymous(isEnabled)}
           />
           <BaseRow
             text="version"

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import "react-native-gesture-handler";
 import * as React from "react";
 import { ApolloProvider } from "@apollo/client";
@@ -15,7 +14,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <SafeAreaProvider>
         <WikiProvider>
-          <NavigationContainer>
+          <NavigationContainer ref={React.createRef()}>
             <Navigation />
           </NavigationContainer>
         </WikiProvider>
