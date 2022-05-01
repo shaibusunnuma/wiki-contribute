@@ -5,6 +5,7 @@ import Settings from "./Settings";
 import Feed from "./Feed";
 import Profile from "./UserProfile";
 import LandingPage from "./LandingPage";
+import Camera from "../CommonComponents/Camera";
 
 export function Notifications() {
   return (
@@ -14,4 +15,4 @@ export function Notifications() {
   );
 }
 
-export { Map, Feed, Settings, Profile, LandingPage };
+export { Map, Feed, Settings, Profile, LandingPage, Camera };

@@ -17,6 +17,7 @@ export default ({
   setIsModalVisible,
   setOldValue,
   setValue,
+  startCamera,
 }) => {
   const { setSelectedPropertyPID } = React.useContext(WikiContext);
   let Value: JSX.Element;
@@ -33,6 +34,10 @@ export default ({
     Value = <TextValue value={property.ps_Label.value} />;
   }
 
+  const __editHandler = () => {
+    if (property.wdLabel.value === "image") startCamera();
+    else toggleModal();
+  };
   const toggleModal = () => {
     setModalType("edit");
     setSelectedPropertyPID(getPID());
@@ -49,9 +54,16 @@ export default ({
       <Card containerStyle={styles.card}>
         <View style={styles.top}>
           <Text style={styles.property}>{property.wdLabel.value}</Text>
-          <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={__editHandler}
+          >
             {/* @ts-ignore */}
-            <MaterialCommunityIcons name="pencil" size={18} color="black" />
+            <MaterialCommunityIcons
+              name={property.wdLabel.value === "image" ? "camera" : "pencil"}
+              size={18}
+              color="black"
+            />
           </TouchableOpacity>
         </View>
         <Card.Divider />

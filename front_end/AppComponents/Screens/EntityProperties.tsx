@@ -15,6 +15,7 @@ import { Chase } from "react-native-animated-spinkit";
 import Item from "../CommonComponents/PropertyListItem";
 import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
+import CameraView from "../CommonComponents/Camera";
 import { FeedStackParamList } from "../CustomTypes";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { WikiContext } from "../../Context";
@@ -45,6 +46,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
   const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
   const [title, setTitle] = React.useState("");
+  const [startCamera, setStartCamera] = React.useState(false);
 
   const toggleModal = () => {
     setModalType("add");
@@ -117,6 +119,10 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
     return entity.place.value.split("/")[4];
   };
 
+  const __startCamera = () => {
+    setStartCamera(true);
+  };
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -139,11 +145,15 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       setIsModalVisible={setIsModalVisible}
       setOldValue={setOldValue}
       setValue={setValue}
+      startCamera={__startCamera}
     />
   );
 
+  if (startCamera) return <CameraView setStartCamera={setStartCamera} />;
+
   return (
     <SafeAreaView style={styles.mainView}>
+      {/* {startCamera ? (<CameraView />) :  */}(
       <View
         style={{
           width: "100%",
@@ -174,7 +184,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           />
         </View>
       </View>
-
       {properties.length !== 0 ? (
         <FlatList
           data={properties}
@@ -195,6 +204,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           <Text>Loading Properties...</Text>
         </View>
       )}
+      ){/* } */}
       <Modal isVisible={isModalVisible}>
         <View>
           {modalType === "add" ? (

@@ -7,17 +7,19 @@ import { WikiProvider } from "./Context";
 import Navigation from "./AppComponents/Navigation";
 import client from "./GraphQL/Config";
 import { StatusBar } from "react-native";
+import { Camera } from "./AppComponents/Screens";
 
 export default function App() {
   StatusBar.setBarStyle("dark-content", true);
   return (
     <ApolloProvider client={client}>
       <SafeAreaProvider>
-        <WikiProvider>
+        <Camera />
+        {/* <WikiProvider>
           <NavigationContainer ref={React.createRef()}>
             <Navigation />
           </NavigationContainer>
-        </WikiProvider>
+        </WikiProvider> */}
       </SafeAreaProvider>
     </ApolloProvider>
   );

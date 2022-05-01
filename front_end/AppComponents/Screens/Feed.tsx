@@ -29,7 +29,6 @@ export default function ({ navigation }: FeedProps) {
     React.useContext(WikiContext);
   const [filteredData, setFilteredData] = React.useState(entities);
   const [search, setSearch] = React.useState("");
-  const renderItemMemo = React.useMemo(() => renderItem, [entities]);
 
   const renderItem = ({ item }: ListRenderItemInfo<Entity>) => (
     <Item navigation={navigation} entity={item} setQID={setSelectedEntityQID} />
