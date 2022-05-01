@@ -1,21 +1,20 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
 import { WikiContext } from "../../Context";
 
 //@ts-ignore
-export default ({ item, setIsModalVisible }) => {
+export default ({ item, setIsModalVisible, startCamera }) => {
   const { setSelectedPropertyPID } = React.useContext(WikiContext);
   const toggleModal = () => {
     setSelectedPropertyPID(item.property);
     setIsModalVisible(true);
+  };
+
+  const __editHandler = () => {
+    if (item.label === "image") startCamera();
+    else toggleModal();
   };
 
   return (
@@ -23,9 +22,15 @@ export default ({ item, setIsModalVisible }) => {
       <Card containerStyle={styles.card}>
         <View style={styles.top}>
           <Text style={styles.property}>{item.property}</Text>
-          <TouchableOpacity style={styles.iconContainer} onPress={toggleModal}>
-            {/* @ts-ignore */}
-            <MaterialCommunityIcons name="plus" size={20} color="black" />
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={__editHandler}
+          >
+            <MaterialCommunityIcons
+              name={item.label === "image" ? "camera" : "pencil"}
+              size={20}
+              color="black"
+            />
           </TouchableOpacity>
         </View>
         <Card.Divider />
