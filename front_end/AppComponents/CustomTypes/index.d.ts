@@ -25,6 +25,7 @@ type WikiContextState = {
   region: Region;
   entities: Entity[];
   anonymous: boolean;
+  trackLocation: boolean;
   properties: any[];
   missingProperties: any[];
   login: boolean;
@@ -44,6 +45,7 @@ type WikiContextState = {
   setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
   setUserCredentials: (user_name: string, password: string) => void;
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
+  setTrackLocation: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setMarkers: React.Dispatch<React.SetStateAction<Mark[]>>;
   setAnonymous: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setLogin: React.Dispatch<React.SetStateAction<boolean, boolean>>;

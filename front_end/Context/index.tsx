@@ -64,6 +64,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   );
   const [properties, setProperties] = React.useState([]);
   const [missingProperties, setMissingProperties] = React.useState([]);
+  const [trackLocation, setTrackLocation] = React.useState(false);
 
   const getUserLocation = async () => {
     try {
@@ -278,6 +279,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         loadingData,
         selectedEntityQID,
         anonymous,
+        trackLocation,
         login,
         markers,
         properties,
@@ -297,6 +299,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         setSelectedEntityQID,
         setUserCredentials,
         setAnonymous,
+        setTrackLocation,
         setLogin,
       }}
     >
