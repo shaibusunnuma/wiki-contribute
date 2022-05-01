@@ -10,7 +10,7 @@ import { Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
 import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
 import contextDefaultData from "./DefaultData";
-import propertySuggestions from "../data/props.json";
+import propertySuggestions from "../data/properties.json";
 interface Props {
   children: JSX.Element;
 }
@@ -59,15 +59,14 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [userLocation, setUserLocation] = React.useState({} as LatLng);
   const [permissionStatus, setPermissionStatus] = React.useState("");
   const [region, setRegion] = React.useState({} as Region);
+  const [trackLocation, setTrackLocation] = React.useState(false);
+  const [properties, setProperties] = React.useState([]);
+  const [missingProperties, setMissingProperties] = React.useState([]);
   const [address, setAddress] = React.useState(
     {} as Location.LocationGeocodedAddress[]
   );
-  const [properties, setProperties] = React.useState([]);
-  const [missingProperties, setMissingProperties] = React.useState([]);
-  const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(
-    []
-  );
-  const [trackLocation, setTrackLocation] = React.useState(false);
+  const [propertySuggestionsList, setPropertySuggestionsList] =
+    React.useState(propertySuggestions);
 
   const loadPropertySuggestionList = async () => {
     const suggestions = await propertySuggestions.map((item) => ({
@@ -299,6 +298,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         username,
         password,
         queryRange,
+        propertySuggestionsList,
+        setPropertySuggestionsList,
         setSelectedPropertyPID,
         setUserLocation,
         setQueryRange,

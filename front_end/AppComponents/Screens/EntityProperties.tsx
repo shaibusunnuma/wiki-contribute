@@ -55,10 +55,9 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   };
 
   const createProperty = async () => {
-    console.log(propertyPID);
     setLoading(true);
     try {
-      if (!value) {
+      if (!value || !propertyPID) {
         throw new Error("Enter value");
       }
       await addProperty({
@@ -207,7 +206,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
               createProperty={createProperty}
               value={value}
               setValue={setValue}
-              propertyID={propertyPID}
               setPropertyID={setPropertyPID}
             />
           ) : (

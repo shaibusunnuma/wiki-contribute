@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { FormItem } from "react-native-form-component";
 import { Circle } from "react-native-animated-spinkit";
-//import propertySuggestions from "../../data/props.json";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
 import { WikiContext } from "../../Context";
 
@@ -14,7 +13,6 @@ export default ({
   success,
   toggleModal,
   loading,
-  propertyID,
   setPropertyID,
 }) => {
   const [suggestionsList, setSuggestionsList] = React.useState(null);
@@ -29,35 +27,19 @@ export default ({
       return;
     }
     setIsLoading(true);
-    // const data = propertySuggestions.slice(20);
-    // const suggestions = await data.map((item) => ({
-    //   id: item.id,
-    //   title: item.label,
-    // }));
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
-    const items = await response.json();
-    const suggestions = items.map((item) => ({
-      id: item.id,
-      title: item.title,
-    }));
+    let i = 0;
+    let suggestions = [];
+    for (let item of propertySuggestionsList) {
+      const itemlabel = item.title.toLowerCase();
+      if (itemlabel.indexOf(text.toLowerCase()) > -1) {
+        ++i;
+        suggestions.push(item);
+      }
+      if (i === 10) break;
+    }
     setSuggestionsList(suggestions);
     setIsLoading(false);
   }, []);
-
-  const GetSuggestions = (text: string) => {
-    if (text.length >= 3) {
-      const newData = propertySuggestionsList.filter(function (item) {
-        const itemData = item.id ? item.id : "";
-        const textData = text;
-        return itemData.indexOf(textData) > -1;
-      });
-      setSuggestionsList(newData);
-      setIsLoading(false);
-    } else {
-      setSuggestionsList([]);
-      setIsLoading(false);
-    }
-  };
 
   if (success && !loading) {
     return (
@@ -85,22 +67,23 @@ export default ({
           )}
           <Text style={{ fontWeight: "bold" }}>Property</Text>
           <AutocompleteDropdown
-            // ref={searchRef}
+            ref={searchRef}
             clearOnFocus={false}
             closeOnSubmit={false}
             controller={(controller) => {
               dropdownController.current = controller;
             }}
             dataSet={suggestionsList}
-            onChangeText={GetSuggestions}
+            onChangeText={getSuggestions}
             onSelectItem={(item) => {
               item && setPropertyID(item.id);
             }}
+            onClear={() => setPropertyID("")}
             debounce={600}
             loading={isLoading}
             useFilter={false}
             textInputProps={{
-              placeholder: "Type 3+ letters",
+              placeholder: "Start typing to see suggestions",
               autoCorrect: false,
               autoCapitalize: "none",
               style: {
@@ -116,14 +99,6 @@ export default ({
             }}
             containerStyle={{ paddingBottom: 20 }}
           />
-          {/* <FormItem
-            label="Property"
-            textInputStyle={styles.input}
-            isRequired
-            value={propertyID}
-            onChangeText={(propertyID) => setPropertyID(propertyID)}
-            asterik
-          /> */}
           <FormItem
             label="Value"
             textInputStyle={styles.input}

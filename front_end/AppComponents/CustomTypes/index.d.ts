@@ -1,6 +1,7 @@
 import { LatLng, Region } from 'react-native-maps';
 import { LocationObject } from 'expo-location';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 
 export type FeedStackParamList = {
   Feed: undefined;
@@ -21,6 +22,11 @@ export interface Entity {
   placeDescription: { value: string }
 }
 
+type PropertySuggestion = {
+  id: string;
+  title: string;
+}
+
 type WikiContextState = {
   region: Region;
   entities: Entity[];
@@ -36,6 +42,8 @@ type WikiContextState = {
   loadingData: boolean;
   markers: Mark[];
   selectedEntityQID: string;
+  propertySuggestionsList: any[];
+  setPropertySuggestionsList: React.Dispatch<React.SetStateAction<Mark[]>>;
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
   loadProperties: (qid: string) => void;
