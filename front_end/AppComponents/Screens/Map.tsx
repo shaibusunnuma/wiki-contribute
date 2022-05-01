@@ -74,9 +74,13 @@ export default function Map({ navigation }) {
                 >
                   <View style={styles.calloutView}>
                     <Text>
-                      {marker.title}
+                      {marker.title.length > 15
+                        ? marker.title.slice(0, 15) + "..."
+                        : marker.title}
                       {"\n"}
-                      {marker.description}
+                      {marker.description.length > 15
+                        ? marker.description.slice(0, 15) + "..."
+                        : marker.description}
                     </Text>
                   </View>
                 </Callout>
