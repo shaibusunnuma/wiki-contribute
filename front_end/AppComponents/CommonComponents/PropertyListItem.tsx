@@ -58,7 +58,6 @@ export default ({
             style={styles.iconContainer}
             onPress={__editHandler}
           >
-            {/* @ts-ignore */}
             <MaterialCommunityIcons
               name={property.wdLabel.value === "image" ? "camera" : "pencil"}
               size={18}
@@ -72,10 +71,9 @@ export default ({
     </ListItem>
   );
 };
-//@ts-ignore
+
 const TextValue = ({ value }) => <Text style={styles.value}>{value}</Text>;
 
-//@ts-ignore
 const ImageValue = ({ value }) => (
   <Card.Image
     style={{ padding: 0 }}
@@ -94,7 +92,6 @@ const MapValue = ({ value }) => (
         console.log(+value[1]);
       }}
     >
-      {/* @ts-ignore */}
       <Ionicons name="open-outline" size={15} color="black" />
     </TouchableOpacity>
   </View>
@@ -112,7 +109,6 @@ const LinkValue = ({ value }) => (
         }
       }}
     >
-      {/* @ts-ignore */}
       <Ionicons name="open-outline" size={15} color="black" />
     </TouchableOpacity>
   </View>

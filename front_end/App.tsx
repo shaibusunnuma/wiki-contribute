@@ -14,12 +14,11 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <SafeAreaProvider>
-        <Camera />
-        {/* <WikiProvider>
+        <WikiProvider>
           <NavigationContainer ref={React.createRef()}>
             <Navigation />
           </NavigationContainer>
-        </WikiProvider> */}
+        </WikiProvider>
       </SafeAreaProvider>
     </ApolloProvider>
   );

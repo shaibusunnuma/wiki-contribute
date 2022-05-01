@@ -153,7 +153,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
 
   return (
     <SafeAreaView style={styles.mainView}>
-      {/* {startCamera ? (<CameraView />) :  */}(
       <View
         style={{
           width: "100%",
@@ -204,7 +203,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
           <Text>Loading Properties...</Text>
         </View>
       )}
-      ){/* } */}
       <Modal isVisible={isModalVisible}>
         <View>
           {modalType === "add" ? (
