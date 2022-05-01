@@ -67,6 +67,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(
     []
   );
+  const [trackLocation, setTrackLocation] = React.useState(false);
 
   const loadPropertySuggestionList = async () => {
     const suggestions = await propertySuggestions.map((item) => ({
