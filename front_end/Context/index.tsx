@@ -64,7 +64,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   );
   const [properties, setProperties] = React.useState([]);
   const [missingProperties, setMissingProperties] = React.useState([]);
-<<<<<<< HEAD
   const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(
     []
   );
@@ -76,9 +75,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }));
     setPropertySuggestionsList(suggestions);
   };
-=======
-  const [trackLocation, setTrackLocation] = React.useState(false);
->>>>>>> 7e64512b0d3b4fac88304539f845cc0fbba132ef
 
   const getUserLocation = async () => {
     try {
