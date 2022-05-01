@@ -35,7 +35,7 @@ export default ({
         ++i;
         suggestions.push(item);
       }
-      if (i === 10) break;
+      if (i === 100) break;
     }
     setSuggestionsList(suggestions);
     setIsLoading(false);
