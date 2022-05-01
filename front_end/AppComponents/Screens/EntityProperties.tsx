@@ -156,7 +156,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
         <Button
           title="Missing properties"
           onPress={() => {
-            navigation.push("missingProperties");
+            navigation.push("MissingProperties");
           }}
         />
         <View

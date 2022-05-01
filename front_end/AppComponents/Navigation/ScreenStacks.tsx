@@ -20,7 +20,7 @@ export const FeedStackScreen = () => (
       options={{ title: "Properties" }}
     />
     <FeedStack.Screen
-      name="missingProperties"
+      name="MissingProperties"
       component={MissingProperties}
       options={{ title: "Missing Properties" }}
     />
