@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   appName: {
-    fontSize: 30,
+    fontSize: 40,
+    color: "#a68929",
   },
   topContainer: {
     flex: 0.4,
