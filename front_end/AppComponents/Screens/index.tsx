@@ -5,7 +5,7 @@ import Settings from "./Settings";
 import Feed from "./Feed";
 import Profile from "./UserProfile";
 import LandingPage from "./LandingPage";
-import Camera from "../CommonComponents/Camera";
+import Camera from "./Camera";
 
 export function Notifications() {
   return (

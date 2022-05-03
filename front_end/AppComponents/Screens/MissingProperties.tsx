@@ -11,12 +11,12 @@ import {
 import Item from "../CommonComponents/MissingPropertyListItem";
 import { useMutation } from "@apollo/client";
 import Modal from "react-native-modal";
-import CameraView from "../CommonComponents/Camera";
+import CameraView from "./Camera";
 import AddMissingProperty from "../CommonComponents/AddMissingPropertyForm";
 import { Ionicons } from "@expo/vector-icons";
 import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-export default function MissingProperties() {
+export default function MissingProperties({ navigation }) {
   const {
     missingProperties,
     username,
@@ -30,7 +30,6 @@ export default function MissingProperties() {
   const [isError, setIsError] = React.useState("no error");
   const [success, setSuccess] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [startCamera, setStartCamera] = React.useState(false);
   const [addProperty, { error }] = useMutation(CREATE_PROPERTY_MUTATION);
 
   const renderItem = ({ item }) => (
@@ -42,7 +41,7 @@ export default function MissingProperties() {
   );
 
   const __startCamera = () => {
-    setStartCamera(true);
+    navigation.push("Camera");
   };
 
   const toggleModal = () => {
@@ -73,8 +72,6 @@ export default function MissingProperties() {
       setIsError(err.message);
     }
   };
-
-  if (startCamera) return <CameraView setStartCamera={setStartCamera} />;
 
   return (
     <SafeAreaView style={styles.mainView}>

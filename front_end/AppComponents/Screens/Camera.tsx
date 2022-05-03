@@ -10,7 +10,7 @@ import {
 import { Camera } from "expo-camera";
 import { MaterialIcons, Entypo, Ionicons } from "@expo/vector-icons";
 
-export default function ({ setStartCamera }) {
+export default function ({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -30,7 +30,7 @@ export default function ({ setStartCamera }) {
   const __savePhoto = async () => {
     if (capturedImage) {
       const asset = await MediaLibrary.createAssetAsync(capturedImage.uri);
-      //console.log(asset);
+      console.log(asset);
     }
   };
 
@@ -109,7 +109,7 @@ export default function ({ setStartCamera }) {
             </TouchableOpacity>
           </View>
           <View style={styles.closeContainer}>
-            <TouchableOpacity onPress={() => setStartCamera(false)}>
+            <TouchableOpacity onPress={() => navigation.pop()}>
               <Entypo name="cross" size={30} color="white" />
             </TouchableOpacity>
           </View>

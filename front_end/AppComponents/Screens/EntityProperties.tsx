@@ -15,16 +15,11 @@ import { Chase } from "react-native-animated-spinkit";
 import Item from "../CommonComponents/PropertyListItem";
 import AddProperty from "../CommonComponents/AddPropertyForm";
 import EditProperty from "../CommonComponents/EditPropertyForm";
-import CameraView from "../CommonComponents/Camera";
-import { FeedStackParamList } from "../CustomTypes";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { WikiContext } from "../../Context";
 import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-type EntityListProps = NativeStackScreenProps<FeedStackParamList, "Properties">;
-
-export function EntityProperties({ route, navigation }: EntityListProps) {
+export function EntityProperties({ route, navigation }) {
   const {
     properties,
     loadProperties,
@@ -46,7 +41,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
   const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
   const [title, setTitle] = React.useState("");
-  const [startCamera, setStartCamera] = React.useState(false);
 
   const toggleModal = () => {
     setModalType("add");
@@ -120,7 +114,7 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
   };
 
   const __startCamera = () => {
-    setStartCamera(true);
+    navigation.push("Camera");
   };
 
   React.useLayoutEffect(() => {
@@ -148,8 +142,6 @@ export function EntityProperties({ route, navigation }: EntityListProps) {
       startCamera={__startCamera}
     />
   );
-
-  if (startCamera) return <CameraView setStartCamera={setStartCamera} />;
 
   return (
     <SafeAreaView style={styles.mainView}>
