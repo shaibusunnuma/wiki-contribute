@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import * as React from "react";
 import { View, Button, Text, SafeAreaView } from "react-native";
 import {
@@ -11,13 +10,8 @@ import {
 import Modal from "react-native-modal";
 import { WikiContext } from "../../Context";
 import createAlert from "../CommonComponents/Alert";
-import { SettingsStackParamList } from "../CustomTypes";
 import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
-
-type EntityListProps = NativeStackScreenProps<
-  SettingsStackParamList,
-  "Settings"
->;
+import { FontAwesome } from "@expo/vector-icons";
 
 export default ({ route, navigation }) => {
   const { clearCache, queryRange, setAnonymous, setTrackLocation } =
@@ -86,20 +80,30 @@ export default ({ route, navigation }) => {
             onValueChange={(isEnabled: boolean) => setAnonymous(isEnabled)}
           />
           <BaseRow
-            text="version"
+            text="Clear Cache"
             leftIcon={{
-              name: "tag",
-              type: "font-awesome",
+              name: "brush",
+              type: "material-community-icons",
             }}
-            rightContent={<Text>0.1.0</Text>}
+            onPress={() => createAlert(clearCache)}
+          />
+          {/* <MaterialCommunityIcons name="broom" size={24} color="black" /> */}
+        </SectionRow>
+        <SectionRow style={{ marginTop: 5 }}>
+          <BaseRow
+            text="Sign Out"
+            style={{ paddingVertical: 5 }}
+            rightContent={
+              <FontAwesome name="sign-out" size={24} color="black" />
+            }
+            onPress={() => console.log("Sign Out")}
           />
         </SectionRow>
       </SettingsPage>
       <View
         style={{ flex: 0.5, justifyContent: "center", alignItems: "center" }}
       >
-        <Button title="Clear Cache" onPress={() => createAlert(clearCache)} />
-        <Text style={{}}>Version 1.0.0</Text>
+        <Text style={{ color: "gray" }}>Version v1.0.0</Text>
       </View>
       <Modal isVisible={isModalVisible}>
         <View>
