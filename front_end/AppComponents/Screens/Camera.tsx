@@ -7,8 +7,12 @@ import {
   SafeAreaView,
   ImageBackground,
 } from "react-native";
+import {
+  MaterialIcons,
+  Entypo,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { Camera } from "expo-camera";
-import { MaterialIcons, Entypo, Ionicons } from "@expo/vector-icons";
 
 export default function ({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -64,21 +68,22 @@ export default function ({ navigation }) {
     })();
   }, []);
 
-  //   if (hasPermission === null) {
-  //     return <View />;
-  //   }
-  //   if (hasPermission === false) {
-  //     return (
-  //       <Text>No access to camera. Allow access to camera in settings.</Text>
-  //     );
-  //   }
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return (
+      <Text>No access to camera. Allow access to camera in settings.</Text>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       {previewVisible && capturedImage ? (
         <CameraPreview
           photo={capturedImage}
-          savePhoto={__savePhoto}
+          //savePhoto={__savePhoto}
           retakePicture={__retakePicture}
+          navigation={navigation}
         />
       ) : (
         <Camera
@@ -133,7 +138,7 @@ export default function ({ navigation }) {
   );
 }
 
-const CameraPreview = ({ photo, retakePicture }) => {
+const CameraPreview = ({ photo, retakePicture, navigation }) => {
   return (
     <View
       style={{
@@ -149,12 +154,22 @@ const CameraPreview = ({ photo, retakePicture }) => {
           flex: 1,
         }}
       >
-        <View style={styles.retakebutton}>
-          <TouchableOpacity onPress={retakePicture}>
-            <Ionicons name="close-circle-outline" size={50} color="#cccccc" />
+        <View style={styles.closeContainer}>
+          <TouchableOpacity
+            style={styles.closebutton}
+            onPress={() => navigation.pop()}
+          >
+            <Entypo name="cross" size={30} color="white" />
           </TouchableOpacity>
         </View>
         <View style={styles.bottomContainer}>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flex: 1,
+              alignItems: "center",
+            }}
+          ></View>
           <View
             style={{
               alignSelf: "center",
@@ -163,7 +178,25 @@ const CameraPreview = ({ photo, retakePicture }) => {
             }}
           >
             <TouchableOpacity onPress={() => {}} style={styles.submitbutton}>
-              <Text style={styles.text}>Submit</Text>
+              <Text style={styles.text}>Next</Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              alignSelf: "flex-end",
+              flex: 1,
+              alignItems: "flex-end",
+            }}
+          >
+            <TouchableOpacity
+              onPress={retakePicture}
+              style={styles.retakebutton}
+            >
+              <MaterialCommunityIcons
+                name="camera-retake"
+                size={24}
+                color="black"
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -206,21 +239,6 @@ const styles = StyleSheet.create({
     left: "5%",
     top: "5%",
   },
-  retakebutton: {
-    position: "absolute",
-    left: "50%",
-    right: "50%",
-    top: "10%",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#333333",
-    alignItems: "center",
-    justifyContent: "center",
-    // paddingHorizontal: 10,
-    // paddingVertical: 15,
-    // borderRadius: 20,
-  },
   capturebutton: {
     width: 70,
     height: 70,
@@ -237,6 +255,20 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     elevation: 3,
     backgroundColor: "#fff",
+  },
+  retakebutton: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 60,
+    width: 60,
+    paddingHorizontal: 0,
+    borderRadius: 50,
+    backgroundColor: "#fff",
+  },
+  closebutton: {
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
   },
   text: {
     fontWeight: "bold",
