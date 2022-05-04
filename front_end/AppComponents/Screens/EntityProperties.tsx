@@ -28,6 +28,7 @@ export function EntityProperties({ route, navigation }) {
     selectedPropertyPID,
     selectedEntityQID,
     anonymous,
+    reloadProperties,
   } = React.useContext(WikiContext);
   const { entity } = route.params;
   const [modalType, setModalType] = React.useState("");
@@ -180,6 +181,10 @@ export function EntityProperties({ route, navigation }) {
           data={properties}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
+          refreshing={false}
+          onRefresh={() => {
+            reloadProperties();
+          }}
         />
       ) : (
         <View

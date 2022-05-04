@@ -43,7 +43,11 @@ type WikiContextState = {
   markers: Mark[];
   selectedEntityQID: string;
   propertySuggestionsList: any[];
-  setPropertySuggestionsList: React.Dispatch<React.SetStateAction<Mark[]>>;
+  reloadProperties: () => void;
+  setPropertySuggestionsList: React.Dispatch<React.SetStateAction<{
+    id: string;
+    title: string;
+  }[]>>;
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
   loadProperties: (qid: string) => void;

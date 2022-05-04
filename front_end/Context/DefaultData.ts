@@ -18,6 +18,7 @@ const contextDefaultData: WikiContextState = {
     selectedPropertyPID: "",
     markers: [] as Mark[],
     propertySuggestionsList: [],
+    reloadProperties: () => { },
     setPropertySuggestionsList: () => { },
     setSelectedEntityQID: () => { },
     setUserLocation: () => { },

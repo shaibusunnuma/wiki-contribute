@@ -68,14 +68,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [propertySuggestionsList, setPropertySuggestionsList] =
     React.useState(propertySuggestions);
 
-  const loadPropertySuggestionList = async () => {
-    const suggestions = await propertySuggestions.map((item) => ({
-      id: item.id,
-      title: item.label,
-    }));
-    setPropertySuggestionsList(suggestions);
-  };
-
   const getUserLocation = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -122,6 +114,11 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     } catch (error: any) {
       console.log(error);
     }
+  };
+  const reloadProperties = async () => {
+    await propertiesCache.remove(selectedEntityQID);
+    await missingPropertiesCache.remove(selectedEntityQID);
+    await loadProperties(selectedEntityQID);
   };
 
   const loadProperties = async (qid: string) => {
@@ -299,6 +296,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         password,
         queryRange,
         propertySuggestionsList,
+        reloadProperties,
         setPropertySuggestionsList,
         setSelectedPropertyPID,
         setUserLocation,
