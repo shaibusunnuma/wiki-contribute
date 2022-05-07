@@ -62,11 +62,32 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
   const [trackLocation, setTrackLocation] = React.useState(false);
   const [properties, setProperties] = React.useState([]);
   const [missingProperties, setMissingProperties] = React.useState([]);
+  const [startUpCacheSize, setStartUpCacheSize] = React.useState(0);
+  const [propertiesCacheSize, setPropertiesCacheSize] = React.useState(0);
+  const [missingPropertiesCacheSize, setMissingPropertiesCacheSize] =
+    React.useState(0);
   const [address, setAddress] = React.useState(
     {} as Location.LocationGeocodedAddress[]
   );
   const [propertySuggestionsList, setPropertySuggestionsList] =
     React.useState(propertySuggestions);
+
+  const updateCacheSize = async (cache: string, value: string) => {
+    const valueSize = value.length;
+    switch (cache) {
+      case "startUpCache":
+        setStartUpCacheSize(startUpCacheSize + valueSize);
+        break;
+      case "propertiesCache":
+        setPropertiesCacheSize(propertiesCacheSize + valueSize);
+        break;
+      case "missingPropertiesCache":
+        setMissingPropertiesCacheSize(missingPropertiesCacheSize + valueSize);
+        break;
+      default:
+        break;
+    }
+  };
 
   const getUserLocation = async () => {
     try {
@@ -91,8 +112,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             longitude: location.coords.longitude,
           }
         );
-        console.log(distance);
         if (distance > 1000) {
+          await updateCacheSize("startUpCache", JSON.stringify(location));
           await startUpCache.set("prev_location", JSON.stringify(location));
           startUpCache.remove("wiki");
         }
@@ -115,6 +136,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
       console.log(error);
     }
   };
+
+  //work on reducing the cache
   const reloadProperties = async () => {
     await propertiesCache.remove(selectedEntityQID);
     await missingPropertiesCache.remove(selectedEntityQID);
@@ -142,6 +165,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
           })
           .then(async () => {
             console.log("Adding properties to cache...");
+            updateCacheSize("propertiesCache", JSON.stringify(props));
             await propertiesCache.set(qid, JSON.stringify(props));
           });
 
@@ -153,6 +177,10 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
           })
           .then(async () => {
             console.log("Adding missing properties to cache...");
+            updateCacheSize(
+              "missingPropertiesCache",
+              JSON.stringify(missing_props)
+            );
             await missingPropertiesCache.set(
               qid,
               JSON.stringify(missing_props)
@@ -224,6 +252,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             return response.results.bindings;
           })
           .then(async (response) => {
+            updateCacheSize("startUpCache", JSON.stringify(response));
             await startUpCache.set("wiki", JSON.stringify(response));
           });
       }
@@ -296,6 +325,9 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         password,
         queryRange,
         propertySuggestionsList,
+        startUpCacheSize,
+        propertiesCacheSize,
+        missingPropertiesCacheSize,
         reloadProperties,
         setPropertySuggestionsList,
         setSelectedPropertyPID,

@@ -40,6 +40,9 @@ type WikiContextState = {
   password: string;
   queryRange: string;
   loadingData: boolean;
+  startUpCacheSize: number;
+  propertiesCacheSize: number;
+  missingPropertiesCacheSize: number;
   markers: Mark[];
   selectedEntityQID: string;
   propertySuggestionsList: any[];

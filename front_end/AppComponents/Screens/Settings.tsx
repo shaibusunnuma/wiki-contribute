@@ -14,12 +14,26 @@ import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default ({ route, navigation }) => {
-  const { clearCache, queryRange, setAnonymous, setTrackLocation } =
-    React.useContext(WikiContext);
+  const {
+    clearCache,
+    queryRange,
+    setAnonymous,
+    setTrackLocation,
+    startUpCacheSize,
+    propertiesCacheSize,
+    missingPropertiesCacheSize,
+  } = React.useContext(WikiContext);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
+  };
+
+  const cacheSize = () => {
+    return (
+      (startUpCacheSize + propertiesCacheSize + missingPropertiesCacheSize) /
+      1048576
+    ).toFixed(3);
   };
 
   return (
@@ -85,6 +99,7 @@ export default ({ route, navigation }) => {
               name: "brush",
               type: "material-community-icons",
             }}
+            rightContent={<Text>{cacheSize()}GB</Text>}
             onPress={() => createAlert(clearCache)}
           />
           {/* <MaterialCommunityIcons name="broom" size={24} color="black" /> */}
