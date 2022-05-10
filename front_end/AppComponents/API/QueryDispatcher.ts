@@ -35,22 +35,20 @@ export class SPARQLQueryDispatcher {
 		`
 	}
 
-	query() {
+	async query() {
 		const locationQueryUrl = this.endpoint + '?query=' + encodeURIComponent(this.locationQuery);
 		const headers = { 'Accept': 'application/sparql-results+json' };
-		return fetch(locationQueryUrl, { headers }).then(body => body.json())
-			.then(data => {
-				try {
-					const res = data.results.bindings[0].item.value.split('/');
-					const cityQid = res[res.length - 1]
-					this.getEntityQuery(cityQid);
-					const entitiesQueryUrl = this.endpoint + '?query=' + encodeURIComponent(this.entitiesQuery);
-					return fetch(entitiesQueryUrl, { headers }).then(body => body.json())
-				} catch (error) {
-					console.log(error)
-				}
-
-			});
+		const body = await fetch(locationQueryUrl, { headers });
+		const data = await body.json();
+		try {
+			const res = data.results.bindings[0].item.value.split('/');
+			const cityQid = res[res.length - 1];
+			this.getEntityQuery(cityQid);
+			const entitiesQueryUrl = this.endpoint + '?query=' + encodeURIComponent(this.entitiesQuery);
+			return fetch(entitiesQueryUrl, { headers }).then(body_1 => body_1.json());
+		} catch (error) {
+			console.log(error);
+		}
 
 	}
 }
