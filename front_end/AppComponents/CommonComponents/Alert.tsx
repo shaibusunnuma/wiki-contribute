@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 
-export default (clearCache) =>
-  Alert.alert("Alert Title", "Are you sure you want to clear cache?", [
+export default (clearCache, cacheInstance) =>
+  Alert.alert("Alert Title", "Are you sure you want to clear" + cacheInstance, [
     {
       text: "Cancel",
       style: "cancel",
@@ -9,7 +9,7 @@ export default (clearCache) =>
     {
       text: "OK",
       onPress: () => {
-        clearCache();
+        clearCache(cacheInstance);
         Alert.alert("Cache Cleared");
       },
     },

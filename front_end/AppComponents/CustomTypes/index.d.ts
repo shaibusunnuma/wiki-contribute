@@ -40,9 +40,8 @@ type WikiContextState = {
   password: string;
   queryRange: string;
   loadingData: boolean;
-  startUpCacheSize: number;
+  entitiesCacheSize: number;
   propertiesCacheSize: number;
-  missingPropertiesCacheSize: number;
   markers: Mark[];
   selectedEntityQID: string;
   propertySuggestionsList: any[];
@@ -55,9 +54,9 @@ type WikiContextState = {
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
   loadProperties: (qid: string) => void;
   setSelectedPropertyPID: React.Dispatch<React.SetStateAction<string, string>>;
-  clearCache: () => void;
+  clearCache: (cacheInstance: string) => void;
   refreshWiki: () => void;
-  setQueryRange: React.Dispatch<React.SetStateAction<string, string>>;
+  SetQueryRange: (range: string) => void;
   setUserCredentials: (user_name: string, password: string) => void;
   setLoadingData: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   setTrackLocation: React.Dispatch<React.SetStateAction<boolean, boolean>>;

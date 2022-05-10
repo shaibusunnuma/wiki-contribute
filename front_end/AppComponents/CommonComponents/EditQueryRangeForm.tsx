@@ -1,13 +1,11 @@
 import React from "react";
-import { useMutation } from "@apollo/client";
-import { View, StyleSheet, Pressable, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { FormItem } from "react-native-form-component";
-import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 import { WikiContext } from "../../Context";
 
-export default ({ toggleModal }) => {
+export default ({ toggleModal, SetQueryRange }) => {
   const [value, setValue] = React.useState("");
-  const { setQueryRange } = React.useContext(WikiContext);
+  // const { SetQueryRange } = React.useContext(WikiContext);
 
   return (
     <View style={styles.container}>
@@ -20,15 +18,15 @@ export default ({ toggleModal }) => {
         onChangeText={(value) => setValue(value)}
         asterik
       />
-      <Pressable
+      <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          setQueryRange(value);
+          SetQueryRange(value);
           toggleModal();
         }}
       >
         <Text style={styles.text}>Save</Text>
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 };
