@@ -50,6 +50,7 @@ type WikiContextState = {
     id: string;
     title: string;
   }[]>>;
+  WikiUpdateCachingHandler: (updateInstance: string, updateData: Object) => void
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
   loadProperties: (qid: string) => void;

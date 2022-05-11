@@ -20,6 +20,7 @@ const contextDefaultData: WikiContextState = {
     propertySuggestionsList: [],
     entitiesCacheSize: 0,
     propertiesCacheSize: 0,
+    WikiUpdateCachingHandler: (updateInstance: string, updateData: Object) => { },
     reloadProperties: () => { },
     setPropertySuggestionsList: () => { },
     setSelectedEntityQID: () => { },

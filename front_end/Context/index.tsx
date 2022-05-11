@@ -24,6 +24,15 @@ const startUpCache = new Cache({
     backend: AsyncStorage,
 });
 
+const EditCache = new Cache({
+    namespace: "EditCache",
+    policy: {
+        maxEntries: 5000, // if unspecified, it can have unlimited entries
+        stdTTL: 0, // the standard ttl as number in seconds, default: 0 (unlimited)
+    },
+    backend: AsyncStorage,
+});
+
 const propertiesCache = new Cache({
     namespace: "PropertiesCache",
     policy: {
@@ -66,6 +75,35 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     const [propertiesCacheSize, setPropertiesCacheSize] = React.useState(0);
     const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
     const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(propertySuggestions);
+
+    const WikiUpdateCachingHandler = (instance: string, data: Object) => {
+        if (instance == "add") {
+            addCreateToCache(data);
+        } else {
+            addEditToCache(data);
+        }
+    };
+
+    const addEditToCache = async (data: Object) => {
+        const cacheData = await EditCache.get("Edits");
+        if (cacheData) {
+            const cacheDataArray = JSON.parse(cacheData);
+            cacheDataArray.push(data);
+            await EditCache.set("Edits", JSON.stringify(cacheDataArray));
+        }
+    };
+
+    const addCreateToCache = async (data: Object) => {
+        const cacheData = await EditCache.get("Adds");
+        if (cacheData) {
+            const cacheDataArray = JSON.parse(cacheData);
+            cacheDataArray.push(data);
+            await EditCache.set("Adds", JSON.stringify(cacheDataArray));
+        }
+    };
+
+    //TODO: Create a handler to sync cached updates to the server
+    const syncHandler = () => {};
 
     const getData = async () => {
         try {
@@ -332,6 +370,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 propertySuggestionsList,
                 entitiesCacheSize,
                 propertiesCacheSize,
+                WikiUpdateCachingHandler,
                 reloadProperties,
                 setPropertySuggestionsList,
                 setSelectedPropertyPID,
