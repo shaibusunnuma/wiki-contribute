@@ -160,7 +160,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
                 latitudeDelta: 0,
-                longitudeDelta: 0.01,
+                longitudeDelta: 0.8,
             } as Region);
 
             setUserLocation({
@@ -266,7 +266,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             setPropertiesCacheSize(cache_size);
 
             setEntitiesCacheSize(entitiesCache !== undefined ? entitiesCache.length : 0);
-            setQueryRange(queryRange !== undefined ? queryRange : "100");
+            setQueryRange(queryRange !== undefined ? queryRange : "0.008");
             setLogin(username !== undefined && password !== undefined);
 
             //get user location
