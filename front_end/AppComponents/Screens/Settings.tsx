@@ -76,7 +76,11 @@ export default ({ navigation }) => {
                             name: "globe",
                             type: "font-awesome",
                         }}
-                        rightContent={<Text>{queryRange}</Text>}
+                        rightContent={
+                            <View style={{ width: 100 }}>
+                                <Text style={{ textAlign: "right" }}>{queryRange}</Text>
+                            </View>
+                        }
                         onPress={() => toggleHandler("queryRange")}
                     />
                     <SwitchRow
