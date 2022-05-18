@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import MapView, { Marker, Region, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 import { View, Text, StyleSheet } from "react-native";
