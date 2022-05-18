@@ -1,8 +1,8 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
-import { FeedStackScreen, SettingsStackScreen } from "./ScreenStacks";
-import { Map, Notifications, LandingPage } from "../Screens";
+import { FeedStackScreen } from "./ScreenStacks";
+import { Map, Notifications, LandingPage, Settings } from "../Screens";
 import { WikiContext } from "../../Context";
 
 const Tab = createBottomTabNavigator();
@@ -60,10 +60,9 @@ export default (): JSX.Element => {
             />
             <Tab.Screen
                 name="SettingsTab"
-                component={SettingsStackScreen}
+                component={Settings}
                 options={{
                     tabBarLabel: "Settings",
-                    headerShown: false,
                     tabBarActiveTintColor: "white",
                     tabBarInactiveTintColor: "#81BAD6",
                     tabBarIcon: ({ color }) => <MaterialCommunityIcons name="cog" color={color} size={26} />,

@@ -5,25 +5,51 @@ import createAlert from "../CommonComponents/Alert";
 import EditQueryRangeForm from "../CommonComponents/EditQueryRangeForm";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { View, TouchableOpacity, Text, SafeAreaView, StyleSheet } from "react-native";
+import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import { SectionRow, SettingsPage, NavigateRow, BaseRow, SwitchRow } from "react-native-settings-view";
+import EditProfile from "../CommonComponents/EditProfileForm";
 
 export default ({ navigation }) => {
     const {
         clearCache,
+        username,
         queryRange,
         setAnonymous,
         setTrackLocation,
         entitiesCacheSize,
         propertiesCacheSize,
         SetQueryRange,
+        setUserCredentials,
     } = React.useContext(WikiContext);
     const [isModalVisible, setIsModalVisible] = React.useState(false);
     const [modalType, setModalType] = React.useState("cache");
+    const [userNameValue, setUserNameValue] = React.useState(username);
+    const [passwordValue, setPasswordValue] = React.useState("");
+    const [success, setSuccess] = React.useState(false);
+    const [isError, setIsError] = React.useState("no error");
     const [cacheSize, setCacheSize] = React.useState(((propertiesCacheSize + entitiesCacheSize) / 1048576).toFixed(3));
 
     const toggleHandler = (type: string) => {
         setIsModalVisible(!isModalVisible);
         setModalType(type);
+    };
+
+    const toggleProfileModal = () => {
+        setIsModalVisible(!isModalVisible);
+        setModalType("Profile");
+        setIsError("no error");
+        setSuccess(false);
+        setUserNameValue("");
+        setPasswordValue("");
+    };
+
+    const handleSubmit = () => {
+        if (!userNameValue || !passwordValue) {
+            setIsError("Username and password are required");
+        } else {
+            setUserCredentials(userNameValue, passwordValue);
+            setSuccess(true);
+        }
     };
 
     const clearCacheHandler = (cacheInstance: string) => {
@@ -42,18 +68,32 @@ export default ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
+            <TouchableOpacity onPress={toggleProfileModal} style={styles.userInfoSection}>
+                <View style={{ flexDirection: "row", marginTop: 15 }}>
+                    <Avatar.Image
+                        source={{
+                            uri: "https://api.adorable.io/avatars/80/abott@adorable.png",
+                        }}
+                        size={80}
+                    />
+                    <View style={{ marginLeft: 20 }}>
+                        <Title
+                            style={[
+                                styles.title,
+                                {
+                                    marginTop: 15,
+                                    marginBottom: 5,
+                                },
+                            ]}
+                        >
+                            {username}
+                        </Title>
+                        <Caption style={styles.caption}>@j_doe</Caption>
+                    </View>
+                </View>
+            </TouchableOpacity>
             <SettingsPage style={{ flex: 1 }}>
                 <SectionRow>
-                    <NavigateRow
-                        text="Profile"
-                        leftIcon={{
-                            name: "account",
-                            type: "material-community",
-                        }}
-                        onPress={() => {
-                            navigation.push("Profile");
-                        }}
-                    />
                     <NavigateRow
                         text="Privacy Policy"
                         leftIcon={{
@@ -114,8 +154,6 @@ export default ({ navigation }) => {
                         }
                         onPress={() => toggleHandler("cache")}
                     />
-                </SectionRow>
-                <SectionRow style={{ marginTop: 5 }}>
                     <BaseRow
                         text="Sign Out"
                         style={{ paddingVertical: 5 }}
@@ -129,13 +167,26 @@ export default ({ navigation }) => {
             </View>
             <Modal isVisible={isModalVisible}>
                 <View>
-                    {modalType === "queryRange" ? (
+                    {modalType === "queryRange" && (
                         <EditQueryRangeForm toggleModal={toggleModal} SetQueryRange={SetQueryRange} />
-                    ) : (
+                    )}
+                    {modalType === "cache" && (
                         <CacheView
                             propertiesCacheSize={propertiesCacheSize}
                             entitiesCacheSize={entitiesCacheSize}
                             clearCache={clearCacheHandler}
+                            toggleModal={toggleModal}
+                        />
+                    )}
+                    {modalType === "Profile" && (
+                        <EditProfile
+                            userNameValue={userNameValue}
+                            passwordValue={passwordValue}
+                            setUserNameValue={setUserNameValue}
+                            setPasswordValue={setPasswordValue}
+                            handleSubmit={handleSubmit}
+                            isError={isError}
+                            success={success}
                             toggleModal={toggleModal}
                         />
                     )}
@@ -203,5 +254,18 @@ const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: "#ffffff",
         height: 180,
+    },
+    userInfoSection: {
+        paddingHorizontal: 30,
+        marginBottom: 25,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+    },
+    caption: {
+        fontSize: 14,
+        lineHeight: 14,
+        fontWeight: "500",
     },
 });
