@@ -27,6 +27,27 @@ type PropertySuggestion = {
   title: string;
 }
 
+interface Editvariables {
+  username: string;
+  password: string;
+  id: string;
+  anonymous: boolean;
+  property: string;
+  oldValue: string;
+  newValue: string;
+};
+
+interface Addvariables {
+  username: string;
+  password: string;
+  id: string;
+  anonymous: boolean;
+  property: string;
+  value: string;
+};
+
+
+
 type WikiContextState = {
   region: Region;
   entities: Entity[];
@@ -50,6 +71,7 @@ type WikiContextState = {
     id: string;
     title: string;
   }[]>>;
+  WikiUpdateCachingHandler: (updateInstance: string, updateData: Object) => void
   setUserLocation: React.Dispatch<React.SetStateAction<LatLng, LatLng>>
   setSelectedEntityQID: React.Dispatch<React.SetStateAction<string, string>>;
   loadProperties: (qid: string) => void;
