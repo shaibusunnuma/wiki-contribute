@@ -11,7 +11,7 @@ import { WikiContext } from "../../Context";
 import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-export function EntityProperties({ route, navigation }) {
+export default ({ route, navigation }) => {
     const {
         properties,
         loadProperties,
@@ -32,6 +32,7 @@ export function EntityProperties({ route, navigation }) {
     const [success, setSuccess] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [propertyPID, setPropertyPID] = React.useState("");
+    const [feedback, setFeedback] = React.useState("Update successful");
     const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
     const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
     const [title, setTitle] = React.useState("");
@@ -61,12 +62,16 @@ export function EntityProperties({ route, navigation }) {
                 },
             }).then(() => {
                 setSuccess(true);
+                setFeedback("Update successful");
                 setLoading(false);
             });
         } catch (error) {
             setLoading(false);
             setIsError(error.message);
             if (error.message.includes("Network request failed")) {
+                setSuccess(true);
+                setFeedback("Network error. Update is cached");
+                setLoading(false);
                 const variables = {
                     username: username,
                     password: password,
@@ -98,6 +103,7 @@ export function EntityProperties({ route, navigation }) {
                 },
             }).then(() => {
                 setSuccess(true);
+                setFeedback("Update successful");
                 setLoading(false);
             });
         } catch (error) {
@@ -105,6 +111,9 @@ export function EntityProperties({ route, navigation }) {
             setIsError(error.message);
             //cache if there was a network error.
             if (error.message.includes("Network request failed")) {
+                setSuccess(true);
+                setFeedback("Network error. Update is cached");
+                setLoading(false);
                 const variables = {
                     username: username,
                     password: password,
@@ -225,6 +234,7 @@ export function EntityProperties({ route, navigation }) {
                             value={value}
                             setValue={setValue}
                             setPropertyID={setPropertyPID}
+                            feedback={feedback}
                         />
                     ) : (
                         <EditProperty
@@ -235,6 +245,7 @@ export function EntityProperties({ route, navigation }) {
                             editProperty={editProperty}
                             newValue={value}
                             setNewValue={setValue}
+                            feedback={feedback}
                         />
                     )}
                     <View style={{ padding: 10, alignItems: "center" }}>
@@ -246,7 +257,7 @@ export function EntityProperties({ route, navigation }) {
             </Modal>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     mainView: {
