@@ -63,19 +63,20 @@ export function EntityProperties({ route, navigation }) {
                 setSuccess(true);
                 setLoading(false);
             });
-        } catch (err) {
+        } catch (error) {
             setLoading(false);
-            setIsError(err.message);
-            //cache if there was a network error. set success for user to click ok.
-            const variables = {
-                username: username,
-                password: password,
-                anonymous: anonymous,
-                id: selectedEntityQID,
-                property: propertyPID,
-                value: value,
-            };
-            // cacheEdit("add",variables)
+            setIsError(error.message);
+            if (error.message.includes("Network request failed")) {
+                const variables = {
+                    username: username,
+                    password: password,
+                    anonymous: anonymous,
+                    id: selectedEntityQID,
+                    property: propertyPID,
+                    value: value,
+                };
+                WikiUpdateCachingHandler("WikiAdd", variables);
+            }
         }
     };
 
@@ -99,22 +100,25 @@ export function EntityProperties({ route, navigation }) {
                 setSuccess(true);
                 setLoading(false);
             });
-        } catch (err) {
+        } catch (error) {
             setLoading(false);
-            setIsError(err.message);
+            setIsError(error.message);
             //cache if there was a network error.
-            const variables = {
-                username: username,
-                password: password,
-                id: selectedEntityQID,
-                anonymous: anonymous,
-                property: selectedPropertyPID,
-                oldValue: oldValue, //get qid of old value
-                newValue: value,
-            };
-            //cacheEdit("edit",variables);
+            if (error.message.includes("Network request failed")) {
+                const variables = {
+                    username: username,
+                    password: password,
+                    id: selectedEntityQID,
+                    anonymous: anonymous,
+                    property: selectedPropertyPID,
+                    oldValue: oldValue, //get qid of old value
+                    newValue: value,
+                };
+                WikiUpdateCachingHandler("WikiEdit", variables);
+            }
         }
     };
+
     const getQID = () => {
         if (entity.QID !== undefined) {
             const t = entity.title.length > 20 ? entity.title.slice(0, 20) : entity.title;

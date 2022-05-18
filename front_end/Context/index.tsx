@@ -6,11 +6,13 @@ import * as Location from "expo-location";
 import { Cache } from "react-native-cache";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SPARQLQueryDispatcher } from "../AppComponents/API/QueryDispatcher";
-import { Entity, Mark } from "../AppComponents/CustomTypes";
+import { Addvariables, Editvariables, Entity, Mark } from "../AppComponents/CustomTypes";
 import { WikiContextState } from "../AppComponents/CustomTypes";
 import { PropertiesSPARQLQueryDispatcher } from "../AppComponents/API/PropertiesQueryDispatcher";
 import contextDefaultData from "./DefaultData";
 import propertySuggestions from "../data/properties.json";
+import { useMutation } from "@apollo/client";
+import { CREATE_PROPERTY_MUTATION, UPDATE_PROPERTY_MUTATION } from "../GraphQL/Mutations";
 interface Props {
     children: JSX.Element;
 }
@@ -24,8 +26,8 @@ const startUpCache = new Cache({
     backend: AsyncStorage,
 });
 
-const EditCache = new Cache({
-    namespace: "EditCache",
+const WikiSyncCache = new Cache({
+    namespace: "WikiSyncCache",
     policy: {
         maxEntries: 5000, // if unspecified, it can have unlimited entries
         stdTTL: 0, // the standard ttl as number in seconds, default: 0 (unlimited)
@@ -75,35 +77,76 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     const [propertiesCacheSize, setPropertiesCacheSize] = React.useState(0);
     const [address, setAddress] = React.useState({} as Location.LocationGeocodedAddress[]);
     const [propertySuggestionsList, setPropertySuggestionsList] = React.useState(propertySuggestions);
+    const [updateProperty] = useMutation(UPDATE_PROPERTY_MUTATION);
+    const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
+    const [cachedEdits, setCachedEdits] = React.useState([] as Editvariables[]);
+    const [cachedAdditions, setCachedAdditions] = React.useState([] as Addvariables[]);
 
-    const WikiUpdateCachingHandler = (instance: string, data: Object) => {
-        if (instance == "add") {
-            addCreateToCache(data);
-        } else {
-            addEditToCache(data);
+    const WikiUpdateCachingHandler = async (instance: string, data: Editvariables | Addvariables) => {
+        instance == "WikiAdd"
+            ? () => {
+                  cachedAdditions.push(data as Addvariables);
+                  UpdateWikiSyncCache(instance, cachedAdditions);
+                  setCachedAdditions(cachedAdditions);
+              }
+            : () => {
+                  cachedEdits.push(data as Editvariables);
+                  UpdateWikiSyncCache(instance, cachedEdits);
+                  setCachedEdits(cachedEdits);
+              };
+    };
+
+    const UpdateWikiSyncCache = async (instance: string, data: Editvariables[] | Addvariables[]) => {
+        await WikiSyncCache.set(instance, JSON.stringify(data));
+    };
+
+    const createProperty = async (data: Addvariables) => {
+        try {
+            await addProperty({
+                variables: data,
+            });
+        } catch (error) {
+            return error;
+        }
+    };
+    const editProperty = async (data: Editvariables) => {
+        try {
+            await updateProperty({
+                variables: data,
+            });
+        } catch (error) {
+            return error;
         }
     };
 
-    const addEditToCache = async (data: Object) => {
-        const cacheData = await EditCache.get("Edits");
-        if (cacheData) {
-            const cacheDataArray = JSON.parse(cacheData);
-            cacheDataArray.push(data);
-            await EditCache.set("Edits", JSON.stringify(cacheDataArray));
+    const syncHandler = async () => {
+        const syncEditData = cachedEdits;
+        if (syncEditData.length !== 0) {
+            for (let i = syncEditData.length - 1; i >= 0; --i) {
+                const res = await editProperty(syncEditData[i]);
+                if (res.message.includes("Network request failed")) {
+                    console.log("Result:", res.message);
+                    break;
+                }
+                syncEditData.splice(i, 1);
+                UpdateWikiSyncCache("WikiEdit", syncEditData);
+                setCachedEdits(syncEditData);
+            }
+        }
+        const syncAddData = cachedAdditions;
+        if (syncAddData.length !== 0) {
+            for (let i = syncAddData.length - 1; i >= 0; --i) {
+                const res = await createProperty(syncAddData[i]);
+                if (res.message.includes("Network request failed")) {
+                    console.log("Result:", res.message);
+                    break;
+                }
+                syncAddData.splice(i, 1);
+                UpdateWikiSyncCache("WikiAdd", syncAddData);
+                setCachedAdditions(syncAddData);
+            }
         }
     };
-
-    const addCreateToCache = async (data: Object) => {
-        const cacheData = await EditCache.get("Adds");
-        if (cacheData) {
-            const cacheDataArray = JSON.parse(cacheData);
-            cacheDataArray.push(data);
-            await EditCache.set("Adds", JSON.stringify(cacheDataArray));
-        }
-    };
-
-    //TODO: Create a handler to sync cached updates to the server
-    const syncHandler = () => {};
 
     const getData = async () => {
         try {
@@ -115,7 +158,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 setLoadingData(false);
                 console.log("Data from cache loaded.");
             } else {
-                console.log("Querying wikidata...", entitiesCacheSize);
+                console.log("Querying wikidata...");
                 const queryDispatcher = new SPARQLQueryDispatcher(userLocation, address[0].city, queryRange);
                 await queryDispatcher
                     .query()
@@ -292,10 +335,14 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             const allCachedMissingProperties = await missingPropertiesCache.getAll(); //returned as an object
             const entitiesCache = await startUpCache.get("wiki");
             const queryRange = await startUpCache.get("queryRange");
+            const cacheEditData = await WikiSyncCache.get("WikiEdit");
+            const cacheAdditionData = await WikiSyncCache.get("WikiAdd");
 
             //set state with cache data
             setUsername(username !== undefined ? username : "");
             setPassword(password !== undefined ? password : "");
+            setCachedEdits(cacheEditData ? JSON.parse(cacheEditData) : []);
+            setCachedAdditions(cacheAdditionData ? JSON.parse(cacheAdditionData) : []);
             const cache_size =
                 Object.keys(allCachedProperties).length !== 0
                     ? JSON.stringify(allCachedMissingProperties).length + JSON.stringify(allCachedProperties).length
@@ -339,11 +386,25 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         await propertiesCache.clearAll();
         await missingPropertiesCache.clearAll();
         await startUpCache.clearAll();
+        await WikiSyncCache.clearAll();
     };
 
     React.useEffect(() => {
         if (userLocation.latitude !== undefined) getData(); //TODO: check if queryRange could be unset before geting data
     }, [userLocation]);
+
+    // React.useEffect(() => {
+    //     syncHandler();
+    // }, [cachedEdits, cachedAdditions]);
+
+    // React.useEffect(() => {
+    //     const syncData = setInterval(() => {
+    //         syncHandler();
+    //     }, 10000);
+    //     return function cleanup() {
+    //         clearInterval(syncData);
+    //     };
+    // }, [cachedEdits, cachedAdditions]);
 
     React.useEffect(() => {
         //clearAll();

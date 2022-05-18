@@ -27,6 +27,27 @@ type PropertySuggestion = {
   title: string;
 }
 
+interface Editvariables {
+  username: string;
+  password: string;
+  id: string;
+  anonymous: boolean;
+  property: string;
+  oldValue: string;
+  newValue: string;
+};
+
+interface Addvariables {
+  username: string;
+  password: string;
+  id: string;
+  anonymous: boolean;
+  property: string;
+  value: string;
+};
+
+
+
 type WikiContextState = {
   region: Region;
   entities: Entity[];
