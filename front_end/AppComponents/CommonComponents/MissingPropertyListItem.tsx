@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ListItem, Card } from "@rneui/base";
 import { WikiContext } from "../../Context";
 
-//@ts-ignore
 export default ({ item, setIsModalVisible, startCamera }) => {
     const { setSelectedPropertyPID } = React.useContext(WikiContext);
     const toggleModal = () => {
