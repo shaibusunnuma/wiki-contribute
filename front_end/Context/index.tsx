@@ -83,17 +83,20 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     const [cachedAdditions, setCachedAdditions] = React.useState([] as Addvariables[]);
 
     const WikiUpdateCachingHandler = async (instance: string, data: Editvariables | Addvariables) => {
-        instance == "WikiAdd"
-            ? () => {
-                  cachedAdditions.push(data as Addvariables);
-                  UpdateWikiSyncCache(instance, cachedAdditions);
-                  setCachedAdditions(cachedAdditions);
-              }
-            : () => {
-                  cachedEdits.push(data as Editvariables);
-                  UpdateWikiSyncCache(instance, cachedEdits);
-                  setCachedEdits(cachedEdits);
-              };
+        console.log("Caching Wiki Update...");
+        if (instance == "WikiAdd") {
+            console.log("Caching Wiki Addition...");
+            cachedAdditions.push(data as Addvariables);
+            console.log("Data:", cachedAdditions);
+            UpdateWikiSyncCache(instance, cachedAdditions);
+            setCachedAdditions(cachedAdditions);
+        } else {
+            console.log("Caching Wiki Edit...");
+            cachedEdits.push(data as Editvariables);
+            console.log("Data:", cachedEdits);
+            UpdateWikiSyncCache(instance, cachedEdits);
+            setCachedEdits(cachedEdits);
+        }
     };
 
     const UpdateWikiSyncCache = async (instance: string, data: Editvariables[] | Addvariables[]) => {
@@ -121,6 +124,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
 
     const syncHandler = async () => {
         const syncEditData = cachedEdits;
+        console.log("syncing...", syncEditData);
         if (syncEditData.length !== 0) {
             for (let i = syncEditData.length - 1; i >= 0; --i) {
                 const res = await editProperty(syncEditData[i]);
@@ -339,7 +343,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             const cacheAdditionData = await WikiSyncCache.get("WikiAdd");
 
             //set state with cache data
-            setUsername(username !== undefined ? username : "");
+            setUsername(username !== undefined ? username : "Username");
             setPassword(password !== undefined ? password : "");
             setCachedEdits(cacheEditData ? JSON.parse(cacheEditData) : []);
             setCachedAdditions(cacheAdditionData ? JSON.parse(cacheAdditionData) : []);
@@ -347,7 +351,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 Object.keys(allCachedProperties).length !== 0
                     ? JSON.stringify(allCachedMissingProperties).length + JSON.stringify(allCachedProperties).length
                     : 0;
-            console.log(cache_size);
             setPropertiesCacheSize(cache_size);
 
             setEntitiesCacheSize(entitiesCache !== undefined ? entitiesCache.length : 0);
@@ -407,7 +410,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     // }, [cachedEdits, cachedAdditions]);
 
     React.useEffect(() => {
-        //clearAll();
+        // clearAll();
         StartUp();
     }, []);
 
