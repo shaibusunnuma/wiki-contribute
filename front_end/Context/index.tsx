@@ -416,21 +416,21 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         if (userLocation.latitude !== undefined) getData(); //TODO: check if queryRange could be unset before geting data
     }, [userLocation]);
 
-    // React.useEffect(() => {
-    //     syncHandler();
-    // }, [cachedEdits, cachedAdditions]);
-
-    // React.useEffect(() => {
-    //     const syncData = setInterval(() => {
-    //         syncHandler();
-    //     }, 10000);
-    //     return function cleanup() {
-    //         clearInterval(syncData);
-    //     };
-    // }, [cachedEdits, cachedAdditions]);
+    React.useEffect(() => {
+        syncHandler();
+    }, [cachedEdits, cachedAdditions]);
 
     React.useEffect(() => {
-        // clearAll();
+        const syncData = setInterval(() => {
+            syncHandler();
+        }, 10000);
+        return function cleanup() {
+            clearInterval(syncData);
+        };
+    }, [cachedEdits, cachedAdditions]);
+
+    React.useEffect(() => {
+        //clearAll();
         StartUp();
     }, []);
 
@@ -457,6 +457,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 showSnackBar,
                 snackBarMessage,
                 setShowSnackBar,
+                setSnackBarMessage,
                 WikiUpdateCachingHandler,
                 reloadProperties,
                 setPropertySuggestionsList,

@@ -20,6 +20,9 @@ export default function ({ route, navigation }) {
         selectedPropertyPID,
         selectedEntityQID,
         anonymous,
+        showSnackBar,
+        setShowSnackBar,
+        setSnackBarMessage,
         reloadProperties,
         WikiUpdateCachingHandler,
     } = React.useContext(WikiContext);
@@ -61,17 +64,20 @@ export default function ({ route, navigation }) {
                     value: value,
                 },
             }).then(() => {
-                setSuccess(true);
-                setFeedback("Update successful");
-                setLoading(false);
+                toggleModal();
+                setSnackBarMessage("Update successful");
+                setShowSnackBar(true);
+                //setLoading(false);
             });
         } catch (error) {
             setLoading(false);
             setIsError(error.message);
             if (error.message.includes("Network request failed")) {
-                setSuccess(true);
-                setFeedback("Network error. Update is cached");
-                setLoading(false);
+                //setSuccess(true);
+                toggleModal();
+                setSnackBarMessage("Network error. Update is cached");
+                setShowSnackBar(true);
+                //setLoading(false);
                 const variables = {
                     username: username,
                     password: password,
@@ -102,18 +108,18 @@ export default function ({ route, navigation }) {
                     newValue: value,
                 },
             }).then(() => {
-                setSuccess(true);
-                setFeedback("Update successful");
-                setLoading(false);
+                toggleModal();
+                setSnackBarMessage("Update successful");
+                setShowSnackBar(true);
             });
         } catch (error) {
             setLoading(false);
             setIsError(error.message);
             //cache if there was a network error.
             if (error.message.includes("Network request failed")) {
-                setSuccess(true);
-                setFeedback("Network error. Update is cached");
-                setLoading(false);
+                toggleModal();
+                setSnackBarMessage("Network error. Update is cached");
+                setShowSnackBar(true);
                 const variables = {
                     username: username,
                     password: password,

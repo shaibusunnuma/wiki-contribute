@@ -68,6 +68,7 @@ type WikiContextState = {
   propertySuggestionsList: any[];
   showSnackBar: boolean;
   snackBarMessage: string;
+  setSnackBarMessage: React.Dispatch<React.SetStateAction<string, string>>;
   setShowSnackBar: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   reloadProperties: () => void;
   setPropertySuggestionsList: React.Dispatch<React.SetStateAction<{

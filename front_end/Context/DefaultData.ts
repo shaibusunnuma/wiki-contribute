@@ -22,6 +22,7 @@ const contextDefaultData: WikiContextState = {
     propertiesCacheSize: 0,
     showSnackBar: false,
     snackBarMessage: "",
+    setSnackBarMessage: (message: string) => { },
     setShowSnackBar: (showSnackBar: boolean) => { },
     WikiUpdateCachingHandler: (updateInstance: string, updateData: Object) => { },
     reloadProperties: () => { },
