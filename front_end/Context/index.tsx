@@ -213,7 +213,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         try {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
-                setPermissionStatus("Permission to access location was denied");
+                setPermissionStatus("denied");
                 return;
             }
             setPermissionStatus("granted");
