@@ -66,6 +66,9 @@ type WikiContextState = {
   markers: Mark[];
   selectedEntityQID: string;
   propertySuggestionsList: any[];
+  showSnackBar: boolean;
+  snackBarMessage: string;
+  setShowSnackBar: React.Dispatch<React.SetStateAction<boolean, boolean>>;
   reloadProperties: () => void;
   setPropertySuggestionsList: React.Dispatch<React.SetStateAction<{
     id: string;

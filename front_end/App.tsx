@@ -9,16 +9,16 @@ import client from "./GraphQL/Config";
 import { StatusBar } from "react-native";
 
 export default function App() {
-  StatusBar.setBarStyle("dark-content", true);
-  return (
-    <ApolloProvider client={client}>
-      <SafeAreaProvider>
-        <WikiProvider>
-          <NavigationContainer ref={React.createRef()}>
-            <Navigation />
-          </NavigationContainer>
-        </WikiProvider>
-      </SafeAreaProvider>
-    </ApolloProvider>
-  );
+    StatusBar.setBarStyle("dark-content", true);
+    return (
+        <ApolloProvider client={client}>
+            <SafeAreaProvider>
+                <WikiProvider>
+                    <NavigationContainer ref={React.createRef()}>
+                        <Navigation />
+                    </NavigationContainer>
+                </WikiProvider>
+            </SafeAreaProvider>
+        </ApolloProvider>
+    );
 }

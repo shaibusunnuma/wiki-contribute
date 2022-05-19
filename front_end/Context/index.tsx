@@ -81,6 +81,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     const [addProperty] = useMutation(CREATE_PROPERTY_MUTATION);
     const [cachedEdits, setCachedEdits] = React.useState([] as Editvariables[]);
     const [cachedAdditions, setCachedAdditions] = React.useState([] as Addvariables[]);
+    const [showSnackBar, setShowSnackBar] = React.useState(false);
+    const [snackBarMessage, setSnackBarMessage] = React.useState("");
 
     const WikiUpdateCachingHandler = async (instance: string, data: Editvariables | Addvariables) => {
         console.log("Caching Wiki Update...");
@@ -123,32 +125,36 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     };
 
     const syncHandler = async () => {
-        const syncEditData = cachedEdits;
-        console.log("syncing...", syncEditData);
-        if (syncEditData.length !== 0) {
-            for (let i = syncEditData.length - 1; i >= 0; --i) {
-                const res = await editProperty(syncEditData[i]);
-                if (res.message.includes("Network request failed")) {
-                    console.log("Result:", res.message);
-                    break;
+        try {
+            const syncEditData = cachedEdits;
+            console.log("syncing...", syncEditData);
+            if (syncEditData.length !== 0) {
+                for (let i = syncEditData.length - 1; i >= 0; --i) {
+                    const res = await editProperty(syncEditData[i]);
+                    if (res.message.includes("Network request failed")) {
+                        console.log("Result:", res.message);
+                        break;
+                    }
+                    syncEditData.splice(i, 1);
+                    UpdateWikiSyncCache("WikiEdit", syncEditData);
+                    setCachedEdits(syncEditData);
                 }
-                syncEditData.splice(i, 1);
-                UpdateWikiSyncCache("WikiEdit", syncEditData);
-                setCachedEdits(syncEditData);
             }
-        }
-        const syncAddData = cachedAdditions;
-        if (syncAddData.length !== 0) {
-            for (let i = syncAddData.length - 1; i >= 0; --i) {
-                const res = await createProperty(syncAddData[i]);
-                if (res.message.includes("Network request failed")) {
-                    console.log("Result:", res.message);
-                    break;
+            const syncAddData = cachedAdditions;
+            if (syncAddData.length !== 0) {
+                for (let i = syncAddData.length - 1; i >= 0; --i) {
+                    const res = await createProperty(syncAddData[i]);
+                    if (res.message.includes("Network request failed")) {
+                        console.log("Result:", res.message);
+                        break;
+                    }
+                    syncAddData.splice(i, 1);
+                    UpdateWikiSyncCache("WikiAdd", syncAddData);
+                    setCachedAdditions(syncAddData);
                 }
-                syncAddData.splice(i, 1);
-                UpdateWikiSyncCache("WikiAdd", syncAddData);
-                setCachedAdditions(syncAddData);
             }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -177,8 +183,10 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                         await startUpCache.set("wiki", JSON.stringify(response));
                     });
             }
-        } catch (e) {
-            console.log("Fetch error :" + e);
+        } catch (error) {
+            console.log(error);
+            setSnackBarMessage("Error while loading data from Wikidata");
+            setShowSnackBar(true);
         }
     };
 
@@ -197,15 +205,19 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }, [refresh]);
 
     const updateCacheSize = async (cache: string, dataSize: number) => {
-        switch (cache) {
-            case "startUpCache":
-                setEntitiesCacheSize(entitiesCacheSize + dataSize);
-                break;
-            case "propertiesCache":
-                setPropertiesCacheSize(propertiesCacheSize + dataSize);
-                break;
-            default:
-                break;
+        try {
+            switch (cache) {
+                case "startUpCache":
+                    setEntitiesCacheSize(entitiesCacheSize + dataSize);
+                    break;
+                case "propertiesCache":
+                    setPropertiesCacheSize(propertiesCacheSize + dataSize);
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -214,6 +226,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== "granted") {
                 setPermissionStatus("denied");
+                setSnackBarMessage("Permission to access location was denied");
+                setShowSnackBar(true);
                 return;
             }
             setPermissionStatus("granted");
@@ -252,12 +266,14 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
             });
-        } catch (error: any) {
+        } catch (error) {
+            setSnackBarMessage("Could not get user location");
+            setShowSnackBar(true);
             console.log(error);
         }
     };
 
-    //work on reducing the cache
+    //work on reducing the cachesize on settings
     const reloadProperties = async () => {
         await propertiesCache.remove(selectedEntityQID);
         await missingPropertiesCache.remove(selectedEntityQID);
@@ -303,6 +319,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             }
         } catch (error) {
             console.log(error);
+            setSnackBarMessage("Could not load properties");
+            setShowSnackBar(true);
         }
     };
 
@@ -361,6 +379,8 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             getUserLocation();
         } catch (error) {
             console.log(error);
+            setSnackBarMessage("Error while loading cache");
+            setShowSnackBar(true);
         }
     };
 
@@ -434,6 +454,9 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 propertySuggestionsList,
                 entitiesCacheSize,
                 propertiesCacheSize,
+                showSnackBar,
+                snackBarMessage,
+                setShowSnackBar,
                 WikiUpdateCachingHandler,
                 reloadProperties,
                 setPropertySuggestionsList,
