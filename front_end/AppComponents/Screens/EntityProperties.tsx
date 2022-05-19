@@ -11,7 +11,7 @@ import { WikiContext } from "../../Context";
 import { UPDATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 import { CREATE_PROPERTY_MUTATION } from "../../GraphQL/Mutations";
 
-export default ({ route, navigation }) => {
+export default function ({ route, navigation }) {
     const {
         properties,
         loadProperties,
@@ -172,21 +172,20 @@ export default ({ route, navigation }) => {
 
     return (
         <SafeAreaView style={styles.mainView}>
-            <View
+            <TouchableOpacity
                 style={{
                     width: "100%",
-                    backgroundColor: "white",
+                    backgroundColor: "#006699",
                     flexDirection: "row",
                     alignItems: "center",
                     paddingHorizontal: 10,
+                    paddingVertical: 10,
+                }}
+                onPress={() => {
+                    navigation.push("MissingProperties");
                 }}
             >
-                <Button
-                    title="Missing properties"
-                    onPress={() => {
-                        navigation.push("MissingProperties");
-                    }}
-                />
+                <Text style={{ color: "white", fontSize: 20 }}>Missing properties</Text>
                 <View
                     style={{
                         flex: 1,
@@ -195,9 +194,9 @@ export default ({ route, navigation }) => {
                         alignItems: "center",
                     }}
                 >
-                    <MaterialCommunityIcons name="chevron-right" size={30} color="black" />
+                    <MaterialCommunityIcons name="chevron-right" size={30} color="white" />
                 </View>
-            </View>
+            </TouchableOpacity>
             {properties.length !== 0 ? (
                 <FlatList
                     data={properties}
@@ -257,7 +256,7 @@ export default ({ route, navigation }) => {
             </Modal>
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     mainView: {
