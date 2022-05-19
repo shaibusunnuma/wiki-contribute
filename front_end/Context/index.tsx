@@ -83,6 +83,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     const [cachedAdditions, setCachedAdditions] = React.useState([] as Addvariables[]);
     const [showSnackBar, setShowSnackBar] = React.useState(false);
     const [snackBarMessage, setSnackBarMessage] = React.useState("");
+    const [startSync, setStartSync] = React.useState(false);
 
     const WikiUpdateCachingHandler = async (instance: string, data: Editvariables | Addvariables) => {
         console.log("Caching Wiki Update...");
@@ -132,7 +133,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 for (let i = syncEditData.length - 1; i >= 0; --i) {
                     const res = await editProperty(syncEditData[i]);
                     if (res.message.includes("Network request failed")) {
-                        console.log("Result:", res.message);
                         break;
                     }
                     syncEditData.splice(i, 1);
@@ -145,7 +145,6 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
                 for (let i = syncAddData.length - 1; i >= 0; --i) {
                     const res = await createProperty(syncAddData[i]);
                     if (res.message.includes("Network request failed")) {
-                        console.log("Result:", res.message);
                         break;
                     }
                     syncAddData.splice(i, 1);
@@ -416,21 +415,25 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
         if (userLocation.latitude !== undefined) getData(); //TODO: check if queryRange could be unset before geting data
     }, [userLocation]);
 
+    //TODO: check if this is the best way to do this
     React.useEffect(() => {
-        syncHandler();
+        if (startSync) {
+            console.log("We are syncing...");
+            const syncData = setInterval(() => {
+                syncHandler();
+            }, 10000);
+            return function cleanup() {
+                clearInterval(syncData);
+            };
+        }
+    }, [startSync]);
+
+    React.useEffect(() => {
+        setStartSync(cachedEdits.length > 0 || cachedAdditions.length > 0);
     }, [cachedEdits, cachedAdditions]);
 
     React.useEffect(() => {
-        const syncData = setInterval(() => {
-            syncHandler();
-        }, 10000);
-        return function cleanup() {
-            clearInterval(syncData);
-        };
-    }, [cachedEdits, cachedAdditions]);
-
-    React.useEffect(() => {
-        //clearAll();
+        clearAll();
         StartUp();
     }, []);
 
