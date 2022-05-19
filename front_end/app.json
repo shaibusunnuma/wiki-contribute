@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "wiki-contribute-ts",
+    "name": "WikiContribute",
     "slug": "wiki-contribute-ts",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,11 +13,16 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.wikicontribute.wiki"
     },
     "android": {
+      "package": "com.wikicontribute.wiki",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
