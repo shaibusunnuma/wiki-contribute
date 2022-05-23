@@ -13,3 +13,10 @@ A light-weight context-aware mobile application for browsing and editing Wikidat
 
 ### Connecting Front End and Backend:
 Navigate to [`Config.ts`](./front_end/GraphQL/Config.ts) and change `graphqlEndpoint` to your local endpoint.
+
+## Demo
+
+
+
+https://user-images.githubusercontent.com/69070520/169910240-dc63b711-2ecf-4297-895f-51a493936269.mov
+
