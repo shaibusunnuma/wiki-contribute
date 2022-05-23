@@ -49,7 +49,7 @@ export default (): JSX.Element => {
                     }}
                 />
 
-                <Tab.Screen
+                {/* <Tab.Screen
                     name="NotificationsTab"
                     component={Notifications}
                     options={{
@@ -59,7 +59,7 @@ export default (): JSX.Element => {
                         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="bell" color={color} size={26} />,
                         title: "Notifications",
                     }}
-                />
+                /> */}
                 <Tab.Screen
                     name="SettingsTab"
                     component={Settings}

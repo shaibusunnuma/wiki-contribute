@@ -433,7 +433,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
     }, [cachedEdits, cachedAdditions]);
 
     React.useEffect(() => {
-        clearAll();
+        //clearAll();
         StartUp();
     }, []);
 
