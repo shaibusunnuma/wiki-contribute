@@ -88,7 +88,7 @@ export default () => {
                         >
                             {username}
                         </Title>
-                        <Caption style={styles.caption}>@j_doe</Caption>
+                        <Caption style={styles.caption}>@{username}</Caption>
                     </View>
                 </View>
             </TouchableOpacity>

@@ -132,7 +132,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             if (syncEditData.length !== 0) {
                 for (let i = syncEditData.length - 1; i >= 0; --i) {
                     const res = await editProperty(syncEditData[i]);
-                    if (res.message.includes("Network request failed")) {
+                    if (res.message && res.message.includes("Network request failed")) {
                         break;
                     }
                     syncEditData.splice(i, 1);
@@ -144,7 +144,7 @@ export const WikiProvider = ({ children }: React.PropsWithChildren<Props>) => {
             if (syncAddData.length !== 0) {
                 for (let i = syncAddData.length - 1; i >= 0; --i) {
                     const res = await createProperty(syncAddData[i]);
-                    if (res.message.includes("Network request failed")) {
+                    if (res.message && res.message.includes("Network request failed")) {
                         break;
                     }
                     syncAddData.splice(i, 1);

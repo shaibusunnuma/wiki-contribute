@@ -67,17 +67,18 @@ export default function ({ route, navigation }) {
                 toggleModal();
                 setSnackBarMessage("Update successful");
                 setShowSnackBar(true);
-                //setLoading(false);
+                setSuccess(true);
+                setLoading(false);
             });
         } catch (error) {
             setLoading(false);
             setIsError(error.message);
             if (error.message.includes("Network request failed")) {
-                //setSuccess(true);
                 toggleModal();
                 setSnackBarMessage("Network error. Update is cached");
                 setShowSnackBar(true);
-                //setLoading(false);
+                setSuccess(true);
+                setLoading(false);
                 const variables = {
                     username: username,
                     password: password,
@@ -111,6 +112,8 @@ export default function ({ route, navigation }) {
                 toggleModal();
                 setSnackBarMessage("Update successful");
                 setShowSnackBar(true);
+                setSuccess(true);
+                setLoading(false);
             });
         } catch (error) {
             setLoading(false);
@@ -120,13 +123,15 @@ export default function ({ route, navigation }) {
                 toggleModal();
                 setSnackBarMessage("Network error. Update is cached");
                 setShowSnackBar(true);
+                setSuccess(true);
+                setLoading(false);
                 const variables = {
                     username: username,
                     password: password,
                     id: selectedEntityQID,
                     anonymous: anonymous,
                     property: selectedPropertyPID,
-                    oldValue: oldValue, //get qid of old value
+                    oldValue: oldValue,
                     newValue: value,
                 };
                 WikiUpdateCachingHandler("WikiEdit", variables);
